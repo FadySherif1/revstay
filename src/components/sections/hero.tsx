@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { EgyptSkyline } from "@/components/sections/egypt-skyline";
 
 const HEADLINE = "Turn Empty Rooms Into Booked Nights";
 
@@ -18,6 +19,9 @@ const FLOATING_STATS = [
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const skylineRef = useRef<HTMLDivElement>(null);
+  const sunRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
@@ -25,6 +29,7 @@ export function Hero() {
     if (!sectionRef.current || !contentRef.current) return;
 
     gsap.registerPlugin(ScrollTrigger);
+    const isMobile = window.matchMedia("(max-width: 640px)").matches;
 
     const ctx = gsap.context(() => {
       gsap.to(contentRef.current, {
@@ -37,9 +42,70 @@ export function Hero() {
           scrub: true,
         },
       });
+
+      if (sunRef.current) {
+        gsap.to(sunRef.current, {
+          y: isMobile ? 60 : 140,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
+
+      const layerSpeeds = isMobile
+        ? { "1": 20, "2": 45, "3": 75 }
+        : { "1": 40, "2": 90, "3": 150 };
+
+      Object.entries(layerSpeeds).forEach(([layer, distance]) => {
+        const el = skylineRef.current?.querySelector(
+          `[data-skyline-layer="${layer}"]`
+        );
+        if (!el) return;
+        gsap.to(el, {
+          y: -distance,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      });
     }, sectionRef);
 
     return () => ctx.revert();
+  }, [prefersReducedMotion]);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    const isTouch = window.matchMedia("(pointer: coarse)").matches;
+    if (isTouch) return;
+
+    function onMouseMove(event: MouseEvent) {
+      const { innerWidth, innerHeight } = window;
+      const relX = (event.clientX / innerWidth - 0.5) * 2;
+      const relY = (event.clientY / innerHeight - 0.5) * 2;
+
+      cardRefs.current.forEach((card, i) => {
+        if (!card) return;
+        const depth = 4 + i * 2;
+        gsap.to(card, {
+          x: relX * depth,
+          y: relY * depth,
+          duration: 0.6,
+          ease: "power2.out",
+          overwrite: true,
+        });
+      });
+    }
+
+    window.addEventListener("mousemove", onMouseMove);
+    return () => window.removeEventListener("mousemove", onMouseMove);
   }, [prefersReducedMotion]);
 
   const wordVariants = {
@@ -85,10 +151,29 @@ export function Hero() {
       {/* Grain overlay */}
       <div aria-hidden className="hero-grain pointer-events-none absolute inset-0 -z-10 opacity-[0.06]" />
 
+      {/* Sun/moon glow disc */}
+      <div
+        ref={sunRef}
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-[38%] -z-10 h-40 w-40 -translate-x-1/2 rounded-full bg-gold-300/25 blur-3xl will-change-transform sm:h-56 sm:w-56"
+      />
+
+      {/* Egyptian skyline parallax scene */}
+      <div
+        ref={skylineRef}
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[40vh] min-h-[220px] will-change-transform"
+      >
+        <EgyptSkyline />
+      </div>
+
       {/* Floating stat cards */}
       {FLOATING_STATS.map((stat, i) => (
         <motion.div
           key={stat.label}
+          ref={(el) => {
+            cardRefs.current[i] = el;
+          }}
           initial={prefersReducedMotion ? undefined : { opacity: 0, y: 20 }}
           animate={
             prefersReducedMotion

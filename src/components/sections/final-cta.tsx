@@ -6,9 +6,22 @@ export function FinalCta() {
       id="book"
       className="relative overflow-hidden bg-navy-950 py-32 sm:py-40"
     >
+      {/* Golden hour over the Nile: deep navy fading to a warm amber horizon */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "linear-gradient(to bottom, transparent 0%, transparent 55%, rgba(212,175,55,0.12) 78%, rgba(212,175,55,0.22) 92%, rgba(212,175,55,0.1) 100%)",
+        }}
+      />
       <div
         aria-hidden
         className="pointer-events-none absolute left-1/2 top-1/2 h-[70vmax] w-[70vmax] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-500/20 blur-[140px]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold-400/50 to-transparent"
       />
 
       <div className="relative mx-auto max-w-3xl px-6 text-center lg:px-8">

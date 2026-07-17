@@ -10,9 +10,39 @@ const VALUE_PILLS = [
   "Full Transparency",
 ];
 
+function CompassOrnament() {
+  return (
+    <svg
+      viewBox="0 0 120 120"
+      className="mx-auto mb-8 h-16 w-16 text-gold-400/50"
+      fill="none"
+      stroke="currentColor"
+    >
+      <circle cx="60" cy="60" r="46" strokeWidth="1" />
+      <circle cx="60" cy="60" r="2" fill="currentColor" stroke="none" />
+      {Array.from({ length: 8 }).map((_, i) => {
+        const angle = (i * Math.PI) / 4;
+        const x1 = 60 + Math.cos(angle) * 38;
+        const y1 = 60 + Math.sin(angle) * 38;
+        const x2 = 60 + Math.cos(angle) * 46;
+        const y2 = 60 + Math.sin(angle) * 46;
+        return (
+          <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} strokeWidth="1" />
+        );
+      })}
+      <path
+        d="M60,24 L68,60 L60,96 L52,60 Z"
+        strokeWidth="1"
+        fill="none"
+      />
+    </svg>
+  );
+}
+
 export function About() {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const compassRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!sectionRef.current || !contentRef.current) return;
@@ -39,6 +69,19 @@ export function About() {
           start: "top 75%",
         },
       });
+
+      if (compassRef.current) {
+        gsap.to(compassRef.current, {
+          rotate: 90,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
+      }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -54,6 +97,10 @@ export function About() {
         ref={contentRef}
         className="mx-auto max-w-3xl px-6 text-center lg:px-8"
       >
+        <div ref={compassRef} data-reveal className="will-change-transform">
+          <CompassOrnament />
+        </div>
+
         <p data-reveal className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-400">
           Who We Are
         </p>

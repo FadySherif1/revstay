@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Quote } from "lucide-react";
+import { TiltCard } from "@/components/ui/tilt-card";
 
 const TESTIMONIALS = [
   {
@@ -89,31 +90,32 @@ export function Testimonials() {
           className="grid grid-cols-1 gap-6 md:grid-cols-3"
         >
           {TESTIMONIALS.map((t) => (
-            <div
-              key={t.name}
-              data-card
-              className="group flex flex-col rounded-2xl border border-offwhite/10 bg-white/[0.03] p-7 transition-transform duration-300 will-change-transform hover:-rotate-1 hover:-translate-y-1"
-            >
-              <Quote
-                className="mb-4 h-8 w-8 text-gold-500/40"
-                strokeWidth={1.5}
-                fill="currentColor"
-              />
-              <p className="mb-6 flex-1 text-sm leading-relaxed text-offwhite/75">
-                &ldquo;{t.quote}&rdquo;
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold-500/15 text-sm font-semibold text-gold-400 ring-1 ring-gold-400/25">
-                  {initials(t.name)}
-                </div>
-                <div>
-                  <p className="text-sm font-semibold text-offwhite">
-                    {t.name}
-                  </p>
-                  <p className="text-xs text-offwhite/50">{t.role}</p>
+            <TiltCard key={t.name}>
+              <div
+                data-card
+                className="group flex h-full flex-col rounded-2xl border border-offwhite/10 bg-white/[0.03] p-7"
+              >
+                <Quote
+                  className="mb-4 h-8 w-8 text-gold-500/40"
+                  strokeWidth={1.5}
+                  fill="currentColor"
+                />
+                <p className="mb-6 flex-1 text-sm leading-relaxed text-offwhite/75">
+                  &ldquo;{t.quote}&rdquo;
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold-500/15 text-sm font-semibold text-gold-400 ring-1 ring-gold-400/25">
+                    {initials(t.name)}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold text-offwhite">
+                      {t.name}
+                    </p>
+                    <p className="text-xs text-offwhite/50">{t.role}</p>
+                  </div>
                 </div>
               </div>
-            </div>
+            </TiltCard>
           ))}
         </div>
       </div>

@@ -4,6 +4,9 @@ import { Hero } from "@/components/sections/hero";
 const ProblemSolution = dynamic(() =>
   import("@/components/sections/problem-solution").then((m) => m.ProblemSolution)
 );
+const ScrollScene = dynamic(() =>
+  import("@/components/ui/scroll-scene").then((m) => m.ScrollScene)
+);
 const Services = dynamic(() =>
   import("@/components/sections/services").then((m) => m.Services)
 );
@@ -29,6 +32,7 @@ export default function Home() {
       <main className="flex flex-1 flex-col">
         <Hero />
         <ProblemSolution />
+        <ScrollScene />
         <Services />
         <Results />
         <Testimonials />

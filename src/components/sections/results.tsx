@@ -34,6 +34,7 @@ const STATS = [
 export function Results() {
   const sectionRef = useRef<HTMLElement>(null);
   const borderRef = useRef<HTMLDivElement>(null);
+  const pyramidsRef = useRef<HTMLDivElement>(null);
   const numberRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const hasAnimated = useRef(false);
 
@@ -69,6 +70,19 @@ export function Results() {
             },
           }
         );
+      }
+
+      if (pyramidsRef.current) {
+        gsap.to(pyramidsRef.current, {
+          y: 50,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
       }
 
       ScrollTrigger.create({
@@ -111,6 +125,38 @@ export function Results() {
         aria-hidden
         className="absolute inset-x-0 top-0 h-px origin-left bg-gradient-to-r from-transparent via-gold-400/60 to-transparent"
       />
+
+      {/* Ghosted pyramid outlines, drift with scroll */}
+      <div
+        ref={pyramidsRef}
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 will-change-transform"
+      >
+        <svg
+          viewBox="0 0 1440 500"
+          preserveAspectRatio="xMidYMax slice"
+          className="h-full w-full opacity-[0.05]"
+        >
+          <polygon
+            points="120,480 320,180 520,480"
+            fill="none"
+            stroke="#d4af37"
+            strokeWidth="2"
+          />
+          <polygon
+            points="850,480 1080,120 1310,480"
+            fill="none"
+            stroke="#d4af37"
+            strokeWidth="2"
+          />
+          <polygon
+            points="1000,480 1160,220 1320,480"
+            fill="none"
+            stroke="#d4af37"
+            strokeWidth="1.5"
+          />
+        </svg>
+      </div>
 
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
         <div className="mx-auto mb-16 max-w-2xl text-center">
