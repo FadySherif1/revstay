@@ -36,6 +36,33 @@ body {
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
+section[id] {
+  scroll-margin-top: 88px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-navy-950);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gold-500);
+  border-radius: 9999px;
+  border: 2px solid var(--color-navy-950);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold-400);
+}
+
+html {
+  scrollbar-color: var(--color-gold-500) var(--color-navy-950);
+  scrollbar-width: thin;
+}
+
 @keyframes hero-glow-drift {
   0%,
   100% {

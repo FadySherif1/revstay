@@ -1,10 +1,27 @@
+import dynamic from "next/dynamic";
 import { Hero } from "@/components/sections/hero";
-import { ProblemSolution } from "@/components/sections/problem-solution";
-import { Services } from "@/components/sections/services";
-import { Results } from "@/components/sections/results";
-import { Testimonials } from "@/components/sections/testimonials";
-import { FinalCta } from "@/components/sections/final-cta";
-import { Footer } from "@/components/sections/footer";
+
+const ProblemSolution = dynamic(() =>
+  import("@/components/sections/problem-solution").then((m) => m.ProblemSolution)
+);
+const Services = dynamic(() =>
+  import("@/components/sections/services").then((m) => m.Services)
+);
+const Results = dynamic(() =>
+  import("@/components/sections/results").then((m) => m.Results)
+);
+const Testimonials = dynamic(() =>
+  import("@/components/sections/testimonials").then((m) => m.Testimonials)
+);
+const About = dynamic(() =>
+  import("@/components/sections/about").then((m) => m.About)
+);
+const FinalCta = dynamic(() =>
+  import("@/components/sections/final-cta").then((m) => m.FinalCta)
+);
+const Footer = dynamic(() =>
+  import("@/components/sections/footer").then((m) => m.Footer)
+);
 
 export default function Home() {
   return (
@@ -15,6 +32,7 @@ export default function Home() {
         <Services />
         <Results />
         <Testimonials />
+        <About />
         <FinalCta />
       </main>
       <Footer />
