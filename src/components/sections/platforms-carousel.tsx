@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { PLATFORM_DETAILS } from "@/lib/platforms";
 import { TiltCard } from "@/components/ui/tilt-card";
 
@@ -49,16 +48,6 @@ export function PlatformsCarousel() {
       if (!autoScroll.isPlaying()) autoScroll.play();
     }, RESUME_DELAY_MS);
   }, [canAutoResume, emblaApi]);
-
-  const scrollPrev = useCallback(() => {
-    emblaApi?.scrollPrev();
-    restartAutoScroll();
-  }, [emblaApi, restartAutoScroll]);
-
-  const scrollNext = useCallback(() => {
-    emblaApi?.scrollNext();
-    restartAutoScroll();
-  }, [emblaApi, restartAutoScroll]);
 
   useEffect(() => {
     if (!emblaApi) return;
@@ -131,25 +120,6 @@ export function PlatformsCarousel() {
           </div>
         </div>
 
-        {/* Arrow controls */}
-        <div className="mt-10 flex items-center justify-center gap-4">
-          <button
-            type="button"
-            aria-label="Previous platform"
-            onClick={scrollPrev}
-            className="flex h-11 w-11 items-center justify-center rounded-full bg-gold-500 text-ink shadow-[var(--shadow-warm-sm)] transition-transform hover:scale-105 hover:bg-gold-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
-          >
-            <ChevronLeft className="h-5 w-5" strokeWidth={2} />
-          </button>
-          <button
-            type="button"
-            aria-label="Next platform"
-            onClick={scrollNext}
-            className="flex h-11 w-11 items-center justify-center rounded-full bg-gold-500 text-ink shadow-[var(--shadow-warm-sm)] transition-transform hover:scale-105 hover:bg-gold-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-600 focus-visible:ring-offset-2 focus-visible:ring-offset-cream"
-          >
-            <ChevronRight className="h-5 w-5" strokeWidth={2} />
-          </button>
-        </div>
       </div>
     </section>
   );
