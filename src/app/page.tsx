@@ -1,6 +1,9 @@
 import dynamic from "next/dynamic";
 import { Hero } from "@/components/sections/hero";
 
+const Platforms = dynamic(() =>
+  import("@/components/sections/platforms").then((m) => m.Platforms)
+);
 const ProblemSolution = dynamic(() =>
   import("@/components/sections/problem-solution").then((m) => m.ProblemSolution)
 );
@@ -31,6 +34,7 @@ export default function Home() {
     <>
       <main className="flex flex-1 flex-col">
         <Hero />
+        <Platforms />
         <ProblemSolution />
         <ScrollScene />
         <Services />

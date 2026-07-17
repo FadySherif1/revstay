@@ -5,10 +5,9 @@ import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { PLATFORMS } from "@/lib/platforms";
 
 const HEADLINE = "Turn Empty Rooms Into Booked Nights";
-
-const PLATFORMS = ["Booking.com", "Expedia", "TripAdvisor"];
 
 const FLOATING_STATS = [
   { label: "+42% Direct Bookings", className: "left-[4%] top-[20%] md:left-[7%]" },
@@ -216,8 +215,9 @@ export function Hero() {
           className="mb-10 max-w-2xl text-lg font-medium text-ink-soft sm:text-xl"
         >
           Revstay builds and optimizes your hotel&apos;s presence on
-          Booking.com, Expedia, and TripAdvisor — so travelers find you
-          first, book faster, and your revenue grows.
+          Booking.com, Expedia, Agoda, Airbnb, and every platform that
+          matters — so travelers find you first, book faster, and your
+          revenue grows.
         </motion.p>
 
         <motion.div
@@ -249,7 +249,7 @@ export function Hero() {
           <p className="text-xs font-medium uppercase tracking-[0.15em] text-ink-mute">
             Trusted expertise across the world&apos;s leading booking platforms
           </p>
-          <div className="flex flex-wrap items-center justify-center gap-3">
+          <div className="flex max-w-xl flex-wrap items-center justify-center gap-2.5">
             {PLATFORMS.map((platform) => (
               <span
                 key={platform}

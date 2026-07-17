@@ -17,9 +17,9 @@ const inter = Inter({
 
 const SITE_URL = "https://revstay.com";
 const TITLE =
-  "Revstay — Grow Your Hotel's Bookings on Booking.com, Expedia & TripAdvisor";
+  "Revstay — Grow Your Hotel's Bookings on Booking.com, Agoda, Expedia & More";
 const DESCRIPTION =
-  "Revstay helps hotels increase guest bookings by creating and optimizing their listings on Booking.com, Expedia, and TripAdvisor.";
+  "Revstay helps hotels increase guest bookings by creating and optimizing their listings across Booking.com, Agoda, Expedia, Airbnb, Hotelbeds, Hotels.com, and Trip.com.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

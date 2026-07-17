@@ -109,10 +109,10 @@ export function About() {
         </h2>
         <p data-reveal className="mb-10 text-lg leading-relaxed text-ink-soft">
           Revstay was founded on real-world experience managing hotel
-          listings across Booking.com, Expedia, and TripAdvisor. We&apos;ve
-          seen — from the inside — exactly what makes a listing rise to the
-          top and what leaves great hotels invisible. That knowledge is now
-          your advantage.
+          listings across Booking.com, Agoda, Expedia, Airbnb, and every
+          major booking platform. We&apos;ve seen — from the inside —
+          exactly what makes a listing rise to the top and what leaves
+          great hotels invisible. That knowledge is now your advantage.
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-3">

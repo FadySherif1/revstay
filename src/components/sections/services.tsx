@@ -10,7 +10,7 @@ const SERVICES = [
   {
     icon: Building2,
     title: "OTA Listing Creation",
-    body: "We build your hotel's pages on Booking.com, Expedia, and TripAdvisor from scratch — structured to rank and designed to sell.",
+    body: "We build your hotel's pages across all major booking platforms — Booking.com, Agoda, Expedia, Airbnb, Hotelbeds, Hotels.com, and Trip.com — structured to rank and designed to sell.",
     gradient: "from-gold-300 to-gold-500",
   },
   {
