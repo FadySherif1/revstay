@@ -7,28 +7,28 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const STATS = [
   {
-    target: 38,
-    prefix: "+",
-    suffix: "%",
-    label: "Average increase in bookings within 6 months",
-  },
-  {
-    target: 92,
+    target: 7,
     prefix: "",
-    suffix: "%",
-    label: "Average occupancy reached in peak seasons",
-  },
-  {
-    target: 3,
-    prefix: "",
-    suffix: "x",
-    label: "More listing views after optimization",
+    suffix: "",
+    label: "Booking platforms managed under one strategy",
   },
   {
     target: 24,
     prefix: "",
     suffix: "/7",
-    label: "Listing monitoring & rate management",
+    label: "Continuous listing monitoring & rate management",
+  },
+  {
+    target: 1,
+    prefix: "",
+    suffix: "",
+    label: "Dedicated team owning your entire OTA presence",
+  },
+  {
+    target: 100,
+    prefix: "",
+    suffix: "%",
+    label: "Transparency in reporting, always",
   },
 ];
 
@@ -180,10 +180,10 @@ export function Results() {
       <div className="relative mx-auto max-w-6xl px-6 lg:px-8">
         <div className="mx-auto mb-16 max-w-2xl text-center">
           <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-600">
-            The Numbers
+            Our Commitment
           </p>
           <h2 className="font-serif text-3xl leading-tight text-ink sm:text-5xl">
-            Results You Can Measure
+            Built to Deliver
           </h2>
         </div>
 

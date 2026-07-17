@@ -9,17 +9,10 @@ import { PLATFORMS } from "@/lib/platforms";
 
 const HEADLINE = "Turn Empty Rooms Into Booked Nights";
 
-const FLOATING_STATS = [
-  { label: "+42% Direct Bookings", className: "left-[4%] top-[20%] md:left-[7%]" },
-  { label: "Occupancy 94%", className: "right-[4%] top-[26%] md:right-[8%]" },
-  { label: "+3.1★ Guest Rating", className: "left-[8%] bottom-[26%] md:left-[12%]" },
-];
-
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
-  const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const prefersReducedMotion = useReducedMotion();
 
   useEffect(() => {
@@ -56,33 +49,6 @@ export function Hero() {
     }, sectionRef);
 
     return () => ctx.revert();
-  }, [prefersReducedMotion]);
-
-  useEffect(() => {
-    if (prefersReducedMotion) return;
-    const isTouch = window.matchMedia("(pointer: coarse)").matches;
-    if (isTouch) return;
-
-    function onMouseMove(event: MouseEvent) {
-      const { innerWidth, innerHeight } = window;
-      const relX = (event.clientX / innerWidth - 0.5) * 2;
-      const relY = (event.clientY / innerHeight - 0.5) * 2;
-
-      cardRefs.current.forEach((card, i) => {
-        if (!card) return;
-        const depth = 4 + i * 2;
-        gsap.to(card, {
-          x: relX * depth,
-          y: relY * depth,
-          duration: 0.6,
-          ease: "power2.out",
-          overwrite: true,
-        });
-      });
-    }
-
-    window.addEventListener("mousemove", onMouseMove);
-    return () => window.removeEventListener("mousemove", onMouseMove);
   }, [prefersReducedMotion]);
 
   const wordVariants = {
@@ -145,40 +111,6 @@ export function Hero() {
             "linear-gradient(to bottom, rgba(250,246,239,0.10) 0%, rgba(250,246,239,0.30) 38%, rgba(250,246,239,0.82) 72%, rgba(250,246,239,0.97) 100%)",
         }}
       />
-
-      {/* Floating stat cards */}
-      {FLOATING_STATS.map((stat, i) => (
-        <motion.div
-          key={stat.label}
-          ref={(el) => {
-            cardRefs.current[i] = el;
-          }}
-          initial={prefersReducedMotion ? undefined : { opacity: 0, y: 20 }}
-          animate={
-            prefersReducedMotion
-              ? undefined
-              : { opacity: 1, y: [0, -14, 0] }
-          }
-          transition={
-            prefersReducedMotion
-              ? undefined
-              : {
-                  opacity: { duration: 0.8, delay: 0.6 + i * 0.15 },
-                  y: {
-                    duration: 5 + i,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 1 + i * 0.3,
-                  },
-                }
-          }
-          className={`pointer-events-none absolute z-10 hidden rounded-2xl border border-white/60 bg-white-soft/80 px-5 py-3 text-sm font-semibold text-ink shadow-[var(--shadow-warm-sm)] backdrop-blur-md sm:block will-change-transform ${
-            i === 2 ? "lg:block" : "sm:block"
-          } ${stat.className}`}
-        >
-          {stat.label}
-        </motion.div>
-      ))}
 
       <div
         ref={contentRef}

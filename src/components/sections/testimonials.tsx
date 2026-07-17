@@ -9,7 +9,7 @@ import { TiltCard } from "@/components/ui/tilt-card";
 const TESTIMONIALS = [
   {
     quote:
-      "Within four months our Booking.com ranking went from invisible to the first page. Weekends are now fully booked.",
+      "Within months our Booking.com ranking went from invisible to genuinely competitive. Weekends are now consistently busy.",
     name: "Omar H.",
     role: "Boutique Hotel Owner, Cairo",
   },
