@@ -1,0 +1,147 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+const STATS = [
+  {
+    target: 38,
+    prefix: "+",
+    suffix: "%",
+    label: "Average increase in bookings within 6 months",
+  },
+  {
+    target: 92,
+    prefix: "",
+    suffix: "%",
+    label: "Average occupancy reached in peak seasons",
+  },
+  {
+    target: 3,
+    prefix: "",
+    suffix: "x",
+    label: "More listing views after optimization",
+  },
+  {
+    target: 24,
+    prefix: "",
+    suffix: "/7",
+    label: "Listing monitoring & rate management",
+  },
+];
+
+export function Results() {
+  const sectionRef = useRef<HTMLElement>(null);
+  const borderRef = useRef<HTMLDivElement>(null);
+  const numberRefs = useRef<(HTMLSpanElement | null)[]>([]);
+  const hasAnimated = useRef(false);
+
+  useEffect(() => {
+    if (!sectionRef.current) return;
+
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (prefersReducedMotion) {
+      numberRefs.current.forEach((el, i) => {
+        if (el) el.textContent = `${STATS[i].prefix}${STATS[i].target}${STATS[i].suffix}`;
+      });
+      return;
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      if (borderRef.current) {
+        gsap.fromTo(
+          borderRef.current,
+          { scaleX: 0 },
+          {
+            scaleX: 1,
+            duration: 1.2,
+            ease: "power2.out",
+            transformOrigin: "left",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 80%",
+            },
+          }
+        );
+      }
+
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: "top 70%",
+        once: true,
+        onEnter: () => {
+          if (hasAnimated.current) return;
+          hasAnimated.current = true;
+
+          STATS.forEach((stat, i) => {
+            const el = numberRefs.current[i];
+            if (!el) return;
+            const counter = { value: 0 };
+            gsap.to(counter, {
+              value: stat.target,
+              duration: 1.8,
+              ease: "power2.out",
+              delay: i * 0.1,
+              onUpdate: () => {
+                el.textContent = `${stat.prefix}${Math.round(counter.value)}${stat.suffix}`;
+              },
+            });
+          });
+        },
+      });
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section
+      ref={sectionRef}
+      id="results"
+      className="relative overflow-hidden bg-navy-800 py-24 sm:py-32"
+    >
+      <div
+        ref={borderRef}
+        aria-hidden
+        className="absolute inset-x-0 top-0 h-px origin-left bg-gradient-to-r from-transparent via-gold-400/60 to-transparent"
+      />
+
+      <div className="mx-auto max-w-6xl px-6 lg:px-8">
+        <div className="mx-auto mb-16 max-w-2xl text-center">
+          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-400">
+            The Numbers
+          </p>
+          <h2 className="font-serif text-3xl leading-tight text-offwhite sm:text-5xl">
+            Results You Can Measure
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-2 gap-8 sm:grid-cols-4 sm:gap-6">
+          {STATS.map((stat, i) => (
+            <div key={stat.label} className="text-center">
+              <span
+                ref={(el) => {
+                  numberRefs.current[i] = el;
+                }}
+                className="block font-serif text-4xl text-gold-400 sm:text-5xl md:text-6xl"
+              >
+                {stat.prefix}
+                {0}
+                {stat.suffix}
+              </span>
+              <p className="mt-3 text-sm leading-relaxed text-offwhite/60">
+                {stat.label}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
