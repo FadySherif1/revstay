@@ -73,14 +73,14 @@ export function Testimonials() {
     <section
       ref={sectionRef}
       id="testimonials"
-      className="relative overflow-hidden bg-navy-900 py-24 sm:py-32"
+      className="relative overflow-hidden bg-cream py-24 sm:py-32"
     >
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
         <div className="mx-auto mb-16 max-w-2xl text-center">
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-400">
+          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-600">
             Client Stories
           </p>
-          <h2 className="font-serif text-3xl leading-tight text-offwhite sm:text-5xl">
+          <h2 className="font-serif text-3xl leading-tight text-ink sm:text-5xl">
             Hoteliers Who Made the Switch
           </h2>
         </div>
@@ -93,25 +93,25 @@ export function Testimonials() {
             <TiltCard key={t.name}>
               <div
                 data-card
-                className="group flex h-full flex-col rounded-2xl border border-offwhite/10 bg-white/[0.03] p-7"
+                className="group flex h-full flex-col rounded-2xl border border-ink/10 bg-white-soft p-7 shadow-[var(--shadow-warm-sm)]"
               >
                 <Quote
-                  className="mb-4 h-8 w-8 text-gold-500/40"
+                  className="mb-4 h-8 w-8 text-gold-500/60"
                   strokeWidth={1.5}
                   fill="currentColor"
                 />
-                <p className="mb-6 flex-1 text-sm leading-relaxed text-offwhite/75">
+                <p className="mb-6 flex-1 text-sm leading-relaxed text-ink-soft">
                   &ldquo;{t.quote}&rdquo;
                 </p>
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold-500/15 text-sm font-semibold text-gold-400 ring-1 ring-gold-400/25">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-teal-500/15 text-sm font-semibold text-teal-600 ring-1 ring-teal-500/25">
                     {initials(t.name)}
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-offwhite">
+                    <p className="text-sm font-semibold text-ink">
                       {t.name}
                     </p>
-                    <p className="text-xs text-offwhite/50">{t.role}</p>
+                    <p className="text-xs text-ink-mute">{t.role}</p>
                   </div>
                 </div>
               </div>

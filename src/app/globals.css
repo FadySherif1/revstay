@@ -1,30 +1,51 @@
 @import "tailwindcss";
 
 :root {
-  --color-navy-950: #05070f;
-  --color-navy-900: #0a1128;
-  --color-navy-800: #10182f;
-  --color-navy-700: #182342;
-  --color-charcoal: #14161c;
-  --color-gold-500: #d4af37;
-  --color-gold-400: #e0c15c;
-  --color-gold-300: #ecd58a;
-  --color-offwhite: #f5f3ee;
+  /* Light theme: sunlit sand & ivory */
+  --color-ivory: #faf6ef;
+  --color-cream: #f3ecdf;
+  --color-sand: #ece2d0;
+  --color-white-soft: #fffdf9;
+
+  /* Warm ink text */
+  --color-ink: #2b2620;
+  --color-ink-soft: #57503f;
+  --color-ink-mute: #7c7059;
+
+  /* Accents */
+  --color-gold-600: #8a6c17;
+  --color-gold-500: #c9a227;
+  --color-gold-400: #d8b846;
+  --color-gold-300: #e7ce78;
+  --color-teal-600: #14655a;
+  --color-teal-500: #1a7a6d;
+  --color-teal-400: #3a998c;
+
+  /* Soft warm shadow */
+  --shadow-warm: 0 20px 45px -20px rgba(120, 92, 30, 0.28);
+  --shadow-warm-sm: 0 10px 25px -12px rgba(120, 92, 30, 0.22);
 }
 
 @theme inline {
-  --color-background: var(--color-navy-900);
-  --color-foreground: var(--color-offwhite);
+  --color-background: var(--color-ivory);
+  --color-foreground: var(--color-ink);
 
-  --color-navy-950: var(--color-navy-950);
-  --color-navy-900: var(--color-navy-900);
-  --color-navy-800: var(--color-navy-800);
-  --color-navy-700: var(--color-navy-700);
-  --color-charcoal: var(--color-charcoal);
+  --color-ivory: var(--color-ivory);
+  --color-cream: var(--color-cream);
+  --color-sand: var(--color-sand);
+  --color-white-soft: var(--color-white-soft);
+
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-ink-mute: var(--color-ink-mute);
+
+  --color-gold-600: var(--color-gold-600);
   --color-gold-500: var(--color-gold-500);
   --color-gold-400: var(--color-gold-400);
   --color-gold-300: var(--color-gold-300);
-  --color-offwhite: var(--color-offwhite);
+  --color-teal-600: var(--color-teal-600);
+  --color-teal-500: var(--color-teal-500);
+  --color-teal-400: var(--color-teal-400);
 
   --font-serif: var(--font-playfair);
   --font-sans: var(--font-inter);
@@ -45,62 +66,56 @@ section[id] {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-navy-950);
+  background: var(--color-cream);
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--color-gold-500);
   border-radius: 9999px;
-  border: 2px solid var(--color-navy-950);
+  border: 2px solid var(--color-cream);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-gold-400);
+  background: var(--color-gold-600);
 }
 
 html {
-  scrollbar-color: var(--color-gold-500) var(--color-navy-950);
+  scrollbar-color: var(--color-gold-500) var(--color-cream);
   scrollbar-width: thin;
 }
 
-@keyframes hero-glow-drift {
-  0%,
-  100% {
-    transform: translate(-50%, -50%) translate3d(0, 0, 0);
-  }
-  50% {
-    transform: translate(-50%, -50%) translate3d(4%, -6%, 0);
-  }
-}
-
-.hero-glow {
-  animation: hero-glow-drift 18s ease-in-out infinite;
-  will-change: transform;
-}
-
-.hero-grain {
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-  background-repeat: repeat;
-}
-
 .hero-cta-glow {
-  box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.55);
+  box-shadow: 0 0 0 0 rgba(201, 162, 39, 0.5);
   animation: hero-cta-pulse 2.6s ease-in-out infinite;
 }
 
 @keyframes hero-cta-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(212, 175, 55, 0.35);
+    box-shadow: 0 0 0 0 rgba(201, 162, 39, 0.32);
   }
   50% {
-    box-shadow: 0 0 28px 6px rgba(212, 175, 55, 0.35);
+    box-shadow: 0 0 30px 6px rgba(201, 162, 39, 0.42);
   }
 }
 
+@keyframes ken-burns {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.08);
+  }
+}
+
+.ken-burns {
+  animation: ken-burns 20s ease-out forwards;
+  will-change: transform;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .hero-glow,
-  .hero-cta-glow {
+  .hero-cta-glow,
+  .ken-burns {
     animation: none !important;
   }
 }

@@ -33,7 +33,7 @@ export function MobileMenu({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
-          className="fixed inset-0 z-40 flex flex-col bg-navy-950 md:hidden"
+          className="fixed inset-0 z-40 flex flex-col bg-ivory md:hidden"
         >
           <div className="flex justify-end px-6 pt-6">
             <span className="h-16" aria-hidden />
@@ -53,7 +53,7 @@ export function MobileMenu({
                     href={link.href}
                     onClick={onClose}
                     className={`font-serif text-3xl ${
-                      isActive ? "text-gold-400" : "text-offwhite"
+                      isActive ? "text-gold-600" : "text-ink"
                     }`}
                   >
                     {link.label}
@@ -71,7 +71,7 @@ export function MobileMenu({
               <Link
                 href="#book"
                 onClick={onClose}
-                className="rounded-full bg-gold-500 px-8 py-3 text-base font-semibold text-navy-950"
+                className="rounded-full bg-gold-500 px-8 py-3 text-base font-semibold text-ink"
               >
                 Book a Free Consultation
               </Link>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -34,6 +35,7 @@ const STATS = [
 export function Results() {
   const sectionRef = useRef<HTMLElement>(null);
   const borderRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
   const pyramidsRef = useRef<HTMLDivElement>(null);
   const numberRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const hasAnimated = useRef(false);
@@ -64,12 +66,22 @@ export function Results() {
             duration: 1.2,
             ease: "power2.out",
             transformOrigin: "left",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 80%",
-            },
+            scrollTrigger: { trigger: sectionRef.current, start: "top 80%" },
           }
         );
+      }
+
+      if (imageRef.current) {
+        gsap.to(imageRef.current, {
+          y: 80,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: true,
+          },
+        });
       }
 
       if (pyramidsRef.current) {
@@ -118,15 +130,37 @@ export function Results() {
     <section
       ref={sectionRef}
       id="results"
-      className="relative overflow-hidden bg-navy-800 py-24 sm:py-32"
+      className="relative overflow-hidden bg-sand py-24 sm:py-32"
     >
       <div
         ref={borderRef}
         aria-hidden
-        className="absolute inset-x-0 top-0 h-px origin-left bg-gradient-to-r from-transparent via-gold-400/60 to-transparent"
+        className="absolute inset-x-0 top-0 z-20 h-px origin-left bg-gradient-to-r from-transparent via-gold-500/70 to-transparent"
       />
 
-      {/* Ghosted pyramid outlines, drift with scroll */}
+      {/* Parallax photo background */}
+      <div
+        ref={imageRef}
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-20 h-[120%] will-change-transform"
+      >
+        <Image
+          src="/images/pyramids1.jpg"
+          alt=""
+          fill
+          quality={75}
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+      </div>
+
+      {/* Warm ivory overlay (~85%) so counters pop */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10 bg-ivory/[0.88]"
+      />
+
+      {/* Ghosted pyramid outlines, recolored gold for light bg */}
       <div
         ref={pyramidsRef}
         aria-hidden
@@ -135,35 +169,20 @@ export function Results() {
         <svg
           viewBox="0 0 1440 500"
           preserveAspectRatio="xMidYMax slice"
-          className="h-full w-full opacity-[0.05]"
+          className="h-full w-full opacity-[0.10]"
         >
-          <polygon
-            points="120,480 320,180 520,480"
-            fill="none"
-            stroke="#d4af37"
-            strokeWidth="2"
-          />
-          <polygon
-            points="850,480 1080,120 1310,480"
-            fill="none"
-            stroke="#d4af37"
-            strokeWidth="2"
-          />
-          <polygon
-            points="1000,480 1160,220 1320,480"
-            fill="none"
-            stroke="#d4af37"
-            strokeWidth="1.5"
-          />
+          <polygon points="120,480 320,180 520,480" fill="none" stroke="#8a6c17" strokeWidth="2" />
+          <polygon points="850,480 1080,120 1310,480" fill="none" stroke="#8a6c17" strokeWidth="2" />
+          <polygon points="1000,480 1160,220 1320,480" fill="none" stroke="#8a6c17" strokeWidth="1.5" />
         </svg>
       </div>
 
-      <div className="mx-auto max-w-6xl px-6 lg:px-8">
+      <div className="relative mx-auto max-w-6xl px-6 lg:px-8">
         <div className="mx-auto mb-16 max-w-2xl text-center">
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-400">
+          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-600">
             The Numbers
           </p>
-          <h2 className="font-serif text-3xl leading-tight text-offwhite sm:text-5xl">
+          <h2 className="font-serif text-3xl leading-tight text-ink sm:text-5xl">
             Results You Can Measure
           </h2>
         </div>
@@ -175,13 +194,13 @@ export function Results() {
                 ref={(el) => {
                   numberRefs.current[i] = el;
                 }}
-                className="block font-serif text-4xl text-gold-400 sm:text-5xl md:text-6xl"
+                className="block font-serif text-4xl text-gold-600 sm:text-5xl md:text-6xl"
               >
                 {stat.prefix}
                 {0}
                 {stat.suffix}
               </span>
-              <p className="mt-3 text-sm leading-relaxed text-offwhite/60">
+              <p className="mt-3 text-sm font-medium leading-relaxed text-ink-soft">
                 {stat.label}
               </p>
             </div>

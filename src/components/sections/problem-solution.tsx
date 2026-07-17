@@ -68,10 +68,7 @@ export function ProblemSolution() {
           duration: 0.7,
           ease: "power2.out",
           stagger: 0.15,
-          scrollTrigger: {
-            trigger: problemRef.current,
-            start: "top 75%",
-          },
+          scrollTrigger: { trigger: problemRef.current, start: "top 75%" },
         });
       }
 
@@ -83,10 +80,7 @@ export function ProblemSolution() {
           ease: "power2.out",
           stagger: 0.15,
           delay: 0.15,
-          scrollTrigger: {
-            trigger: solutionRef.current,
-            start: "top 75%",
-          },
+          scrollTrigger: { trigger: solutionRef.current, start: "top 75%" },
         });
       }
 
@@ -99,10 +93,7 @@ export function ProblemSolution() {
             duration: 1,
             ease: "power2.out",
             transformOrigin: "top",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 65%",
-            },
+            scrollTrigger: { trigger: sectionRef.current, start: "top 65%" },
           }
         );
       }
@@ -115,45 +106,44 @@ export function ProblemSolution() {
     <section
       ref={sectionRef}
       id="problem-solution"
-      className="relative overflow-hidden bg-navy-900 py-24 sm:py-32"
+      className="relative overflow-hidden bg-white-soft py-24 sm:py-32"
     >
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
         <div className="mx-auto mb-16 max-w-3xl text-center">
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-400">
+          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-600">
             The Challenge
           </p>
-          <h2 className="font-serif text-3xl leading-tight text-offwhite sm:text-5xl">
+          <h2 className="font-serif text-3xl leading-tight text-ink sm:text-5xl">
             Great Hotels Stay Empty for One Reason: Nobody Finds Them
           </h2>
         </div>
 
         <div className="relative grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-16">
-          {/* Divider line */}
           <div
             ref={dividerRef}
             aria-hidden
-            className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-gold-400/40 to-transparent md:block"
+            className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-gold-500/40 to-transparent md:block"
           />
 
-          {/* Problem column */}
-          <div ref={problemRef} className="space-y-8 opacity-90 grayscale-[35%]">
-            <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-offwhite/40">
+          {/* Problem column — muted */}
+          <div ref={problemRef} className="space-y-8">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-ink-mute">
               The Problem
             </h3>
             {PROBLEMS.map((item) => (
               <div
                 key={item.title}
                 data-item
-                className="flex gap-4 rounded-2xl border border-offwhite/10 bg-white/[0.02] p-5"
+                className="flex gap-4 rounded-2xl border border-ink/10 bg-sand/50 p-5"
               >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-offwhite/5 text-offwhite/50">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink/5 text-ink-mute">
                   <item.icon className="h-5 w-5" strokeWidth={1.75} />
                 </div>
                 <div>
-                  <h4 className="mb-1 font-semibold text-offwhite/80">
+                  <h4 className="mb-1 font-semibold text-ink/80">
                     {item.title}
                   </h4>
-                  <p className="text-sm leading-relaxed text-offwhite/50">
+                  <p className="text-sm leading-relaxed text-ink-soft">
                     {item.body}
                   </p>
                 </div>
@@ -161,25 +151,25 @@ export function ProblemSolution() {
             ))}
           </div>
 
-          {/* Solution column */}
+          {/* Solution column — warm gold/teal */}
           <div ref={solutionRef} className="space-y-8">
-            <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-gold-400">
+            <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-teal-600">
               The Revstay Solution
             </h3>
             {SOLUTIONS.map((item) => (
               <div
                 key={item.title}
                 data-item
-                className="flex gap-4 rounded-2xl border border-gold-400/20 bg-gold-500/[0.06] p-5"
+                className="flex gap-4 rounded-2xl border border-gold-500/25 bg-gold-500/[0.08] p-5 shadow-[var(--shadow-warm-sm)]"
               >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold-500/15 text-gold-400">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-teal-500/15 text-teal-600">
                   <item.icon className="h-5 w-5" strokeWidth={1.75} />
                 </div>
                 <div>
-                  <h4 className="mb-1 font-semibold text-offwhite">
+                  <h4 className="mb-1 font-semibold text-ink">
                     {item.title}
                   </h4>
-                  <p className="text-sm leading-relaxed text-offwhite/70">
+                  <p className="text-sm leading-relaxed text-ink-soft">
                     {item.body}
                   </p>
                 </div>

@@ -1,26 +1,25 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { EgyptSkyline } from "@/components/sections/egypt-skyline";
 
 const HEADLINE = "Turn Empty Rooms Into Booked Nights";
 
 const PLATFORMS = ["Booking.com", "Expedia", "TripAdvisor"];
 
 const FLOATING_STATS = [
-  { label: "+42% Direct Bookings", className: "left-[4%] top-[18%] md:left-[8%]" },
-  { label: "Occupancy 94%", className: "right-[4%] top-[30%] md:right-[10%]" },
-  { label: "+3.1★ Guest Rating", className: "left-[10%] bottom-[14%] md:left-[16%]" },
+  { label: "+42% Direct Bookings", className: "left-[4%] top-[20%] md:left-[7%]" },
+  { label: "Occupancy 94%", className: "right-[4%] top-[26%] md:right-[8%]" },
+  { label: "+3.1★ Guest Rating", className: "left-[8%] bottom-[26%] md:left-[12%]" },
 ];
 
 export function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const skylineRef = useRef<HTMLDivElement>(null);
-  const sunRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
   const prefersReducedMotion = useReducedMotion();
 
@@ -43,8 +42,8 @@ export function Hero() {
         },
       });
 
-      if (sunRef.current) {
-        gsap.to(sunRef.current, {
+      if (imageRef.current) {
+        gsap.to(imageRef.current, {
           y: isMobile ? 60 : 140,
           ease: "none",
           scrollTrigger: {
@@ -55,27 +54,6 @@ export function Hero() {
           },
         });
       }
-
-      const layerSpeeds = isMobile
-        ? { "1": 20, "2": 45, "3": 75 }
-        : { "1": 40, "2": 90, "3": 150 };
-
-      Object.entries(layerSpeeds).forEach(([layer, distance]) => {
-        const el = skylineRef.current?.querySelector(
-          `[data-skyline-layer="${layer}"]`
-        );
-        if (!el) return;
-        gsap.to(el, {
-          y: -distance,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top top",
-            end: "bottom top",
-            scrub: true,
-          },
-        });
-      });
     }, sectionRef);
 
     return () => ctx.revert();
@@ -138,34 +116,36 @@ export function Hero() {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative flex min-h-screen items-center overflow-hidden bg-navy-900"
+      className="relative flex min-h-screen items-end overflow-hidden bg-cream pb-20 sm:items-center sm:pb-0"
     >
-      {/* Animated gradient glow */}
+      {/* Full-bleed golden-hour photo with parallax + Ken Burns */}
+      <div
+        ref={imageRef}
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-20 h-[120%] will-change-transform"
+      >
+        <div className={prefersReducedMotion ? "h-full w-full" : "ken-burns h-full w-full"}>
+          <Image
+            src="/images/pyramids2.jpg"
+            alt=""
+            fill
+            priority
+            quality={82}
+            sizes="100vw"
+            className="object-cover object-[center_30%]"
+          />
+        </div>
+      </div>
+
+      {/* Readability overlays: warm ivory rising from the bottom + soft top light */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10"
-      >
-        <div className="hero-glow absolute left-1/2 top-1/3 h-[60vmax] w-[60vmax] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-500/20 blur-[120px]" />
-      </div>
-
-      {/* Grain overlay */}
-      <div aria-hidden className="hero-grain pointer-events-none absolute inset-0 -z-10 opacity-[0.06]" />
-
-      {/* Sun/moon glow disc */}
-      <div
-        ref={sunRef}
-        aria-hidden
-        className="pointer-events-none absolute left-1/2 top-[38%] -z-10 h-40 w-40 -translate-x-1/2 rounded-full bg-gold-300/25 blur-3xl will-change-transform sm:h-56 sm:w-56"
+        style={{
+          background:
+            "linear-gradient(to bottom, rgba(250,246,239,0.10) 0%, rgba(250,246,239,0.30) 38%, rgba(250,246,239,0.82) 72%, rgba(250,246,239,0.97) 100%)",
+        }}
       />
-
-      {/* Egyptian skyline parallax scene */}
-      <div
-        ref={skylineRef}
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[40vh] min-h-[220px] will-change-transform"
-      >
-        <EgyptSkyline />
-      </div>
 
       {/* Floating stat cards */}
       {FLOATING_STATS.map((stat, i) => (
@@ -178,10 +158,7 @@ export function Hero() {
           animate={
             prefersReducedMotion
               ? undefined
-              : {
-                  opacity: 1,
-                  y: [0, -14, 0],
-                }
+              : { opacity: 1, y: [0, -14, 0] }
           }
           transition={
             prefersReducedMotion
@@ -196,7 +173,7 @@ export function Hero() {
                   },
                 }
           }
-          className={`pointer-events-none absolute z-10 hidden rounded-2xl border border-gold-300/20 bg-white/5 px-5 py-3 text-sm font-medium text-offwhite/90 shadow-lg backdrop-blur-md sm:block will-change-transform ${
+          className={`pointer-events-none absolute z-10 hidden rounded-2xl border border-white/60 bg-white-soft/80 px-5 py-3 text-sm font-semibold text-ink shadow-[var(--shadow-warm-sm)] backdrop-blur-md sm:block will-change-transform ${
             i === 2 ? "lg:block" : "sm:block"
           } ${stat.className}`}
         >
@@ -212,12 +189,12 @@ export function Hero() {
           initial={prefersReducedMotion ? undefined : "hidden"}
           animate="visible"
           variants={fadeUp(0)}
-          className="mb-6 text-sm font-semibold uppercase tracking-[0.2em] text-gold-400"
+          className="mb-6 rounded-full bg-white-soft/70 px-4 py-1.5 text-sm font-semibold uppercase tracking-[0.2em] text-gold-600 backdrop-blur-sm"
         >
           OTA Revenue Management for Hotels
         </motion.p>
 
-        <h1 className="mb-6 font-serif text-4xl leading-tight text-offwhite sm:text-6xl md:text-7xl">
+        <h1 className="mb-6 font-serif text-4xl leading-tight text-ink sm:text-6xl md:text-7xl">
           {HEADLINE.split(" ").map((word, i) => (
             <motion.span
               key={`${word}-${i}`}
@@ -236,7 +213,7 @@ export function Hero() {
           initial={prefersReducedMotion ? undefined : "hidden"}
           animate="visible"
           variants={fadeUp(0.5)}
-          className="mb-10 max-w-2xl text-lg text-offwhite/70 sm:text-xl"
+          className="mb-10 max-w-2xl text-lg font-medium text-ink-soft sm:text-xl"
         >
           Revstay builds and optimizes your hotel&apos;s presence on
           Booking.com, Expedia, and TripAdvisor — so travelers find you
@@ -251,13 +228,13 @@ export function Hero() {
         >
           <a
             href="#book"
-            className="hero-cta-glow rounded-full bg-gold-500 px-8 py-3.5 text-base font-semibold text-navy-950 transition-transform hover:scale-[1.03] hover:bg-gold-400"
+            className="hero-cta-glow rounded-full bg-gold-500 px-8 py-3.5 text-base font-semibold text-ink transition-transform hover:scale-[1.03] hover:bg-gold-400"
           >
             Book a Free Consultation
           </a>
           <a
             href="#services"
-            className="rounded-full border border-offwhite/25 px-8 py-3.5 text-base font-semibold text-offwhite/90 transition-colors hover:border-gold-400/60 hover:text-gold-300"
+            className="rounded-full border border-ink/25 bg-white-soft/60 px-8 py-3.5 text-base font-semibold text-ink backdrop-blur-sm transition-colors hover:border-gold-500 hover:text-gold-600"
           >
             See How It Works
           </a>
@@ -269,14 +246,14 @@ export function Hero() {
           variants={fadeUp(0.9)}
           className="flex flex-col items-center gap-3"
         >
-          <p className="text-xs uppercase tracking-[0.15em] text-offwhite/50">
+          <p className="text-xs font-medium uppercase tracking-[0.15em] text-ink-mute">
             Trusted expertise across the world&apos;s leading booking platforms
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3">
             {PLATFORMS.map((platform) => (
               <span
                 key={platform}
-                className="rounded-full border border-offwhite/10 bg-white/5 px-4 py-1.5 text-xs font-medium tracking-wide text-offwhite/60"
+                className="rounded-full border border-ink/10 bg-white-soft/70 px-4 py-1.5 text-xs font-semibold tracking-wide text-ink-soft"
               >
                 {platform}
               </span>
@@ -295,9 +272,9 @@ export function Hero() {
         <motion.div
           animate={prefersReducedMotion ? undefined : { y: [0, 10, 0] }}
           transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-          className="h-9 w-5 rounded-full border border-offwhite/30 p-1 will-change-transform"
+          className="h-9 w-5 rounded-full border border-ink/30 p-1 will-change-transform"
         >
-          <div className="h-1.5 w-1.5 rounded-full bg-gold-400" />
+          <div className="h-1.5 w-1.5 rounded-full bg-gold-500" />
         </motion.div>
       </motion.div>
     </section>

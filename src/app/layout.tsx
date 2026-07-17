@@ -50,7 +50,7 @@ export default function RootLayout({
       lang="en"
       className={`${playfair.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-navy-900 text-offwhite">
+      <body className="min-h-full flex flex-col bg-ivory text-ink">
         <IntroLoader />
         <SmoothScrollProvider>
           <Navbar />

@@ -12,19 +12,19 @@ function LotusOrnament({ x }: { x: number }) {
       <path
         d="M0,20 Q-10,0 0,-16 Q10,0 0,20"
         fill="none"
-        stroke="#d4af37"
+        stroke="#8a6c17"
         strokeWidth="1.5"
       />
       <path
         d="M-14,14 Q-16,0 -4,-8"
         fill="none"
-        stroke="#d4af37"
+        stroke="#8a6c17"
         strokeWidth="1"
       />
       <path
         d="M14,14 Q16,0 4,-8"
         fill="none"
-        stroke="#d4af37"
+        stroke="#8a6c17"
         strokeWidth="1"
       />
     </g>
@@ -95,7 +95,7 @@ export function ScrollScene() {
       <svg
         viewBox="0 0 1440 120"
         preserveAspectRatio="none"
-        className="absolute inset-0 h-full w-full opacity-[0.03]"
+        className="absolute inset-0 h-full w-full opacity-[0.06]"
       >
         {Array.from({ length: 24 }).map((_, i) => (
           <rect
@@ -105,7 +105,7 @@ export function ScrollScene() {
             width="18"
             height="60"
             fill="none"
-            stroke="#d4af37"
+            stroke="#8a6c17"
             strokeWidth="1"
           />
         ))}
@@ -122,7 +122,7 @@ export function ScrollScene() {
           y1="60"
           x2="1400"
           y2="60"
-          stroke="#d4af37"
+          stroke="#8a6c17"
           strokeWidth="1.5"
         />
         {ORNAMENT_X.map((x) => (

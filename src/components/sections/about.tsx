@@ -14,7 +14,7 @@ function CompassOrnament() {
   return (
     <svg
       viewBox="0 0 120 120"
-      className="mx-auto mb-8 h-16 w-16 text-gold-400/50"
+      className="mx-auto mb-8 h-16 w-16 text-gold-600/60"
       fill="none"
       stroke="currentColor"
     >
@@ -91,7 +91,7 @@ export function About() {
     <section
       ref={sectionRef}
       id="about"
-      className="relative overflow-hidden bg-navy-900 py-24 sm:py-32"
+      className="relative overflow-hidden bg-white-soft py-24 sm:py-32"
     >
       <div
         ref={contentRef}
@@ -101,13 +101,13 @@ export function About() {
           <CompassOrnament />
         </div>
 
-        <p data-reveal className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-400">
+        <p data-reveal className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-600">
           Who We Are
         </p>
-        <h2 data-reveal className="mb-6 font-serif text-3xl leading-tight text-offwhite sm:text-5xl">
+        <h2 data-reveal className="mb-6 font-serif text-3xl leading-tight text-ink sm:text-5xl">
           Built by People Who Know How Travelers Book
         </h2>
-        <p data-reveal className="mb-10 text-lg leading-relaxed text-offwhite/70">
+        <p data-reveal className="mb-10 text-lg leading-relaxed text-ink-soft">
           Revstay was founded on real-world experience managing hotel
           listings across Booking.com, Expedia, and TripAdvisor. We&apos;ve
           seen — from the inside — exactly what makes a listing rise to the
@@ -120,7 +120,7 @@ export function About() {
             <span
               key={pill}
               data-reveal
-              className="rounded-full border border-gold-400/25 bg-gold-500/[0.06] px-5 py-2 text-sm font-medium text-gold-300"
+              className="rounded-full border border-teal-500/30 bg-teal-500/[0.08] px-5 py-2 text-sm font-semibold text-teal-600"
             >
               {pill}
             </span>
