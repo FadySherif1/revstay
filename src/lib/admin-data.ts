@@ -47,6 +47,8 @@ export type AdminDashboardData = {
     name: string | null;
     email: string;
     role: string;
+    // How they signed up: "email" (password) or "google" (OAuth).
+    signUpMethod: "email" | "google";
     createdAt: Date;
     bookingCount: number;
   }[];
@@ -161,6 +163,8 @@ export async function getAdminDashboardData(): Promise<AdminDashboardData> {
       name: u.name,
       email: u.email,
       role: u.role,
+      // Email/password users have a hashedPassword; OAuth-only users don't.
+      signUpMethod: (u.hashedPassword ? "email" : "google") as "email" | "google",
       createdAt: u.createdAt,
       bookingCount: u._count.bookings,
     })),

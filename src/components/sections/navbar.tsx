@@ -8,6 +8,7 @@ import { MobileMenu } from "@/components/sections/mobile-menu";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
 import { UserMenu } from "@/components/auth/user-menu";
+import { AdminNavLink } from "@/components/auth/admin-nav-link";
 import { useAuthModal } from "@/components/auth/auth-provider";
 
 export const NAV_LINKS = [
@@ -103,6 +104,7 @@ export function Navbar() {
           <div className="hidden items-center gap-4 md:flex">
             <LanguageSwitcher />
             <ThemeToggle />
+            <AdminNavLink />
             <UserMenu />
             <button
               type="button"
