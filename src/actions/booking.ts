@@ -1,10 +1,12 @@
 "use server";
 
 import { headers } from "next/headers";
+import { getLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
 import { bookingSchema } from "@/lib/booking-schema";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { sendBookingConfirmation } from "@/lib/send-booking-email";
 
 const BOOKING_MAX_PER_MIN = 5;
 
@@ -77,6 +79,21 @@ export async function createBooking(input: unknown): Promise<CreateBookingResult
       },
       select: { id: true },
     });
+
+    // Best-effort confirmation email — must never block the booking.
+    const locale = (await getLocale()) === "ar" ? "ar" : "en";
+    const whenLabel = new Intl.DateTimeFormat(
+      locale === "ar" ? "ar-EG" : "en-US",
+      { weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit" }
+    ).format(scheduledAt);
+    await sendBookingConfirmation({
+      to: email.toLowerCase(),
+      name,
+      hotelName,
+      whenLabel,
+      locale,
+    });
+
     return { ok: true, id: booking.id };
   } catch (err) {
     console.error("createBooking failed:", err);
