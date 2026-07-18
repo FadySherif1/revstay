@@ -2,6 +2,8 @@
 
 import { createContext, useContext, useEffect, useRef } from "react";
 import Lenis from "lenis";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const NAVBAR_OFFSET = 88;
 
@@ -15,18 +17,26 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
+    gsap.registerPlugin(ScrollTrigger);
+
     const lenis = new Lenis({
       duration: 1.2,
       smoothWheel: true,
     });
     lenisRef.current = lenis;
 
-    function raf(time: number) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
+    // Keep ScrollTrigger in sync with Lenis's smooth-scroll position and
+    // drive Lenis from GSAP's ticker so triggers never drift.
+    lenis.on("scroll", ScrollTrigger.update);
 
-    const rafId = requestAnimationFrame(raf);
+    function onRaf(time: number) {
+      lenis.raf(time * 1000);
+    }
+    gsap.ticker.add(onRaf);
+    gsap.ticker.lagSmoothing(0);
+
+    // Recalculate all trigger positions once layout has settled.
+    ScrollTrigger.refresh();
 
     function onAnchorClick(event: MouseEvent) {
       const target = (event.target as HTMLElement).closest("a[href^='#']");
@@ -44,7 +54,8 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
 
     return () => {
       document.removeEventListener("click", onAnchorClick);
-      cancelAnimationFrame(rafId);
+      lenis.off("scroll", ScrollTrigger.update);
+      gsap.ticker.remove(onRaf);
       lenis.destroy();
       lenisRef.current = null;
     };

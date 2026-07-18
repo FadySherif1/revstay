@@ -73,26 +73,34 @@ export function ProblemSolution() {
       const chevrons = sectionRef.current?.querySelectorAll("[data-chevron]");
 
       if (problemItems?.length) {
-        gsap.from(problemItems, {
-          opacity: 0,
-          y: 32,
-          duration: 0.7,
-          ease: "power2.out",
-          stagger: 0.15,
-          scrollTrigger: { trigger: problemRef.current, start: "top 75%" },
-        });
+        gsap.fromTo(
+          problemItems,
+          { opacity: 0, y: 32 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            ease: "power2.out",
+            stagger: 0.15,
+            scrollTrigger: { trigger: problemRef.current, start: "top 85%" },
+          }
+        );
       }
 
       if (solutionItems?.length) {
-        gsap.from(solutionItems, {
-          opacity: 0,
-          y: 32,
-          duration: 0.7,
-          ease: "power2.out",
-          stagger: 0.15,
-          delay: 0.15,
-          scrollTrigger: { trigger: solutionRef.current, start: "top 75%" },
-        });
+        gsap.fromTo(
+          solutionItems,
+          { opacity: 0, y: 32 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.7,
+            ease: "power2.out",
+            stagger: 0.15,
+            delay: 0.15,
+            scrollTrigger: { trigger: solutionRef.current, start: "top 85%" },
+          }
+        );
       }
 
       // Gold left-borders draw in (height 0 -> 100%)
@@ -128,14 +136,21 @@ export function ProblemSolution() {
       }
 
       if (closingRef.current) {
-        gsap.from(closingRef.current, {
-          opacity: 0,
-          y: 16,
-          duration: 0.8,
-          ease: "power2.out",
-          scrollTrigger: { trigger: closingRef.current, start: "top 90%" },
-        });
+        gsap.fromTo(
+          closingRef.current,
+          { opacity: 0, y: 16 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "power2.out",
+            scrollTrigger: { trigger: closingRef.current, start: "top 95%" },
+          }
+        );
       }
+
+      // Recalculate trigger positions after dynamic mount + Lenis layout.
+      ScrollTrigger.refresh();
     }, sectionRef);
 
     return () => ctx.revert();
