@@ -119,7 +119,7 @@ export default async function LocaleLayout({
                   <Navbar />
                   {children}
                 </SmoothScrollProvider>
-                <ChatWidget />
+                {process.env.CHAT_ENABLED === "true" && <ChatWidget />}
                 <AuthRoot />
               </AuthModalProvider>
             </ThemeProvider>
