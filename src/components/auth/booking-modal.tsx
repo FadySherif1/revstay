@@ -197,7 +197,7 @@ export function BookingModal() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
           onClick={handleClose}
-          className="fixed inset-0 z-[120] flex items-center justify-center overflow-y-auto bg-ink/40 p-4 backdrop-blur-sm"
+          className="fixed inset-0 z-[120] flex items-center justify-center bg-ink/40 p-4 backdrop-blur-sm"
         >
           <motion.div
             onClick={(e) => e.stopPropagation()}
@@ -205,7 +205,7 @@ export function BookingModal() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={prefersReducedMotion ? undefined : { opacity: 0, scale: 0.96, y: 8 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="relative my-8 w-full max-w-md rounded-3xl border border-ink/10 bg-white-soft px-7 pb-7 pt-14 shadow-[var(--shadow-warm)]"
+            className="relative flex max-h-[90dvh] w-full max-w-md flex-col overflow-hidden rounded-3xl border border-ink/10 bg-white-soft shadow-[var(--shadow-warm)]"
           >
             <motion.button
               type="button"
@@ -213,7 +213,7 @@ export function BookingModal() {
               onClick={handleClose}
               whileHover={prefersReducedMotion ? undefined : { rotate: 90 }}
               transition={{ duration: 0.25, ease: "easeOut" }}
-              className="group absolute top-4 flex h-11 w-11 items-center justify-center rounded-full text-ink-mute hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500/40 ltr:right-4 rtl:left-4"
+              className="group absolute top-4 z-10 flex h-11 w-11 items-center justify-center rounded-full text-ink-mute hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500/40 ltr:right-4 rtl:left-4"
             >
               <span
                 aria-hidden
@@ -222,6 +222,7 @@ export function BookingModal() {
               <X className="relative h-5 w-5" strokeWidth={2} />
             </motion.button>
 
+            <div className="scrollbar-hide overflow-y-auto px-7 pb-7 pt-14">
             {step === "form" && (
               <div>
                 <h2 className="mb-1 font-serif text-2xl text-ink">{t("formTitle")}</h2>
@@ -409,6 +410,7 @@ export function BookingModal() {
                 </button>
               </div>
             )}
+            </div>
           </motion.div>
         </motion.div>
       )}
