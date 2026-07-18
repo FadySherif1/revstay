@@ -55,10 +55,11 @@ export function Footer() {
               {t("contact")}
             </p>
             <a
-              href="mailto:hello@revstay.com"
-              className="mb-5 block text-sm text-ink-soft transition-colors hover:text-gold-600"
+              href="mailto:revstay0@gmail.com"
+              dir="ltr"
+              className="mb-5 block text-sm text-ink-soft transition-colors hover:text-gold-600 rtl:text-end"
             >
-              hello@revstay.com
+              revstay0@gmail.com
             </a>
             <div className="flex items-center gap-4">
               {SOCIALS.map((social) => (
