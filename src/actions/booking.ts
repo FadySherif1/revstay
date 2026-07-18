@@ -31,14 +31,33 @@ export async function createBooking(input: unknown): Promise<CreateBookingResult
     return { ok: false, error: "invalid" };
   }
 
-  const { name, phone, email, hotelName, hotelLocation, notes, date, slot } =
-    parsed.data;
+  const {
+    name,
+    phone,
+    email,
+    hotelName,
+    hotelLocation,
+    roomCount,
+    hasListings,
+    platforms,
+    otherPlatform,
+    notes,
+    date,
+    slot,
+  } = parsed.data;
 
   // Combine the chosen day + slot into a timestamp.
   const scheduledAt = new Date(`${date}T${slot}:00`);
   if (Number.isNaN(scheduledAt.getTime())) {
     return { ok: false, error: "invalid" };
   }
+
+  // If they don't have listings, ignore any platform selection.
+  const finalPlatforms = hasListings ? platforms : [];
+  const finalOther =
+    hasListings && otherPlatform && otherPlatform.trim()
+      ? otherPlatform.trim()
+      : null;
 
   try {
     const booking = await prisma.booking.create({
@@ -49,6 +68,10 @@ export async function createBooking(input: unknown): Promise<CreateBookingResult
         email: email.toLowerCase(),
         hotelName,
         hotelLocation,
+        roomCount,
+        hasListings,
+        platforms: finalPlatforms,
+        otherPlatform: finalOther,
         notes: notes || null,
         scheduledAt,
       },

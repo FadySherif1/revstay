@@ -8,6 +8,7 @@ import { CalendarCheck, X, ArrowLeft, Loader2 } from "lucide-react";
 import { useAuthModal } from "@/components/auth/auth-provider";
 import { createBooking } from "@/actions/booking";
 import { BOOKING_SLOTS, type BookingSlot } from "@/lib/booking-schema";
+import { PLATFORMS } from "@/lib/platforms";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const PHONE_RE = /^[+()\-\s0-9]{6,20}$/;
@@ -20,6 +21,10 @@ type FormState = {
   email: string;
   hotelName: string;
   hotelLocation: string;
+  roomCount: string;
+  hasListings: boolean | null;
+  platforms: string[];
+  otherPlatform: string;
   notes: string;
 };
 
@@ -57,6 +62,10 @@ export function BookingModal() {
     email: "",
     hotelName: "",
     hotelLocation: "",
+    roomCount: "",
+    hasListings: null,
+    platforms: [],
+    otherPlatform: "",
     notes: "",
   });
   const [prefilled, setPrefilled] = useState(false);
@@ -101,15 +110,26 @@ export function BookingModal() {
     setPrefilled(false);
   }
 
-  function set<K extends keyof FormState>(key: K, value: string) {
+  function set<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((f) => ({ ...f, [key]: value }));
+  }
+
+  function togglePlatform(name: string) {
+    setForm((f) => ({
+      ...f,
+      platforms: f.platforms.includes(name)
+        ? f.platforms.filter((p) => p !== name)
+        : [...f.platforms, name],
+    }));
   }
 
   function validateForm(): boolean {
     if (
       form.name.trim().length < 2 ||
       form.hotelName.trim().length < 2 ||
-      form.hotelLocation.trim().length < 2
+      form.hotelLocation.trim().length < 2 ||
+      !(Number(form.roomCount) >= 1) ||
+      form.hasListings === null
     ) {
       setError(t("errors.required"));
       return false;
@@ -120,6 +140,15 @@ export function BookingModal() {
     }
     if (!EMAIL_RE.test(form.email.trim())) {
       setError(t("errors.email"));
+      return false;
+    }
+    // If they have listings, require at least one platform or an "other".
+    if (
+      form.hasListings &&
+      form.platforms.length === 0 &&
+      !form.otherPlatform.trim()
+    ) {
+      setError(t("errors.platformsRequired"));
       return false;
     }
     setError(null);
@@ -203,6 +232,71 @@ export function BookingModal() {
                   <Field label={t("email")} value={form.email} onChange={(v) => set("email", v)} type="email" autoComplete="email" dir="ltr" />
                   <Field label={t("hotelName")} value={form.hotelName} onChange={(v) => set("hotelName", v)} />
                   <Field label={t("hotelLocation")} value={form.hotelLocation} onChange={(v) => set("hotelLocation", v)} />
+                  <Field label={t("roomCount")} value={form.roomCount} onChange={(v) => set("roomCount", v.replace(/[^0-9]/g, ""))} type="text" dir="ltr" inputMode="numeric" />
+
+                  {/* Existing listings? yes/no */}
+                  <div>
+                    <label className="mb-1.5 block text-xs font-medium text-ink-mute">
+                      {t("hasListingsQuestion")}
+                    </label>
+                    <div className="flex gap-2">
+                      {[true, false].map((val) => {
+                        const active = form.hasListings === val;
+                        return (
+                          <button
+                            key={String(val)}
+                            type="button"
+                            onClick={() => set("hasListings", val)}
+                            className={`flex-1 rounded-xl border py-2 text-sm font-semibold transition-colors ${
+                              active
+                                ? "border-gold-500 bg-gold-500 text-gold-ink"
+                                : "border-ink/15 bg-ivory text-ink-soft hover:border-gold-500/50"
+                            }`}
+                          >
+                            {val ? t("yes") : t("no")}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Platform picker — only when they have listings */}
+                  {form.hasListings === true && (
+                    <div>
+                      <label className="mb-1.5 block text-xs font-medium text-ink-mute">
+                        {t("platformsLabel")}
+                      </label>
+                      <div className="flex flex-wrap gap-2">
+                        {PLATFORMS.map((p) => {
+                          const active = form.platforms.includes(p);
+                          return (
+                            <button
+                              key={p}
+                              type="button"
+                              onClick={() => togglePlatform(p)}
+                              aria-pressed={active}
+                              className={`rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                                active
+                                  ? "border-gold-500 bg-gold-500 text-gold-ink"
+                                  : "border-ink/15 bg-ivory text-ink-soft hover:border-gold-500/50"
+                              }`}
+                            >
+                              {p}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <input
+                        type="text"
+                        value={form.otherPlatform}
+                        onChange={(e) => set("otherPlatform", e.target.value)}
+                        placeholder={t("otherPlatformPlaceholder")}
+                        aria-label={t("otherPlatform")}
+                        className="mt-2 w-full rounded-xl border border-ink/15 bg-ivory px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-mute focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500/30"
+                      />
+                    </div>
+                  )}
+
                   <div>
                     <label className="mb-1 block text-xs font-medium text-ink-mute">{t("notes")}</label>
                     <textarea
@@ -329,6 +423,7 @@ function Field({
   type = "text",
   autoComplete,
   dir,
+  inputMode,
 }: {
   label: string;
   value: string;
@@ -336,6 +431,7 @@ function Field({
   type?: string;
   autoComplete?: string;
   dir?: "ltr" | "rtl";
+  inputMode?: "numeric" | "tel" | "email" | "text";
 }) {
   return (
     <div>
@@ -346,6 +442,7 @@ function Field({
         onChange={(e) => onChange(e.target.value)}
         autoComplete={autoComplete}
         dir={dir}
+        inputMode={inputMode}
         className="w-full rounded-xl border border-ink/15 bg-ivory px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-mute focus:border-gold-500 focus:outline-none focus:ring-2 focus:ring-gold-500/30"
       />
     </div>

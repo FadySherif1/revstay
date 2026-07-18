@@ -87,6 +87,13 @@ model Booking {
   phone         String
   hotelName     String
   hotelLocation String
+  roomCount     Int
+  // Whether the hotel already has listings on booking platforms.
+  hasListings   Boolean       @default(false)
+  // Selected platform names (from the known 7) when hasListings is true.
+  platforms     String[]
+  // Free-text platform the guest typed under "Other".
+  otherPlatform String?
   scheduledAt   DateTime
   notes         String?
   status        BookingStatus @default(PENDING)
