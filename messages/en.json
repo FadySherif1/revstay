@@ -52,9 +52,40 @@
     }
   },
   "booking": {
-    "soonTitle": "Booking is coming next",
-    "soonBody": "You're all set. The consultation booking calendar will open here shortly — we'll be in touch to confirm your free session.",
-    "soonClose": "Got it"
+    "close": "Close",
+    "formTitle": "Book Your Free Consultation",
+    "formSubtitle": "Tell us a bit about your hotel so we can prepare for the call.",
+    "name": "Full name",
+    "phone": "Phone number",
+    "email": "Email",
+    "hotelName": "Hotel name",
+    "hotelLocation": "Hotel location",
+    "notes": "Anything else? (optional)",
+    "notesPlaceholder": "Your goals, current platforms, challenges…",
+    "next": "Choose a time",
+    "back": "Back",
+    "timeTitle": "Pick a date & time",
+    "timeSubtitle": "Choose a slot that works for you — it's a 30-minute call.",
+    "confirm": "Confirm Booking",
+    "booking": "Booking…",
+    "successTitle": "You're booked!",
+    "successBody": "Thanks, {name}. We've got your consultation request for {when}. We'll be in touch to confirm.",
+    "successClose": "Done",
+    "slots": {
+      "10:00": "10:00 AM",
+      "12:00": "12:00 PM",
+      "14:00": "2:00 PM",
+      "16:00": "4:00 PM"
+    },
+    "errors": {
+      "required": "Please fill in all required fields correctly.",
+      "phone": "Please enter a valid phone number.",
+      "email": "Please enter a valid email address.",
+      "noSlot": "Please pick a date and time.",
+      "rateLimited": "Too many attempts. Please wait a minute and try again.",
+      "unauthenticated": "Please sign in to book.",
+      "generic": "Something went wrong. Please try again."
+    }
   },
   "hero": {
     "eyebrow": "We Help Hotels Get More Bookings",

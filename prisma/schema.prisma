@@ -79,14 +79,17 @@ model VerificationToken {
 // ─── Bookings (free consultation meetings) ────────────────────────────
 
 model Booking {
-  id          String        @id @default(cuid())
-  userId      String
-  // Snapshot of contact details at booking time (user profile may change).
-  name        String
-  email       String
-  scheduledAt DateTime
-  notes       String?
-  status      BookingStatus @default(PENDING)
+  id            String        @id @default(cuid())
+  userId        String
+  // Snapshot of contact + hotel details at booking time.
+  name          String
+  email         String
+  phone         String
+  hotelName     String
+  hotelLocation String
+  scheduledAt   DateTime
+  notes         String?
+  status        BookingStatus @default(PENDING)
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
