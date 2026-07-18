@@ -153,18 +153,23 @@ export function AuthModal({ googleEnabled }: { googleEnabled: boolean }) {
                   key={key}
                   type="button"
                   onClick={() => setTab(key)}
-                  className={`relative flex-1 rounded-full py-2 text-sm font-semibold transition-colors ${
-                    tab === key ? "text-gold-ink" : "text-ink-soft hover:text-ink"
-                  }`}
+                  aria-pressed={tab === key}
+                  className="relative flex-1 rounded-full py-2.5 text-sm font-semibold"
                 >
                   {tab === key && (
                     <motion.span
                       layoutId="auth-tab"
                       transition={prefersReducedMotion ? { duration: 0 } : { type: "spring", stiffness: 400, damping: 32 }}
-                      className="absolute inset-0 -z-10 rounded-full bg-gold-500"
+                      className="absolute inset-0 rounded-full bg-gold-500 shadow-[var(--shadow-warm-sm)]"
                     />
                   )}
-                  {key === "signin" ? t("signIn") : t("createAccount")}
+                  <span
+                    className={`relative z-10 transition-colors ${
+                      tab === key ? "text-gold-ink" : "text-ink-soft hover:text-ink"
+                    }`}
+                  >
+                    {key === "signin" ? t("signIn") : t("createAccount")}
+                  </span>
                 </button>
               ))}
             </div>
