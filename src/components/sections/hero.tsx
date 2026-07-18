@@ -194,22 +194,6 @@ export function Hero() {
           </div>
         </motion.div>
       </div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={prefersReducedMotion ? undefined : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: prefersReducedMotion ? 0 : 1.3, duration: 0.8 }}
-        className="absolute bottom-8 left-1/2 z-20 -translate-x-1/2"
-      >
-        <motion.div
-          animate={prefersReducedMotion ? undefined : { y: [0, 10, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-          className="h-9 w-5 rounded-full border border-ink/30 p-1 will-change-transform"
-        >
-          <div className="h-1.5 w-1.5 rounded-full bg-gold-500" />
-        </motion.div>
-      </motion.div>
     </section>
   );
 }

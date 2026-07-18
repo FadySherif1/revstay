@@ -18,9 +18,6 @@ const Services = dynamic(() =>
 const Results = dynamic(() =>
   import("@/components/sections/results").then((m) => m.Results)
 );
-const Testimonials = dynamic(() =>
-  import("@/components/sections/testimonials").then((m) => m.Testimonials)
-);
 const About = dynamic(() =>
   import("@/components/sections/about").then((m) => m.About)
 );
@@ -41,7 +38,6 @@ export default function Home() {
         <ScrollScene />
         <Services />
         <Results />
-        <Testimonials />
         <About />
         <FinalCta />
       </main>

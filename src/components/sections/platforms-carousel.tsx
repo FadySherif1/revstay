@@ -83,14 +83,14 @@ export function PlatformsCarousel() {
       <div className="relative">
         {/* Viewport */}
         <div className="overflow-hidden px-6 lg:px-8" ref={emblaRef}>
-          <div className="flex touch-pan-y">
+          <div className="-mx-2 flex touch-pan-y">
             {PLATFORM_DETAILS.map((platform) => {
               const accent =
                 theme === "dark" ? platform.accentDark : platform.accentLight;
               return (
                 <div
                   key={platform.name}
-                  className="min-w-0 shrink-0 grow-0 basis-[82%] pl-4 first:pl-0 sm:basis-[46%] lg:basis-[28.5%]"
+                  className="min-w-0 shrink-0 grow-0 basis-[82%] px-2 sm:basis-[46%] lg:basis-[28.5%]"
                 >
                   <TiltCard className="h-full">
                     <article
