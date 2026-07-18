@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import { SmoothScrollProvider } from "@/components/ui/smooth-scroll-provider";
 import { IntroLoader } from "@/components/ui/intro-loader";
+import { ChatWidget } from "@/components/ui/chat-widget";
 import { Navbar } from "@/components/sections/navbar";
 import "./globals.css";
 
@@ -56,6 +57,7 @@ export default function RootLayout({
           <Navbar />
           {children}
         </SmoothScrollProvider>
+        <ChatWidget />
       </body>
     </html>
   );
