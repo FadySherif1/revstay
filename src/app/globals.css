@@ -145,6 +145,34 @@ section[id] {
   display: none;
 }
 
+/* Soft fade masks on the carousel viewport edges — mask works over any
+   section background and adapts to both themes automatically (unlike
+   color overlays). Vertical stays fully opaque so hover lift isn't
+   clipped mid-fade; only the left/right edges dissolve. */
+.edge-fade-x {
+  --edge-fade: 28px;
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 var(--edge-fade),
+    #000 calc(100% - var(--edge-fade)),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 var(--edge-fade),
+    #000 calc(100% - var(--edge-fade)),
+    transparent 100%
+  );
+}
+
+@media (min-width: 640px) {
+  .edge-fade-x {
+    --edge-fade: 72px;
+  }
+}
+
 ::selection {
   background: var(--color-selection-bg);
   color: var(--color-selection-fg);

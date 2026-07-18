@@ -95,8 +95,8 @@ export function PlatformsCarousel() {
       </div>
 
       <div className="relative">
-        {/* Viewport */}
-        <div className="overflow-hidden px-6 lg:px-8" ref={emblaRef}>
+        {/* Viewport — edge-fade-x dissolves cards softly at both edges */}
+        <div className="edge-fade-x overflow-hidden px-6 lg:px-8" ref={emblaRef}>
           <div className="-mx-2 flex touch-pan-y">
             {PLATFORM_DETAILS.map((platform) => {
               const accent =

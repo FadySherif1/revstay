@@ -129,16 +129,22 @@ export function AuthModal({ googleEnabled }: { googleEnabled: boolean }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={prefersReducedMotion ? undefined : { opacity: 0, scale: 0.96, y: 8 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="relative w-full max-w-md rounded-3xl border border-ink/10 bg-white-soft p-7 shadow-[var(--shadow-warm)]"
+            className="relative w-full max-w-md rounded-3xl border border-ink/10 bg-white-soft px-7 pb-7 pt-14 shadow-[var(--shadow-warm)]"
           >
-            <button
+            <motion.button
               type="button"
               aria-label={t("closeAuth")}
               onClick={closeAuth}
-              className="absolute top-5 flex h-8 w-8 items-center justify-center rounded-full text-ink-mute transition-colors hover:bg-ink/5 hover:text-ink ltr:right-5 rtl:left-5"
+              whileHover={prefersReducedMotion ? undefined : { rotate: 90 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+              className="group absolute top-4 flex h-11 w-11 items-center justify-center rounded-full text-ink-mute transition-colors hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500/40 ltr:right-4 rtl:left-4"
             >
-              <X className="h-5 w-5" strokeWidth={2} />
-            </button>
+              <span
+                aria-hidden
+                className="absolute inset-0 scale-75 rounded-full bg-ink/5 opacity-0 transition-all duration-200 group-hover:scale-100 group-hover:opacity-100"
+              />
+              <X className="relative h-5 w-5" strokeWidth={2} />
+            </motion.button>
 
             {/* Tabs */}
             <div className="mb-6 flex gap-1 rounded-full bg-ink/5 p-1">
