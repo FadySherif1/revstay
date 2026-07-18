@@ -6,8 +6,8 @@ import { motion, useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTranslations } from "next-intl";
-import { PLATFORMS } from "@/lib/platforms";
 import { useAuthModal } from "@/components/auth/auth-provider";
+import { TrustBadges } from "@/components/sections/trust-badges";
 
 export function Hero() {
   const t = useTranslations("hero");
@@ -177,21 +177,12 @@ export function Hero() {
           initial={prefersReducedMotion ? undefined : "hidden"}
           animate="visible"
           variants={fadeUp(0.9)}
-          className="flex flex-col items-center gap-3"
+          className="flex w-full flex-col items-center gap-4"
         >
           <p className="text-xs font-medium uppercase tracking-[0.15em] text-ink-mute">
             {t("trust")}
           </p>
-          <div className="flex max-w-xl flex-wrap items-center justify-center gap-2.5">
-            {PLATFORMS.map((platform) => (
-              <span
-                key={platform}
-                className="rounded-full border border-ink/10 bg-white-soft/70 px-4 py-1.5 text-xs font-semibold tracking-wide text-ink-soft"
-              >
-                {platform}
-              </span>
-            ))}
-          </div>
+          <TrustBadges />
         </motion.div>
       </div>
     </section>

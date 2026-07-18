@@ -136,6 +136,15 @@ section[id] {
   scroll-margin-top: 88px;
 }
 
+/* Hide scrollbar while keeping horizontal scroll (trust-line row on mobile). */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 ::selection {
   background: var(--color-selection-bg);
   color: var(--color-selection-fg);
