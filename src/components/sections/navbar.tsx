@@ -7,6 +7,8 @@ import { Link } from "@/i18n/navigation";
 import { MobileMenu } from "@/components/sections/mobile-menu";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
+import { UserMenu } from "@/components/auth/user-menu";
+import { useAuthModal } from "@/components/auth/auth-provider";
 
 export const NAV_LINKS = [
   { key: "services", href: "#services" },
@@ -19,6 +21,7 @@ const SECTION_IDS = NAV_LINKS.map((link) => link.href.slice(1));
 
 export function Navbar() {
   const t = useTranslations("nav");
+  const { requestBooking } = useAuthModal();
   const [scrolled, setScrolled] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -100,12 +103,14 @@ export function Navbar() {
           <div className="hidden items-center gap-4 md:flex">
             <LanguageSwitcher />
             <ThemeToggle />
-            <a
-              href="#book"
+            <UserMenu />
+            <button
+              type="button"
+              onClick={requestBooking}
               className="rounded-full bg-gold-500 px-5 py-2.5 text-sm font-semibold text-gold-ink transition-colors hover:bg-gold-400"
             >
               {t("book")}
-            </a>
+            </button>
           </div>
 
           <button

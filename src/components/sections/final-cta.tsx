@@ -2,9 +2,11 @@
 
 import Image from "next/image";
 import { useTranslations } from "next-intl";
+import { useAuthModal } from "@/components/auth/auth-provider";
 
 export function FinalCta() {
   const t = useTranslations("finalCta");
+  const { requestBooking } = useAuthModal();
   return (
     <section
       id="book"
@@ -46,9 +48,7 @@ export function FinalCta() {
 
         <button
           type="button"
-          onClick={() => {
-            // TODO: open auth + booking flow once implemented
-          }}
+          onClick={requestBooking}
           className="hero-cta-glow rounded-full bg-gold-500 px-10 py-4 text-lg font-semibold text-gold-ink transition-transform hover:scale-[1.03] hover:bg-gold-400"
         >
           {t("cta")}

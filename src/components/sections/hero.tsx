@@ -7,9 +7,11 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTranslations } from "next-intl";
 import { PLATFORMS } from "@/lib/platforms";
+import { useAuthModal } from "@/components/auth/auth-provider";
 
 export function Hero() {
   const t = useTranslations("hero");
+  const { requestBooking } = useAuthModal();
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
@@ -156,12 +158,13 @@ export function Hero() {
           variants={fadeUp(0.7)}
           className="mb-8 flex flex-col items-center gap-4 sm:flex-row"
         >
-          <a
-            href="#book"
+          <button
+            type="button"
+            onClick={requestBooking}
             className="hero-cta-glow rounded-full bg-gold-500 px-8 py-3.5 text-base font-semibold text-gold-ink transition-transform hover:scale-[1.03] hover:bg-gold-400"
           >
             {t("ctaPrimary")}
-          </a>
+          </button>
           <a
             href="#how-it-works"
             className="rounded-full border border-ink/25 bg-white-soft/60 px-8 py-3.5 text-base font-semibold text-ink backdrop-blur-sm transition-colors hover:border-gold-500 hover:text-gold-600"

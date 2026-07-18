@@ -17,6 +17,45 @@
     "en": "EN",
     "ar": "عربي"
   },
+  "auth": {
+    "signIn": "Sign In",
+    "createAccount": "Create Account",
+    "google": "Continue with Google",
+    "or": "or",
+    "name": "Full name",
+    "email": "Email",
+    "password": "Password",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "signInCta": "Sign In",
+    "createCta": "Create Account",
+    "signingIn": "Signing in…",
+    "creating": "Creating account…",
+    "haveAccount": "Already have an account?",
+    "noAccount": "Don't have an account?",
+    "switchToSignIn": "Sign in",
+    "switchToSignUp": "Create one",
+    "closeAuth": "Close",
+    "errors": {
+      "nameShort": "Please enter your name (at least 2 characters).",
+      "emailInvalid": "Please enter a valid email address.",
+      "passwordWeak": "Password must be at least 8 characters and include a letter and a number.",
+      "invalidCredentials": "Invalid email or password.",
+      "emailTaken": "An account with this email already exists.",
+      "rateLimited": "Too many attempts. Please wait a minute and try again.",
+      "generic": "Something went wrong. Please try again."
+    },
+    "menu": {
+      "myBookings": "My Bookings",
+      "signOut": "Sign Out",
+      "signInLink": "Sign In"
+    }
+  },
+  "booking": {
+    "soonTitle": "Booking is coming next",
+    "soonBody": "You're all set. The consultation booking calendar will open here shortly — we'll be in touch to confirm your free session.",
+    "soonClose": "Got it"
+  },
   "hero": {
     "eyebrow": "We Help Hotels Get More Bookings",
     "headline": "Turn Empty Rooms Into Booked Nights",

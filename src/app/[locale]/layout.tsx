@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { SessionProvider } from "next-auth/react";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Playfair_Display, Inter, Amiri, IBM_Plex_Sans_Arabic } from "next/font/google";
@@ -7,6 +8,8 @@ import { SmoothScrollProvider } from "@/components/ui/smooth-scroll-provider";
 import { IntroLoader } from "@/components/ui/intro-loader";
 import { ChatWidget } from "@/components/ui/chat-widget";
 import { ThemeProvider } from "@/components/ui/theme-provider";
+import { AuthModalProvider } from "@/components/auth/auth-provider";
+import { AuthRoot } from "@/components/auth/auth-root";
 import { Navbar } from "@/components/sections/navbar";
 import { themeInitScript } from "@/lib/theme-script";
 import { routing } from "@/i18n/routing";
@@ -108,14 +111,19 @@ export default async function LocaleLayout({
       </head>
       <body className="min-h-full flex flex-col bg-ivory text-ink">
         <NextIntlClientProvider>
-          <ThemeProvider>
-            <IntroLoader />
-            <SmoothScrollProvider>
-              <Navbar />
-              {children}
-            </SmoothScrollProvider>
-            <ChatWidget />
-          </ThemeProvider>
+          <SessionProvider>
+            <ThemeProvider>
+              <AuthModalProvider>
+                <IntroLoader />
+                <SmoothScrollProvider>
+                  <Navbar />
+                  {children}
+                </SmoothScrollProvider>
+                <ChatWidget />
+                <AuthRoot />
+              </AuthModalProvider>
+            </ThemeProvider>
+          </SessionProvider>
         </NextIntlClientProvider>
       </body>
     </html>

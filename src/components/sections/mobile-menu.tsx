@@ -3,9 +3,12 @@
 import { useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { signOut, useSession } from "next-auth/react";
+import { LogOut } from "lucide-react";
 import { NAV_LINKS } from "@/components/sections/navbar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { LanguageSwitcher } from "@/components/ui/language-switcher";
+import { useAuthModal } from "@/components/auth/auth-provider";
 
 export function MobileMenu({
   open,
@@ -17,6 +20,10 @@ export function MobileMenu({
   onClose: () => void;
 }) {
   const t = useTranslations("nav");
+  const tAuth = useTranslations("auth");
+  const { data: session, status } = useSession();
+  const { openAuth, requestBooking } = useAuthModal();
+  const signedIn = status === "authenticated" && !!session?.user;
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
@@ -75,13 +82,45 @@ export function MobileMenu({
                 <LanguageSwitcher />
                 <ThemeToggle />
               </div>
-              <a
-                href="#book"
-                onClick={onClose}
+
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  requestBooking();
+                }}
                 className="rounded-full bg-gold-500 px-8 py-3 text-base font-semibold text-gold-ink"
               >
                 {t("book")}
-              </a>
+              </button>
+
+              {/* Auth state */}
+              {signedIn ? (
+                <div className="flex flex-col items-center gap-3 text-center">
+                  <p className="text-sm text-ink-soft" dir="ltr">
+                    {session!.user.name || session!.user.email}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => signOut()}
+                    className="flex items-center gap-2 text-sm font-semibold text-ink-soft hover:text-gold-600"
+                  >
+                    <LogOut className="h-4 w-4 rtl:-scale-x-100" strokeWidth={1.75} />
+                    {tAuth("menu.signOut")}
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    onClose();
+                    openAuth("signin");
+                  }}
+                  className="text-sm font-semibold text-ink-soft hover:text-gold-600"
+                >
+                  {tAuth("menu.signInLink")}
+                </button>
+              )}
             </motion.div>
           </nav>
         </motion.div>
