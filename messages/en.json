@@ -17,6 +17,66 @@
     "en": "EN",
     "ar": "عربي"
   },
+  "admin": {
+    "title": "Dashboard",
+    "subtitle": "Everything happening across Revstay.",
+    "kpis": {
+      "totalVisits": "Total visits",
+      "uniqueVisitors": "Unique visitors",
+      "visitsToday": "Visits today",
+      "visits7d": "Visits (7 days)",
+      "totalUsers": "Accounts",
+      "users7d": "New accounts (7 days)",
+      "totalBookings": "Bookings",
+      "pendingBookings": "Pending bookings"
+    },
+    "conversion": {
+      "title": "Conversion",
+      "visitorToAccount": "Visitors → accounts",
+      "visitorToBooking": "Visitors → bookings"
+    },
+    "chart": {
+      "title": "Last 14 days",
+      "visits": "Visits",
+      "bookings": "Bookings"
+    },
+    "statusBreakdown": "Bookings by status",
+    "status": {
+      "PENDING": "Pending",
+      "CONFIRMED": "Confirmed",
+      "CANCELLED": "Cancelled"
+    },
+    "bookings": {
+      "title": "Recent bookings",
+      "empty": "No bookings yet.",
+      "hotel": "Hotel",
+      "contact": "Contact",
+      "rooms": "Rooms",
+      "listings": "Listings",
+      "when": "Requested",
+      "status": "Status",
+      "hasListingsYes": "Yes",
+      "hasListingsNo": "No"
+    },
+    "users": {
+      "title": "Users",
+      "empty": "No users yet.",
+      "name": "Name",
+      "email": "Email",
+      "role": "Role",
+      "joined": "Joined",
+      "bookings": "Bookings",
+      "makeAdmin": "Make admin",
+      "admin": "Admin",
+      "user": "User",
+      "promoteTitle": "Add an admin",
+      "promotePlaceholder": "email@example.com",
+      "promote": "Promote",
+      "promoted": "Done — they're now an admin.",
+      "notFound": "No account found with that email.",
+      "promoteError": "Couldn't promote. Try again."
+    }
+  },
   "auth": {
     "signIn": "Sign In",
     "createAccount": "Create Account",
@@ -47,6 +107,7 @@
     },
     "menu": {
       "myBookings": "My Bookings",
+      "dashboard": "Admin Dashboard",
       "signOut": "Sign Out",
       "signInLink": "Sign In"
     }

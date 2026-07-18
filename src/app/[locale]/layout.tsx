@@ -7,6 +7,7 @@ import { Playfair_Display, Inter, Amiri, IBM_Plex_Sans_Arabic } from "next/font/
 import { SmoothScrollProvider } from "@/components/ui/smooth-scroll-provider";
 import { IntroLoader } from "@/components/ui/intro-loader";
 import { ChatWidget } from "@/components/ui/chat-widget";
+import { PageViewTracker } from "@/components/ui/page-view-tracker";
 import { ThemeProvider } from "@/components/ui/theme-provider";
 import { AuthModalProvider } from "@/components/auth/auth-provider";
 import { AuthRoot } from "@/components/auth/auth-root";
@@ -121,6 +122,7 @@ export default async function LocaleLayout({
                 </SmoothScrollProvider>
                 {process.env.CHAT_ENABLED === "true" && <ChatWidget />}
                 <AuthRoot />
+                <PageViewTracker />
               </AuthModalProvider>
             </ThemeProvider>
           </SessionProvider>

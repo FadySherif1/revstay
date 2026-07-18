@@ -9,7 +9,8 @@
     "lint": "eslint",
     "postinstall": "prisma generate",
     "db:migrate": "prisma migrate dev",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:seed:admins": "tsx prisma/seed-admins.mts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.11.2",
@@ -41,6 +42,7 @@
     "eslint-config-next": "^15.5.20",
     "prisma": "^7.8.0",
     "tailwindcss": "^4",
+    "tsx": "^4.23.1",
     "typescript": "^5"
   }
 }

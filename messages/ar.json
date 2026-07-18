@@ -17,6 +17,66 @@
     "en": "EN",
     "ar": "عربي"
   },
+  "admin": {
+    "title": "لوحة التحكم",
+    "subtitle": "كل اللي بيحصل على Revstay.",
+    "kpis": {
+      "totalVisits": "إجمالي الزيارات",
+      "uniqueVisitors": "زوار فريدون",
+      "visitsToday": "زيارات النهاردة",
+      "visits7d": "زيارات (7 أيام)",
+      "totalUsers": "الحسابات",
+      "users7d": "حسابات جديدة (7 أيام)",
+      "totalBookings": "الحجوزات",
+      "pendingBookings": "حجوزات قيد الانتظار"
+    },
+    "conversion": {
+      "title": "معدل التحويل",
+      "visitorToAccount": "زوار ← حسابات",
+      "visitorToBooking": "زوار ← حجوزات"
+    },
+    "chart": {
+      "title": "آخر 14 يوم",
+      "visits": "الزيارات",
+      "bookings": "الحجوزات"
+    },
+    "statusBreakdown": "الحجوزات حسب الحالة",
+    "status": {
+      "PENDING": "قيد الانتظار",
+      "CONFIRMED": "مؤكّد",
+      "CANCELLED": "ملغي"
+    },
+    "bookings": {
+      "title": "آخر الحجوزات",
+      "empty": "مفيش حجوزات لسه.",
+      "hotel": "الفندق",
+      "contact": "التواصل",
+      "rooms": "الغرف",
+      "listings": "صفحات",
+      "when": "الميعاد",
+      "status": "الحالة",
+      "hasListingsYes": "نعم",
+      "hasListingsNo": "لا"
+    },
+    "users": {
+      "title": "المستخدمون",
+      "empty": "مفيش مستخدمين لسه.",
+      "name": "الاسم",
+      "email": "الإيميل",
+      "role": "الصلاحية",
+      "joined": "انضم",
+      "bookings": "الحجوزات",
+      "makeAdmin": "اجعله أدمن",
+      "admin": "أدمن",
+      "user": "مستخدم",
+      "promoteTitle": "إضافة أدمن",
+      "promotePlaceholder": "email@example.com",
+      "promote": "ترقية",
+      "promoted": "تم — بقى أدمن دلوقتي.",
+      "notFound": "مفيش حساب بالإيميل ده.",
+      "promoteError": "متعرفش نرقّيه. حاول تاني."
+    }
+  },
   "auth": {
     "signIn": "تسجيل الدخول",
     "createAccount": "إنشاء حساب",
@@ -47,6 +107,7 @@
     },
     "menu": {
       "myBookings": "حجوزاتي",
+      "dashboard": "لوحة التحكم",
       "signOut": "تسجيل الخروج",
       "signInLink": "تسجيل الدخول"
     }

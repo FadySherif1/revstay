@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { authConfig } from "@/auth.config";
 import { signInSchema } from "@/lib/auth-schemas";
+import { isBootstrapAdmin } from "@/lib/admin";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
@@ -12,6 +13,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   // strategy (required alongside Credentials), it also lets the Google
   // flow create User rows via our Prisma 7 generated client.
   adapter: PrismaAdapter(prisma),
+  events: {
+    // Auto-promote bootstrap admin emails on any successful sign-in, so
+    // they become ADMIN even if they registered before this existed.
+    async signIn({ user }) {
+      if (user?.email && isBootstrapAdmin(user.email)) {
+        await prisma.user.updateMany({
+          where: { email: user.email.toLowerCase(), role: { not: "ADMIN" } },
+          data: { role: "ADMIN" },
+        });
+      }
+    },
+  },
   providers: [
     ...authConfig.providers,
     Credentials({
@@ -34,13 +47,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const valid = await bcrypt.compare(password, user.hashedPassword);
         if (!valid) return null;
 
+        // Bootstrap admins are ADMIN regardless of stored role (the signIn
+        // event also persists it).
+        const role = isBootstrapAdmin(user.email) ? "ADMIN" : user.role;
+
         // Returned object seeds the JWT (never include the hash).
         return {
           id: user.id,
           name: user.name,
           email: user.email,
           image: user.image,
-          role: user.role,
+          role,
         };
       },
     }),

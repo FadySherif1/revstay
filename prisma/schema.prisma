@@ -112,3 +112,18 @@ enum BookingStatus {
   CONFIRMED
   CANCELLED
 }
+
+// ─── Analytics ────────────────────────────────────────────────────────
+// One row per page view. visitorId is a salted hash of IP+UA (no raw IP
+// stored) so we can estimate unique visitors without holding PII.
+
+model PageView {
+  id        String   @id @default(cuid())
+  path      String
+  locale    String?
+  visitorId String
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([visitorId])
+}

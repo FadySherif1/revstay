@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { signOut, useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { LogOut, CalendarDays } from "lucide-react";
+import { LogOut, CalendarDays, LayoutDashboard } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { useAuthModal } from "@/components/auth/auth-provider";
 
 function initials(nameOrEmail: string) {
@@ -79,6 +80,17 @@ export function UserMenu() {
                 {session.user.email}
               </p>
             </div>
+            {session.user.role === "ADMIN" && (
+              <Link
+                href="/admin"
+                role="menuitem"
+                onClick={() => setOpen(false)}
+                className="flex w-full items-center gap-3 px-4 py-3 text-sm font-semibold text-gold-600 transition-colors hover:bg-gold-500/10"
+              >
+                <LayoutDashboard className="h-4 w-4" strokeWidth={1.75} />
+                {t("menu.dashboard")}
+              </Link>
+            )}
             {/* TODO: link to /account/bookings once that page exists. */}
             <button
               type="button"
