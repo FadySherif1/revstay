@@ -222,7 +222,7 @@ export function BookingModal() {
               <X className="relative h-5 w-5" strokeWidth={2} />
             </motion.button>
 
-            <div className="scrollbar-hide overflow-y-auto px-7 pb-7 pt-14">
+            <div className="scrollbar-slim overflow-y-auto px-7 pb-7 pt-14">
             {step === "form" && (
               <div>
                 <h2 className="mb-1 font-serif text-2xl text-ink">{t("formTitle")}</h2>

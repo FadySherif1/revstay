@@ -129,7 +129,7 @@ export function AuthModal({ googleEnabled }: { googleEnabled: boolean }) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={prefersReducedMotion ? undefined : { opacity: 0, scale: 0.96, y: 8 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="scrollbar-hide relative max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-3xl border border-ink/10 bg-white-soft px-7 pb-7 pt-14 shadow-[var(--shadow-warm)]"
+            className="scrollbar-slim relative max-h-[90dvh] w-full max-w-md overflow-y-auto rounded-3xl border border-ink/10 bg-white-soft px-7 pb-7 pt-14 shadow-[var(--shadow-warm)]"
           >
             <motion.button
               type="button"

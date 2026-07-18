@@ -145,6 +145,28 @@ section[id] {
   display: none;
 }
 
+/* Slim, themed scrollbar — used inside modals so users can see there's
+   more content to scroll to, without the chunky default OS bar. */
+.scrollbar-slim {
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--color-gold-500) 55%, transparent) transparent;
+}
+.scrollbar-slim::-webkit-scrollbar {
+  width: 8px;
+}
+.scrollbar-slim::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-slim::-webkit-scrollbar-thumb {
+  background-color: color-mix(in srgb, var(--color-gold-500) 45%, transparent);
+  border-radius: 9999px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+}
+.scrollbar-slim::-webkit-scrollbar-thumb:hover {
+  background-color: color-mix(in srgb, var(--color-gold-500) 70%, transparent);
+}
+
 /* Soft fade masks on the carousel viewport edges — mask works over any
    section background and adapts to both themes automatically (unlike
    color overlays). Vertical stays fully opaque so hover lift isn't
