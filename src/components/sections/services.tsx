@@ -101,8 +101,8 @@ export function Services() {
           className="h-[130%] w-full"
         >
           <pattern id="egypt-grid" width="50" height="50" patternUnits="userSpaceOnUse">
-            <path d="M25,0 L50,25 L25,50 L0,25 Z" fill="none" stroke="#a9861d" strokeWidth="1" />
-            <circle cx="25" cy="25" r="4" fill="none" stroke="#a9861d" strokeWidth="1" />
+            <path d="M25,0 L50,25 L25,50 L0,25 Z" fill="none" stroke="var(--color-gold-600)" strokeWidth="1" />
+            <circle cx="25" cy="25" r="4" fill="none" stroke="var(--color-gold-600)" strokeWidth="1" />
           </pattern>
           <rect width="400" height="400" fill="url(#egypt-grid)" />
         </svg>
@@ -148,9 +148,10 @@ export function Services() {
                     className="pointer-events-none absolute inset-0"
                     style={{
                       background:
-                        "linear-gradient(to bottom, rgba(43,38,32,0.05) 0%, transparent 35%, rgba(255,253,249,0.15) 78%, var(--color-white-soft) 100%)",
+                        "linear-gradient(to bottom, color-mix(in srgb, var(--color-fixed-dark) 5%, transparent) 0%, transparent 35%, color-mix(in srgb, var(--color-white-soft) 15%, transparent) 78%, var(--color-white-soft) 100%)",
                     }}
                   />
+                  <div aria-hidden className="dark-scrim" />
                 </div>
 
                 {/* Text area */}

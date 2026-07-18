@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { MobileMenu } from "@/components/sections/mobile-menu";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export const NAV_LINKS = [
   { label: "Services", href: "#services" },
@@ -93,12 +94,15 @@ export function Navbar() {
             })}
           </ul>
 
-          <Link
-            href="#book"
-            className="hidden rounded-full bg-gold-500 px-5 py-2.5 text-sm font-semibold text-ink transition-colors hover:bg-gold-400 md:inline-block"
-          >
-            Book a Free Consultation
-          </Link>
+          <div className="hidden items-center gap-4 md:flex">
+            <ThemeToggle />
+            <Link
+              href="#book"
+              className="rounded-full bg-gold-500 px-5 py-2.5 text-sm font-semibold text-gold-ink transition-colors hover:bg-gold-400"
+            >
+              Book a Free Consultation
+            </Link>
+          </div>
 
           <button
             type="button"

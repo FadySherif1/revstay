@@ -12,19 +12,19 @@ function LotusOrnament({ x }: { x: number }) {
       <path
         d="M0,20 Q-10,0 0,-16 Q10,0 0,20"
         fill="none"
-        stroke="#8a6c17"
+        stroke="var(--color-gold-600)"
         strokeWidth="1.5"
       />
       <path
         d="M-14,14 Q-16,0 -4,-8"
         fill="none"
-        stroke="#8a6c17"
+        stroke="var(--color-gold-600)"
         strokeWidth="1"
       />
       <path
         d="M14,14 Q16,0 4,-8"
         fill="none"
-        stroke="#8a6c17"
+        stroke="var(--color-gold-600)"
         strokeWidth="1"
       />
     </g>
@@ -105,7 +105,7 @@ export function ScrollScene() {
             width="18"
             height="60"
             fill="none"
-            stroke="#8a6c17"
+            stroke="var(--color-gold-600)"
             strokeWidth="1"
           />
         ))}
@@ -122,7 +122,7 @@ export function ScrollScene() {
           y1="60"
           x2="1400"
           y2="60"
-          stroke="#8a6c17"
+          stroke="var(--color-gold-600)"
           strokeWidth="1.5"
         />
         {ORNAMENT_X.map((x) => (

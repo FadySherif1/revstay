@@ -99,16 +99,17 @@ export function Hero() {
             sizes="100vw"
             className="object-cover object-[center_30%]"
           />
+          <div aria-hidden className="dark-scrim" />
         </div>
       </div>
 
-      {/* Readability overlays: warm ivory rising from the bottom + soft top light */}
+      {/* Readability overlays: theme background rising from the bottom + soft top light */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
-            "linear-gradient(to bottom, rgba(250,246,239,0.10) 0%, rgba(250,246,239,0.30) 38%, rgba(250,246,239,0.82) 72%, rgba(250,246,239,0.97) 100%)",
+            "linear-gradient(to bottom, color-mix(in srgb, var(--color-ivory) 10%, transparent) 0%, color-mix(in srgb, var(--color-ivory) 30%, transparent) 38%, color-mix(in srgb, var(--color-ivory) 82%, transparent) 72%, color-mix(in srgb, var(--color-ivory) 97%, transparent) 100%)",
         }}
       />
 
@@ -160,7 +161,7 @@ export function Hero() {
         >
           <a
             href="#book"
-            className="hero-cta-glow rounded-full bg-gold-500 px-8 py-3.5 text-base font-semibold text-ink transition-transform hover:scale-[1.03] hover:bg-gold-400"
+            className="hero-cta-glow rounded-full bg-gold-500 px-8 py-3.5 text-base font-semibold text-gold-ink transition-transform hover:scale-[1.03] hover:bg-gold-400"
           >
             Book a Free Consultation
           </a>

@@ -65,7 +65,7 @@ export function TiltCard({
         <motion.div
           aria-hidden
           style={{
-            background: `radial-gradient(180px circle at ${glowX} ${glowY}, rgba(212,175,55,0.18), transparent 70%)`,
+            background: `radial-gradient(180px circle at ${glowX} ${glowY}, color-mix(in srgb, var(--color-gold-500) 18%, transparent), transparent 70%)`,
           }}
           className="pointer-events-none absolute inset-0 rounded-2xl"
         />

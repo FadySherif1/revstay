@@ -5,10 +5,12 @@ import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 import { PLATFORM_DETAILS } from "@/lib/platforms";
 import { TiltCard } from "@/components/ui/tilt-card";
+import { useTheme } from "@/components/ui/theme-provider";
 
 const RESUME_DELAY_MS = 3000;
 
 export function PlatformsCarousel() {
+  const { theme } = useTheme();
   const prefersReducedMotion = useRef(false);
   if (typeof window !== "undefined") {
     prefersReducedMotion.current = window.matchMedia(
@@ -82,41 +84,45 @@ export function PlatformsCarousel() {
         {/* Viewport */}
         <div className="overflow-hidden px-6 lg:px-8" ref={emblaRef}>
           <div className="flex touch-pan-y">
-            {PLATFORM_DETAILS.map((platform) => (
-              <div
-                key={platform.name}
-                className="min-w-0 shrink-0 grow-0 basis-[82%] pl-4 first:pl-0 sm:basis-[46%] lg:basis-[28.5%]"
-              >
-                <TiltCard className="h-full">
-                  <article
-                    tabIndex={0}
-                    aria-label={`${platform.name} — ${platform.description}`}
-                    className="group flex h-full flex-col justify-between rounded-2xl border bg-white-soft p-6 shadow-[var(--shadow-warm-sm)] outline-none transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-warm)] focus-visible:ring-2 focus-visible:ring-gold-500"
-                    style={{
-                      borderColor: `rgba(${platform.accent}, 0.35)`,
-                    }}
-                  >
-                    <div className="mb-8 flex items-start justify-between gap-3">
-                      <span className="font-serif text-2xl tracking-tight text-ink">
-                        {platform.name}
-                      </span>
-                      <span
-                        className="shrink-0 rounded-full px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-wider"
-                        style={{
-                          color: `rgb(${platform.accent})`,
-                          backgroundColor: `rgba(${platform.accent}, 0.1)`,
-                        }}
-                      >
-                        {platform.tag}
-                      </span>
-                    </div>
-                    <p className="text-sm leading-relaxed text-ink-soft">
-                      {platform.description}
-                    </p>
-                  </article>
-                </TiltCard>
-              </div>
-            ))}
+            {PLATFORM_DETAILS.map((platform) => {
+              const accent =
+                theme === "dark" ? platform.accentDark : platform.accentLight;
+              return (
+                <div
+                  key={platform.name}
+                  className="min-w-0 shrink-0 grow-0 basis-[82%] pl-4 first:pl-0 sm:basis-[46%] lg:basis-[28.5%]"
+                >
+                  <TiltCard className="h-full">
+                    <article
+                      tabIndex={0}
+                      aria-label={`${platform.name} — ${platform.description}`}
+                      className="group flex h-full flex-col justify-between rounded-2xl border bg-white-soft p-6 shadow-[var(--shadow-warm-sm)] outline-none transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-warm)] focus-visible:ring-2 focus-visible:ring-gold-500"
+                      style={{
+                        borderColor: `rgba(${accent}, 0.35)`,
+                      }}
+                    >
+                      <div className="mb-8 flex items-start justify-between gap-3">
+                        <span className="font-serif text-2xl tracking-tight text-ink">
+                          {platform.name}
+                        </span>
+                        <span
+                          className="shrink-0 rounded-full px-2.5 py-1 text-[0.65rem] font-semibold uppercase tracking-wider"
+                          style={{
+                            color: `rgb(${accent})`,
+                            backgroundColor: `rgba(${accent}, 0.1)`,
+                          }}
+                        >
+                          {platform.tag}
+                        </span>
+                      </div>
+                      <p className="text-sm leading-relaxed text-ink-soft">
+                        {platform.description}
+                      </p>
+                    </article>
+                  </TiltCard>
+                </div>
+              );
+            })}
           </div>
         </div>
 

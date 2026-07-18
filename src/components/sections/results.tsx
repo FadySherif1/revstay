@@ -152,6 +152,7 @@ export function Results() {
           sizes="100vw"
           className="object-cover object-center"
         />
+        <div aria-hidden className="dark-scrim" />
       </div>
 
       {/* Warm ivory overlay (~85%) so counters pop */}
@@ -171,9 +172,9 @@ export function Results() {
           preserveAspectRatio="xMidYMax slice"
           className="h-full w-full opacity-[0.10]"
         >
-          <polygon points="120,480 320,180 520,480" fill="none" stroke="#8a6c17" strokeWidth="2" />
-          <polygon points="850,480 1080,120 1310,480" fill="none" stroke="#8a6c17" strokeWidth="2" />
-          <polygon points="1000,480 1160,220 1320,480" fill="none" stroke="#8a6c17" strokeWidth="1.5" />
+          <polygon points="120,480 320,180 520,480" fill="none" stroke="var(--color-gold-600)" strokeWidth="2" />
+          <polygon points="850,480 1080,120 1310,480" fill="none" stroke="var(--color-gold-600)" strokeWidth="2" />
+          <polygon points="1000,480 1160,220 1320,480" fill="none" stroke="var(--color-gold-600)" strokeWidth="1.5" />
         </svg>
       </div>
 

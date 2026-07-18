@@ -218,7 +218,7 @@ export function ProblemSolution() {
               <ChevronRight
                 key={n}
                 data-chevron
-                className="h-6 w-6 text-gold-500 drop-shadow-[0_0_6px_rgba(201,162,39,0.5)] md:rotate-90"
+                className="h-6 w-6 text-gold-500 drop-shadow-[0_0_6px_color-mix(in_srgb,var(--color-gold-500)_50%,transparent)] md:rotate-90"
                 strokeWidth={2.5}
               />
             ))}
@@ -226,7 +226,7 @@ export function ProblemSolution() {
 
           {/* AFTER — solution column */}
           <div ref={solutionRef} className="space-y-6">
-            <p className="text-center text-sm font-semibold uppercase tracking-[0.3em] text-gold-600 drop-shadow-[0_0_10px_rgba(201,162,39,0.35)] md:text-left">
+            <p className="text-center text-sm font-semibold uppercase tracking-[0.3em] text-gold-600 drop-shadow-[0_0_10px_color-mix(in_srgb,var(--color-gold-500)_35%,transparent)] md:text-left">
               After
             </p>
             {SOLUTIONS.map((item, i) => (
@@ -245,7 +245,7 @@ export function ProblemSolution() {
                   aria-hidden
                   className="absolute left-0 top-0 h-full w-1 origin-top bg-gold-500"
                 />
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white-soft">
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold-500 text-gold-ink">
                   <item.icon className="h-5 w-5" strokeWidth={1.75} />
                 </div>
                 <div>

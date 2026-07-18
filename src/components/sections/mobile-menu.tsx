@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { NAV_LINKS } from "@/components/sections/navbar";
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 
 export function MobileMenu({
   open,
@@ -66,12 +67,13 @@ export function MobileMenu({
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 + NAV_LINKS.length * 0.07, duration: 0.4 }}
-              className="mt-4"
+              className="mt-4 flex flex-col items-center gap-6"
             >
+              <ThemeToggle />
               <Link
                 href="#book"
                 onClick={onClose}
-                className="rounded-full bg-gold-500 px-8 py-3 text-base font-semibold text-ink"
+                className="rounded-full bg-gold-500 px-8 py-3 text-base font-semibold text-gold-ink"
               >
                 Book a Free Consultation
               </Link>

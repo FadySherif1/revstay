@@ -103,7 +103,7 @@ export function ChatWidget() {
           type="button"
           aria-label="Open Revstay Concierge chat"
           onClick={openWidget}
-          className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-gold-500 text-white-soft shadow-[var(--shadow-warm)] transition-transform hover:scale-105"
+          className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-gold-500 text-gold-ink shadow-[var(--shadow-warm)] transition-transform hover:scale-105"
         >
           <span
             aria-hidden
@@ -131,14 +131,14 @@ export function ChatWidget() {
             {/* Header */}
             <div className="flex items-center justify-between border-b border-ink/10 bg-gold-500 px-5 py-4 sm:rounded-t-3xl">
               <div>
-                <p className="font-serif text-lg text-white-soft">Revstay Concierge</p>
-                <p className="text-xs text-white-soft/80">Hotels, OTAs & Egyptian hospitality</p>
+                <p className="font-serif text-lg text-gold-ink">Revstay Concierge</p>
+                <p className="text-xs text-gold-ink/80">Hotels, OTAs & Egyptian hospitality</p>
               </div>
               <button
                 type="button"
                 aria-label="Close chat"
                 onClick={() => setOpen(false)}
-                className="flex h-8 w-8 items-center justify-center rounded-full text-white-soft/90 hover:bg-white-soft/15"
+                className="flex h-8 w-8 items-center justify-center rounded-full text-gold-ink/90 hover:bg-gold-ink/10"
               >
                 <X className="h-5 w-5" strokeWidth={2} />
               </button>
@@ -201,7 +201,7 @@ export function ChatWidget() {
               })}
 
               {error && (
-                <div className="flex flex-col items-start gap-2 rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+                <div className="flex flex-col items-start gap-2 rounded-2xl border border-error-border bg-error-bg px-4 py-3 text-sm text-error-fg">
                   <span>{error}</span>
                   <button
                     type="button"
@@ -235,7 +235,7 @@ export function ChatWidget() {
                   aria-label="Send message"
                   onClick={handleSend}
                   disabled={!input.trim() || isStreaming}
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white-soft transition-opacity disabled:opacity-40"
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gold-500 text-gold-ink transition-opacity disabled:opacity-40"
                 >
                   <Send className="h-4 w-4" strokeWidth={2} />
                 </button>

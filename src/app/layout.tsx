@@ -3,7 +3,9 @@ import { Playfair_Display, Inter } from "next/font/google";
 import { SmoothScrollProvider } from "@/components/ui/smooth-scroll-provider";
 import { IntroLoader } from "@/components/ui/intro-loader";
 import { ChatWidget } from "@/components/ui/chat-widget";
+import { ThemeProvider } from "@/components/ui/theme-provider";
 import { Navbar } from "@/components/sections/navbar";
+import { themeInitScript } from "@/lib/theme-script";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -49,15 +51,21 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={`${playfair.variable} ${inter.variable} h-full antialiased`}
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="min-h-full flex flex-col bg-ivory text-ink">
-        <IntroLoader />
-        <SmoothScrollProvider>
-          <Navbar />
-          {children}
-        </SmoothScrollProvider>
-        <ChatWidget />
+        <ThemeProvider>
+          <IntroLoader />
+          <SmoothScrollProvider>
+            <Navbar />
+            {children}
+          </SmoothScrollProvider>
+          <ChatWidget />
+        </ThemeProvider>
       </body>
     </html>
   );

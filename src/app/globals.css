@@ -24,6 +24,61 @@
   /* Soft warm shadow */
   --shadow-warm: 0 20px 45px -20px rgba(120, 92, 30, 0.28);
   --shadow-warm-sm: 0 10px 25px -12px rgba(120, 92, 30, 0.22);
+
+  /* Text/icons on top of the gold accent (buttons, gold circles) — always
+     near-white regardless of theme, since gold stays bright in both. */
+  --color-on-gold: #fffdf9;
+
+  /* Fixed dark tone, theme-independent — used for text on gold surfaces
+     (which never get dark themselves) and for darkening overlays on photos
+     that need consistent contrast regardless of theme. */
+  --color-fixed-dark: #2b2620;
+  --color-gold-ink: var(--color-fixed-dark);
+
+  /* Selection */
+  --color-selection-bg: var(--color-gold-500);
+  --color-selection-fg: var(--color-on-gold);
+
+  /* Error state (chat widget, forms) */
+  --color-error-bg: #fdf0ef;
+  --color-error-border: #f2c9c5;
+  --color-error-fg: #a13f38;
+
+  /* Fixed dark navy used only for the dark-mode photo scrim */
+  --color-scrim-dark: #0b0f1a;
+}
+
+[data-theme="dark"] {
+  /* Dark theme: deep navy/charcoal */
+  --color-ivory: #0b0f1a;
+  --color-cream: #111827;
+  --color-sand: #1a2333;
+  --color-white-soft: #1a2333;
+
+  /* Off-white / grey-ivory text */
+  --color-ink: #f4f1ea;
+  --color-ink-soft: #c9c4ba;
+  --color-ink-mute: #8f8a7f;
+
+  /* Gold brightens slightly for contrast on dark; teal brightens too */
+  --color-gold-600: #d9b448;
+  --color-gold-500: #d9b448;
+  --color-gold-400: #e6c66a;
+  --color-gold-300: #f0da96;
+  --color-teal-600: #4fb3a3;
+  --color-teal-500: #4fb3a3;
+  --color-teal-400: #6cc4b6;
+
+  /* Subtle gold/black glows replace warm diffuse shadows */
+  --shadow-warm: 0 20px 45px -18px rgba(0, 0, 0, 0.55), 0 0 30px -12px rgba(217, 180, 72, 0.15);
+  --shadow-warm-sm: 0 10px 22px -10px rgba(0, 0, 0, 0.5), 0 0 16px -8px rgba(217, 180, 72, 0.12);
+
+  --color-selection-bg: var(--color-gold-500);
+  --color-selection-fg: var(--color-ivory);
+
+  --color-error-bg: #2a1917;
+  --color-error-border: #5a2e29;
+  --color-error-fg: #e8a09a;
 }
 
 @theme inline {
@@ -46,6 +101,14 @@
   --color-teal-600: var(--color-teal-600);
   --color-teal-500: var(--color-teal-500);
   --color-teal-400: var(--color-teal-400);
+  --color-on-gold: var(--color-on-gold);
+  --color-gold-ink: var(--color-gold-ink);
+  --color-fixed-dark: var(--color-fixed-dark);
+
+  --color-error-bg: var(--color-error-bg);
+  --color-error-border: var(--color-error-border);
+  --color-error-fg: var(--color-error-fg);
+  --color-scrim-dark: var(--color-scrim-dark);
 
   --font-serif: var(--font-playfair);
   --font-sans: var(--font-inter);
@@ -59,6 +122,11 @@ body {
 
 section[id] {
   scroll-margin-top: 88px;
+}
+
+::selection {
+  background: var(--color-selection-bg);
+  color: var(--color-selection-fg);
 }
 
 ::-webkit-scrollbar {
@@ -85,18 +153,33 @@ html {
 }
 
 .hero-cta-glow {
-  box-shadow: 0 0 0 0 rgba(201, 162, 39, 0.5);
+  --glow-color: color-mix(in srgb, var(--color-gold-500) 55%, transparent);
+  box-shadow: 0 0 0 0 var(--glow-color);
   animation: hero-cta-pulse 2.6s ease-in-out infinite;
 }
 
 @keyframes hero-cta-pulse {
   0%,
   100% {
-    box-shadow: 0 0 0 0 rgba(201, 162, 39, 0.32);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-gold-500) 32%, transparent);
   }
   50% {
-    box-shadow: 0 0 30px 6px rgba(201, 162, 39, 0.42);
+    box-shadow: 0 0 30px 6px color-mix(in srgb, var(--color-gold-500) 42%, transparent);
   }
+}
+
+/* Dark-mode image scrim: subtle darkening so photos blend with the theme */
+.dark-scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: color-mix(in srgb, var(--color-scrim-dark) 35%, transparent);
+  transition: opacity 0.3s ease;
+}
+
+[data-theme="dark"] .dark-scrim {
+  opacity: 1;
 }
 
 @keyframes ken-burns {
