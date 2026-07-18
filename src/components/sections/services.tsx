@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Building2, Camera, TrendingUp, BarChart3 } from "lucide-react";
+import { Building2, Camera, TrendingUp, BarChart3, ArrowRight } from "lucide-react";
 import { TiltCard } from "@/components/ui/tilt-card";
 
 const SERVICES = [
@@ -11,25 +12,25 @@ const SERVICES = [
     icon: Building2,
     title: "OTA Listing Creation",
     body: "We build your hotel's pages across all major booking platforms — Booking.com, Agoda, Expedia, Airbnb, Hotelbeds, Hotels.com, and Trip.com — structured to rank and designed to sell.",
-    gradient: "from-gold-300 to-gold-500",
+    image: "/images/services/listing.avif",
   },
   {
     icon: Camera,
     title: "Content & Presentation",
     body: "Compelling room showcases, persuasive descriptions, and visual storytelling that makes travelers stop scrolling.",
-    gradient: "from-teal-400 to-teal-600",
+    image: "/images/services/content.avif",
   },
   {
     icon: TrendingUp,
     title: "Visibility Optimization",
     body: "Continuous tuning of rankings, reviews strategy, and platform algorithms to keep you ahead.",
-    gradient: "from-gold-400 to-teal-500",
+    image: "/images/services/visibility.jpg",
   },
   {
     icon: BarChart3,
     title: "Performance & Growth",
     body: "Transparent reporting on occupancy, bookings, and revenue — so you see exactly what we deliver.",
-    gradient: "from-teal-500 to-gold-500",
+    image: "/images/services/growth.jpg",
   },
 ];
 
@@ -50,34 +51,20 @@ export function Services() {
 
     const ctx = gsap.context(() => {
       const cards = gridRef.current?.querySelectorAll("[data-card]");
-      if (!cards?.length) return;
-
-      cards.forEach((card) => {
-        const icon = card.querySelector("[data-icon]");
-        if (icon) gsap.set(icon, { scale: 0.4, opacity: 0 });
-      });
-
-      gsap.from(cards, {
-        opacity: 0,
-        y: 32,
-        duration: 0.7,
-        ease: "power2.out",
-        stagger: 0.12,
-        scrollTrigger: { trigger: gridRef.current, start: "top 75%" },
-        onComplete: () => {
-          cards.forEach((card) => {
-            const icon = card.querySelector("[data-icon]");
-            if (icon) {
-              gsap.to(icon, {
-                scale: 1,
-                opacity: 1,
-                duration: 0.5,
-                ease: "back.out(2)",
-              });
-            }
-          });
-        },
-      });
+      if (cards?.length) {
+        gsap.fromTo(
+          cards,
+          { clipPath: "inset(0% 0% 100% 0%)", y: 24 },
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            y: 0,
+            duration: 0.9,
+            ease: "power3.out",
+            stagger: 0.12,
+            scrollTrigger: { trigger: gridRef.current, start: "top 78%" },
+          }
+        );
+      }
 
       if (patternRef.current) {
         gsap.to(patternRef.current, {
@@ -140,32 +127,58 @@ export function Services() {
           className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
         >
           {SERVICES.map((service) => (
-            <TiltCard key={service.title}>
-              <div
+            <TiltCard key={service.title} maxTilt={4} className="h-full">
+              <article
                 data-card
-                className="group h-full overflow-hidden rounded-2xl border border-ink/10 bg-white-soft shadow-[var(--shadow-warm-sm)] transition-shadow duration-300 hover:shadow-[var(--shadow-warm)]"
+                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-ink/10 bg-white-soft shadow-[var(--shadow-warm-sm)] transition-shadow duration-300 hover:shadow-[var(--shadow-warm)]"
               >
-                {/* Decorative gradient top area with zoom-on-hover */}
-                <div className="relative h-28 overflow-hidden">
-                  <div
-                    className={`absolute inset-0 scale-100 bg-gradient-to-br ${service.gradient} transition-transform duration-500 will-change-transform group-hover:scale-110`}
+                {/* Image area (~55%) */}
+                <div className="relative aspect-[4/3] overflow-hidden">
+                  <Image
+                    src={service.image}
+                    alt=""
+                    fill
+                    quality={72}
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    className="object-cover transition-transform duration-[600ms] ease-out will-change-transform group-hover:scale-[1.06]"
                   />
+                  {/* Warm scrim fading into the text area */}
                   <div
-                    data-icon
-                    className="absolute bottom-3 left-4 flex h-12 w-12 items-center justify-center rounded-full bg-white-soft/90 text-gold-600 shadow-sm ring-1 ring-white/50"
-                  >
+                    aria-hidden
+                    className="pointer-events-none absolute inset-0"
+                    style={{
+                      background:
+                        "linear-gradient(to bottom, rgba(43,38,32,0.05) 0%, transparent 35%, rgba(255,253,249,0.15) 78%, var(--color-white-soft) 100%)",
+                    }}
+                  />
+                </div>
+
+                {/* Text area */}
+                <div className="relative flex flex-1 flex-col p-6 pt-9">
+                  {/* Frosted-glass icon, overlapping the image/text boundary */}
+                  <div className="absolute -top-6 left-5 flex h-12 w-12 items-center justify-center rounded-full border border-white/60 bg-white-soft/70 text-gold-600 shadow-[var(--shadow-warm-sm)] backdrop-blur-md">
                     <service.icon className="h-6 w-6" strokeWidth={1.75} />
                   </div>
-                </div>
-                <div className="p-6">
+
                   <h3 className="mb-2 font-serif text-lg text-ink">
                     {service.title}
                   </h3>
-                  <p className="text-sm leading-relaxed text-ink-soft">
+                  <p className="flex-1 text-sm leading-relaxed text-ink-soft">
                     {service.body}
                   </p>
+
+                  {/* Learn more — slides in on hover */}
+                  <button
+                    type="button"
+                    // TODO: link to /services/<slug> once service detail pages exist
+                    aria-label={`Learn more about ${service.title}`}
+                    className="mt-5 flex items-center gap-1.5 text-sm font-semibold text-gold-600 opacity-0 transition-all duration-300 -translate-x-1 group-hover:translate-x-0 group-hover:opacity-100 focus-visible:translate-x-0 focus-visible:opacity-100 focus-visible:outline-none"
+                  >
+                    Learn more
+                    <ArrowRight className="h-4 w-4" strokeWidth={2} />
+                  </button>
                 </div>
-              </div>
+              </article>
             </TiltCard>
           ))}
         </div>

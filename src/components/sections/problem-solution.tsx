@@ -1,9 +1,17 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { EyeOff, ImageOff, CircleDollarSign, ArrowUpRight, Sparkles, LineChart } from "lucide-react";
+import {
+  EyeOff,
+  ImageOff,
+  CircleDollarSign,
+  ArrowUpRight,
+  Sparkles,
+  LineChart,
+  ChevronRight,
+} from "lucide-react";
 
 const PROBLEMS = [
   {
@@ -45,7 +53,8 @@ export function ProblemSolution() {
   const sectionRef = useRef<HTMLElement>(null);
   const problemRef = useRef<HTMLDivElement>(null);
   const solutionRef = useRef<HTMLDivElement>(null);
-  const dividerRef = useRef<HTMLDivElement>(null);
+  const closingRef = useRef<HTMLParagraphElement>(null);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (!sectionRef.current) return;
@@ -60,6 +69,8 @@ export function ProblemSolution() {
     const ctx = gsap.context(() => {
       const problemItems = problemRef.current?.querySelectorAll("[data-item]");
       const solutionItems = solutionRef.current?.querySelectorAll("[data-item]");
+      const borders = solutionRef.current?.querySelectorAll("[data-border]");
+      const chevrons = sectionRef.current?.querySelectorAll("[data-chevron]");
 
       if (problemItems?.length) {
         gsap.from(problemItems, {
@@ -84,18 +95,46 @@ export function ProblemSolution() {
         });
       }
 
-      if (dividerRef.current) {
+      // Gold left-borders draw in (height 0 -> 100%)
+      if (borders?.length) {
         gsap.fromTo(
-          dividerRef.current,
+          borders,
           { scaleY: 0 },
           {
             scaleY: 1,
-            duration: 1,
+            duration: 0.8,
             ease: "power2.out",
+            stagger: 0.15,
+            delay: 0.3,
             transformOrigin: "top",
-            scrollTrigger: { trigger: sectionRef.current, start: "top 65%" },
+            scrollTrigger: { trigger: solutionRef.current, start: "top 75%" },
           }
         );
+      }
+
+      // Chevron flow: light up sequentially, looping subtly
+      if (chevrons?.length) {
+        gsap.set(chevrons, { opacity: 0.2 });
+        gsap.to(chevrons, {
+          opacity: 1,
+          duration: 0.5,
+          stagger: 0.25,
+          repeat: -1,
+          repeatDelay: 0.6,
+          yoyo: true,
+          ease: "power1.inOut",
+          scrollTrigger: { trigger: sectionRef.current, start: "top 70%" },
+        });
+      }
+
+      if (closingRef.current) {
+        gsap.from(closingRef.current, {
+          opacity: 0,
+          y: 16,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: { trigger: closingRef.current, start: "top 90%" },
+        });
       }
     }, sectionRef);
 
@@ -118,31 +157,35 @@ export function ProblemSolution() {
           </h2>
         </div>
 
-        <div className="relative grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-16">
-          <div
-            ref={dividerRef}
-            aria-hidden
-            className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-gold-500/40 to-transparent md:block"
-          />
-
-          {/* Problem column — muted */}
-          <div ref={problemRef} className="space-y-8">
-            <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-ink-mute">
-              The Problem
-            </h3>
-            {PROBLEMS.map((item) => (
+        <div className="relative grid grid-cols-1 gap-10 md:grid-cols-[1fr_auto_1fr] md:gap-8">
+          {/* BEFORE — problem column */}
+          <div ref={problemRef} className="space-y-6">
+            <p className="text-center text-sm font-semibold uppercase tracking-[0.3em] text-ink-mute md:text-left">
+              Before
+            </p>
+            {PROBLEMS.map((item, i) => (
               <div
                 key={item.title}
                 data-item
-                className="flex gap-4 rounded-2xl border border-ink/10 bg-sand/50 p-5"
+                onMouseEnter={() => setActiveIndex(i)}
+                onMouseLeave={() => setActiveIndex(null)}
+                className={`flex gap-4 rounded-2xl border border-ink/10 bg-sand/40 p-5 saturate-[0.7] transition-all duration-300 ${
+                  activeIndex === i
+                    ? "ring-2 ring-gold-500/50 saturate-100"
+                    : ""
+                }`}
               >
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink/5 text-ink-mute">
                   <item.icon className="h-5 w-5" strokeWidth={1.75} />
                 </div>
                 <div>
-                  <h4 className="mb-1 font-semibold text-ink/80">
+                  <h3 className="relative mb-1 inline-block font-semibold text-ink/70">
                     {item.title}
-                  </h4>
+                    <span
+                      aria-hidden
+                      className="absolute left-0 top-1/2 h-px w-full -translate-y-1/2 bg-ink-mute/40"
+                    />
+                  </h3>
                   <p className="text-sm leading-relaxed text-ink-soft">
                     {item.body}
                   </p>
@@ -151,24 +194,47 @@ export function ProblemSolution() {
             ))}
           </div>
 
-          {/* Solution column — warm gold/teal */}
-          <div ref={solutionRef} className="space-y-8">
-            <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-teal-600">
-              The Revstay Solution
-            </h3>
-            {SOLUTIONS.map((item) => (
+          {/* Transformation flow — vertical chevrons (desktop) / horizontal (mobile) */}
+          <div
+            aria-hidden
+            className="flex items-center justify-center gap-2 py-2 md:flex-col md:px-3 md:py-0"
+          >
+            {[0, 1, 2].map((n) => (
+              <ChevronRight
+                key={n}
+                data-chevron
+                className="h-6 w-6 text-gold-500 drop-shadow-[0_0_6px_rgba(201,162,39,0.5)] md:rotate-90"
+                strokeWidth={2.5}
+              />
+            ))}
+          </div>
+
+          {/* AFTER — solution column */}
+          <div ref={solutionRef} className="space-y-6">
+            <p className="text-center text-sm font-semibold uppercase tracking-[0.3em] text-gold-600 drop-shadow-[0_0_10px_rgba(201,162,39,0.35)] md:text-left">
+              After
+            </p>
+            {SOLUTIONS.map((item, i) => (
               <div
                 key={item.title}
                 data-item
-                className="flex gap-4 rounded-2xl border border-gold-500/25 bg-gold-500/[0.08] p-5 shadow-[var(--shadow-warm-sm)]"
+                onMouseEnter={() => setActiveIndex(i)}
+                onMouseLeave={() => setActiveIndex(null)}
+                className={`relative flex gap-4 overflow-hidden rounded-2xl border border-gold-500/20 bg-ivory p-5 pl-6 shadow-[var(--shadow-warm-sm)] transition-all duration-300 ${
+                  activeIndex === i ? "ring-2 ring-gold-500/60" : ""
+                }`}
               >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-teal-500/15 text-teal-600">
+                {/* Draw-in gold left border */}
+                <span
+                  data-border
+                  aria-hidden
+                  className="absolute left-0 top-0 h-full w-1 origin-top bg-gold-500"
+                />
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold-500 text-white-soft">
                   <item.icon className="h-5 w-5" strokeWidth={1.75} />
                 </div>
                 <div>
-                  <h4 className="mb-1 font-semibold text-ink">
-                    {item.title}
-                  </h4>
+                  <h3 className="mb-1 font-semibold text-ink">{item.title}</h3>
                   <p className="text-sm leading-relaxed text-ink-soft">
                     {item.body}
                   </p>
@@ -177,6 +243,13 @@ export function ProblemSolution() {
             ))}
           </div>
         </div>
+
+        <p
+          ref={closingRef}
+          className="mx-auto mt-16 max-w-2xl text-center font-serif text-xl italic text-ink/80 sm:text-2xl"
+        >
+          This transformation is what we do. Every day.
+        </p>
       </div>
     </section>
   );

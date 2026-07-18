@@ -3,14 +3,16 @@
 import { useRef } from "react";
 import { motion, useMotionValue, useSpring, useTransform, useReducedMotion } from "framer-motion";
 
-const MAX_TILT_DEG = 6;
+const DEFAULT_MAX_TILT_DEG = 6;
 
 export function TiltCard({
   children,
   className,
+  maxTilt = DEFAULT_MAX_TILT_DEG,
 }: {
   children: React.ReactNode;
   className?: string;
+  maxTilt?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
@@ -20,11 +22,11 @@ export function TiltCard({
 
   const springConfig = { stiffness: 200, damping: 20, mass: 0.5 };
   const rotateX = useSpring(
-    useTransform(mouseY, [0, 1], [MAX_TILT_DEG, -MAX_TILT_DEG]),
+    useTransform(mouseY, [0, 1], [maxTilt, -maxTilt]),
     springConfig
   );
   const rotateY = useSpring(
-    useTransform(mouseX, [0, 1], [-MAX_TILT_DEG, MAX_TILT_DEG]),
+    useTransform(mouseX, [0, 1], [-maxTilt, maxTilt]),
     springConfig
   );
   const glowX = useTransform(mouseX, [0, 1], ["0%", "100%"]);
