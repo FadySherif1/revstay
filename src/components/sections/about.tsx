@@ -3,12 +3,9 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useTranslations } from "next-intl";
 
-const VALUE_PILLS = [
-  "Platform Expertise",
-  "Revenue-First Mindset",
-  "Full Transparency",
-];
+const VALUE_PILLS = ["expertise", "revenue", "transparency"];
 
 function CompassOrnament() {
   return (
@@ -40,6 +37,7 @@ function CompassOrnament() {
 }
 
 export function About() {
+  const t = useTranslations("about");
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const compassRef = useRef<HTMLDivElement>(null);
@@ -102,17 +100,13 @@ export function About() {
         </div>
 
         <p data-reveal className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-600">
-          Who We Are
+          {t("eyebrow")}
         </p>
         <h2 data-reveal className="mb-6 font-serif text-3xl leading-tight text-ink sm:text-5xl">
-          Built by People Who Know How Travelers Book
+          {t("headline")}
         </h2>
         <p data-reveal className="mb-10 text-lg leading-relaxed text-ink-soft">
-          Revstay was founded on real-world experience managing hotel
-          listings across Booking.com, Agoda, Expedia, Airbnb, and every
-          major booking platform. We&apos;ve seen — from the inside —
-          exactly what makes a listing rise to the top and what leaves
-          great hotels invisible. That knowledge is now your advantage.
+          {t("body")}
         </p>
 
         <div className="flex flex-wrap items-center justify-center gap-3">
@@ -122,7 +116,7 @@ export function About() {
               data-reveal
               className="rounded-full border border-teal-500/30 bg-teal-500/[0.08] px-5 py-2 text-sm font-semibold text-teal-600"
             >
-              {pill}
+              {t(`pills.${pill}`)}
             </span>
           ))}
         </div>

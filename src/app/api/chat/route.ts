@@ -17,6 +17,7 @@ const messageSchema = z.object({
 
 const requestSchema = z.object({
   messages: z.array(messageSchema).min(1).max(MAX_MESSAGES),
+  locale: z.enum(["en", "ar"]).optional(),
 });
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
@@ -55,7 +56,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const { messages } = parsed.data;
+  const { messages, locale } = parsed.data;
 
   if (!process.env.OPENAI_API_KEY) {
     return Response.json(
@@ -64,13 +65,18 @@ export async function POST(req: NextRequest) {
     );
   }
 
+  const localeHint =
+    locale === "ar"
+      ? "\n\nThe visitor is browsing the site in Arabic. Default to replying in Arabic (simple, warm Modern Standard Arabic that any Egyptian reader understands). If they write to you in English, mirror them and reply in English."
+      : "\n\nThe visitor is browsing the site in English. Default to replying in English. If they write to you in Arabic, mirror them and reply in Arabic.";
+
   try {
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       max_tokens: MAX_TOKENS,
       stream: true,
       messages: [
-        { role: "system", content: CHATBOT_SYSTEM_PROMPT },
+        { role: "system", content: CHATBOT_SYSTEM_PROMPT + localeHint },
         ...messages,
       ],
     });

@@ -1,8 +1,10 @@
 "use client";
 
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export function FinalCta() {
+  const t = useTranslations("finalCta");
   return (
     <section
       id="book"
@@ -36,11 +38,10 @@ export function FinalCta() {
 
       <div className="relative mx-auto max-w-3xl px-6 text-center lg:px-8">
         <h2 className="mb-6 font-serif text-4xl leading-tight text-on-gold sm:text-6xl">
-          Your Rooms Won&apos;t Fill Themselves
+          {t("headline")}
         </h2>
         <p className="mx-auto mb-10 max-w-xl text-lg text-on-gold/85">
-          Book a free 30-minute consultation. We&apos;ll audit your current
-          presence and show you exactly where the revenue is hiding.
+          {t("sub")}
         </p>
 
         <button
@@ -50,11 +51,11 @@ export function FinalCta() {
           }}
           className="hero-cta-glow rounded-full bg-gold-500 px-10 py-4 text-lg font-semibold text-gold-ink transition-transform hover:scale-[1.03] hover:bg-gold-400"
         >
-          Book a Free Consultation
+          {t("cta")}
         </button>
 
         <p className="mt-5 text-sm text-on-gold/70">
-          No commitment. No pressure. Just clarity.
+          {t("reassurance")}
         </p>
       </div>
     </section>

@@ -120,6 +120,18 @@ body {
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Arabic (RTL) font pairing: Amiri for serif headlines, IBM Plex Sans
+   Arabic for body. Overriding the tokens re-points every existing
+   font-serif / font-sans utility with no per-component changes. */
+[dir="rtl"] {
+  --font-serif: var(--font-amiri);
+  --font-sans: var(--font-plex-arabic);
+}
+
+[dir="rtl"] body {
+  font-family: var(--font-plex-arabic), ui-sans-serif, system-ui, sans-serif;
+}
+
 section[id] {
   scroll-margin-top: 88px;
 }

@@ -3,13 +3,26 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
+import { useLocale, useTranslations } from "next-intl";
 import { PLATFORM_DETAILS } from "@/lib/platforms";
 import { TiltCard } from "@/components/ui/tilt-card";
 import { useTheme } from "@/components/ui/theme-provider";
 
 const RESUME_DELAY_MS = 3000;
 
+const DESC_KEYS: Record<string, string> = {
+  "Booking.com": "booking",
+  Agoda: "agoda",
+  Expedia: "expedia",
+  Airbnb: "airbnb",
+  Hotelbeds: "hotelbeds",
+  "Hotels.com": "hotelscom",
+  "Trip.com": "tripcom",
+};
+
 export function PlatformsCarousel() {
+  const t = useTranslations("platforms");
+  const locale = useLocale();
   const { theme } = useTheme();
   const prefersReducedMotion = useRef(false);
   if (typeof window !== "undefined") {
@@ -24,6 +37,7 @@ export function PlatformsCarousel() {
       align: "start",
       dragFree: true,
       containScroll: false,
+      direction: locale === "ar" ? "rtl" : "ltr",
     },
     prefersReducedMotion.current
       ? []
@@ -68,15 +82,15 @@ export function PlatformsCarousel() {
   return (
     <section
       aria-roledescription="carousel"
-      aria-label="Booking platforms we manage"
+      aria-label={t("regionLabel")}
       className="relative overflow-hidden bg-cream py-24 sm:py-32"
     >
       <div className="mx-auto mb-14 max-w-3xl px-6 text-center lg:px-8">
         <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-600">
-          Where We Put You
+          {t("eyebrow")}
         </p>
         <h2 className="font-serif text-3xl leading-tight text-ink sm:text-5xl">
-          Seven Platforms. One Strategy. Total Coverage.
+          {t("headline")}
         </h2>
       </div>
 
@@ -87,6 +101,7 @@ export function PlatformsCarousel() {
             {PLATFORM_DETAILS.map((platform) => {
               const accent =
                 theme === "dark" ? platform.accentDark : platform.accentLight;
+              const descKey = DESC_KEYS[platform.name];
               return (
                 <div
                   key={platform.name}
@@ -95,7 +110,7 @@ export function PlatformsCarousel() {
                   <TiltCard className="h-full">
                     <article
                       tabIndex={0}
-                      aria-label={`${platform.name} — ${platform.description}`}
+                      aria-label={`${platform.name} — ${t(`descriptions.${descKey}`)}`}
                       className="group flex h-full flex-col justify-between rounded-2xl border bg-white-soft p-6 shadow-[var(--shadow-warm-sm)] outline-none transition-all duration-300 hover:-translate-y-1 hover:shadow-[var(--shadow-warm)] focus-visible:ring-2 focus-visible:ring-gold-500"
                       style={{
                         borderColor: `rgba(${accent}, 0.35)`,
@@ -112,11 +127,11 @@ export function PlatformsCarousel() {
                             backgroundColor: `rgba(${accent}, 0.1)`,
                           }}
                         >
-                          {platform.tag}
+                          {t(`tags.${platform.tag}`)}
                         </span>
                       </div>
                       <p className="text-sm leading-relaxed text-ink-soft">
-                        {platform.description}
+                        {t(`descriptions.${descKey}`)}
                       </p>
                     </article>
                   </TiltCard>

@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect } from "react";
-import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
+import { useTranslations } from "next-intl";
 import { NAV_LINKS } from "@/components/sections/navbar";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { LanguageSwitcher } from "@/components/ui/language-switcher";
 
 export function MobileMenu({
   open,
@@ -15,6 +16,7 @@ export function MobileMenu({
   activeId: string | null;
   onClose: () => void;
 }) {
+  const t = useTranslations("nav");
   useEffect(() => {
     if (open) {
       document.body.style.overflow = "hidden";
@@ -50,15 +52,15 @@ export function MobileMenu({
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 + i * 0.07, duration: 0.4 }}
                 >
-                  <Link
+                  <a
                     href={link.href}
                     onClick={onClose}
                     className={`font-serif text-3xl ${
                       isActive ? "text-gold-600" : "text-ink"
                     }`}
                   >
-                    {link.label}
-                  </Link>
+                    {t(link.key)}
+                  </a>
                 </motion.div>
               );
             })}
@@ -69,14 +71,17 @@ export function MobileMenu({
               transition={{ delay: 0.1 + NAV_LINKS.length * 0.07, duration: 0.4 }}
               className="mt-4 flex flex-col items-center gap-6"
             >
-              <ThemeToggle />
-              <Link
+              <div className="flex items-center gap-4">
+                <LanguageSwitcher />
+                <ThemeToggle />
+              </div>
+              <a
                 href="#book"
                 onClick={onClose}
                 className="rounded-full bg-gold-500 px-8 py-3 text-base font-semibold text-gold-ink"
               >
-                Book a Free Consultation
-              </Link>
+                {t("book")}
+              </a>
             </motion.div>
           </nav>
         </motion.div>

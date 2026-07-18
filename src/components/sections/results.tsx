@@ -4,35 +4,37 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useTranslations } from "next-intl";
 
 const STATS = [
   {
     target: 7,
     prefix: "",
     suffix: "",
-    label: "Booking platforms managed under one strategy",
+    key: "platforms",
   },
   {
     target: 24,
     prefix: "",
     suffix: "/7",
-    label: "Continuous listing monitoring & rate management",
+    key: "monitoring",
   },
   {
     target: 1,
     prefix: "",
     suffix: "",
-    label: "Dedicated team owning your entire OTA presence",
+    key: "team",
   },
   {
     target: 100,
     prefix: "",
     suffix: "%",
-    label: "Transparency in reporting, always",
+    key: "transparency",
   },
 ];
 
 export function Results() {
+  const t = useTranslations("results");
   const sectionRef = useRef<HTMLElement>(null);
   const borderRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
@@ -181,16 +183,16 @@ export function Results() {
       <div className="relative mx-auto max-w-6xl px-6 lg:px-8">
         <div className="mx-auto mb-16 max-w-2xl text-center">
           <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-600">
-            Our Commitment
+            {t("eyebrow")}
           </p>
           <h2 className="font-serif text-3xl leading-tight text-ink sm:text-5xl">
-            Built to Deliver
+            {t("headline")}
           </h2>
         </div>
 
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-4 sm:gap-6">
           {STATS.map((stat, i) => (
-            <div key={stat.label} className="text-center">
+            <div key={stat.key} className="text-center">
               <span
                 ref={(el) => {
                   numberRefs.current[i] = el;
@@ -202,7 +204,7 @@ export function Results() {
                 {stat.suffix}
               </span>
               <p className="mt-3 text-sm font-medium leading-relaxed text-ink-soft">
-                {stat.label}
+                {t(`stats.${stat.key}`)}
               </p>
             </div>
           ))}

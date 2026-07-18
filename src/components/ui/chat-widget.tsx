@@ -2,30 +2,27 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useLocale, useTranslations } from "next-intl";
 import { MessageCircle, X, Send } from "lucide-react";
 import { useChatStream } from "@/components/ui/use-chat-stream";
 
 const TOOLTIP_KEY = "revstay-chat-tooltip-dismissed";
-
-const WELCOME_MESSAGE =
-  "Hi! I'm the Revstay Concierge — ask me anything about growing your hotel's bookings, OTA platforms, or hospitality in Egypt. مرحباً! اسألني عن أي شيء يخص الفنادق والحجوزات.";
-
-const STARTER_CHIPS = [
-  "How do I rank higher on Booking.com?",
-  "What does Revstay do exactly?",
-  "إزاي أزود حجوزات فندقي؟",
-];
 
 function isRtl(text: string) {
   return /[؀-ۿ]/.test(text);
 }
 
 export function ChatWidget() {
+  const t = useTranslations("chat");
+  const locale = useLocale();
   const [open, setOpen] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
   const [input, setInput] = useState("");
   const prefersReducedMotion = useReducedMotion();
-  const { messages, sendMessage, isStreaming, error, reset } = useChatStream();
+  const { messages, sendMessage, isStreaming, error, reset } = useChatStream(locale);
+
+  const welcomeMessage = t("welcome");
+  const starterChips = [t("chips.rank"), t("chips.whatWeDo"), t("chips.moreBookings")];
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -82,17 +79,17 @@ export function ChatWidget() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={prefersReducedMotion ? undefined : { opacity: 0, y: 8, scale: 0.95 }}
             transition={{ duration: 0.3 }}
-            className="fixed bottom-24 right-6 z-40 max-w-[220px] rounded-2xl border border-ink/10 bg-white-soft px-4 py-3 text-sm text-ink shadow-[var(--shadow-warm)]"
+            className="fixed bottom-24 z-40 max-w-[220px] rounded-2xl border border-ink/10 bg-white-soft px-4 py-3 text-sm text-ink shadow-[var(--shadow-warm)] ltr:right-6 rtl:left-6"
           >
             <button
               type="button"
-              aria-label="Dismiss tooltip"
+              aria-label={t("dismissTooltip")}
               onClick={dismissTooltip}
-              className="absolute -right-2 -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-ink/10 text-ink-soft hover:bg-ink/20"
+              className="absolute -top-2 flex h-5 w-5 items-center justify-center rounded-full bg-ink/10 text-ink-soft hover:bg-ink/20 ltr:-right-2 rtl:-left-2"
             >
               <X className="h-3 w-3" strokeWidth={2.5} />
             </button>
-            Ask me anything about hotels ✨
+            {t("tooltip")}
           </motion.div>
         )}
       </AnimatePresence>
@@ -101,9 +98,9 @@ export function ChatWidget() {
       {!open && (
         <button
           type="button"
-          aria-label="Open Revstay Concierge chat"
+          aria-label={t("open")}
           onClick={openWidget}
-          className="fixed bottom-6 right-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-gold-500 text-gold-ink shadow-[var(--shadow-warm)] transition-transform hover:scale-105"
+          className="fixed bottom-6 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-gold-500 text-gold-ink shadow-[var(--shadow-warm)] transition-transform hover:scale-105 ltr:right-6 rtl:left-6"
         >
           <span
             aria-hidden
@@ -121,22 +118,22 @@ export function ChatWidget() {
           <motion.div
             role="dialog"
             aria-modal="true"
-            aria-label="Revstay Concierge chat"
+            aria-label={t("title")}
             initial={prefersReducedMotion ? undefined : { opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={prefersReducedMotion ? undefined : { opacity: 0, scale: 0.9, y: 20 }}
             transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-            className="fixed inset-0 z-50 flex flex-col bg-white-soft sm:inset-auto sm:bottom-6 sm:right-6 sm:h-[min(640px,85vh)] sm:w-[380px] sm:rounded-3xl sm:border sm:border-ink/10 sm:shadow-[var(--shadow-warm)]"
+            className="fixed inset-0 z-50 flex flex-col bg-white-soft sm:inset-auto sm:bottom-6 sm:h-[min(640px,85vh)] sm:w-[380px] sm:rounded-3xl sm:border sm:border-ink/10 sm:shadow-[var(--shadow-warm)] sm:ltr:right-6 sm:rtl:left-6"
           >
             {/* Header */}
             <div className="flex items-center justify-between border-b border-ink/10 bg-gold-500 px-5 py-4 sm:rounded-t-3xl">
               <div>
-                <p className="font-serif text-lg text-gold-ink">Revstay Concierge</p>
-                <p className="text-xs text-gold-ink/80">Hotels, OTAs & Egyptian hospitality</p>
+                <p className="font-serif text-lg text-gold-ink">{t("title")}</p>
+                <p className="text-xs text-gold-ink/80">{t("subtitle")}</p>
               </div>
               <button
                 type="button"
-                aria-label="Close chat"
+                aria-label={t("close")}
                 onClick={() => setOpen(false)}
                 className="flex h-8 w-8 items-center justify-center rounded-full text-gold-ink/90 hover:bg-gold-ink/10"
               >
@@ -150,15 +147,15 @@ export function ChatWidget() {
               className="flex-1 space-y-3 overflow-y-auto px-4 py-4"
             >
               <div
-                dir={isRtl(WELCOME_MESSAGE) ? "rtl" : "ltr"}
+                dir={isRtl(welcomeMessage) ? "rtl" : "ltr"}
                 className="max-w-[85%] rounded-2xl rounded-tl-sm border border-ink/10 bg-ivory px-4 py-2.5 text-sm leading-relaxed text-ink-soft"
               >
-                {WELCOME_MESSAGE}
+                {welcomeMessage}
               </div>
 
               {!hasMessages && (
                 <div className="flex flex-wrap gap-2 pt-1">
-                  {STARTER_CHIPS.map((chip) => (
+                  {starterChips.map((chip) => (
                     <button
                       key={chip}
                       type="button"
@@ -211,7 +208,7 @@ export function ChatWidget() {
                     }}
                     className="font-semibold underline underline-offset-2"
                   >
-                    Try again
+                    {t("retry")}
                   </button>
                 </div>
               )}
@@ -226,16 +223,16 @@ export function ChatWidget() {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Ask about hotels, OTAs, or travel in Egypt…"
+                  placeholder={t("placeholder")}
                   dir={isRtl(input) ? "rtl" : "ltr"}
                   className="max-h-28 flex-1 resize-none bg-transparent text-sm text-ink placeholder:text-ink-mute focus:outline-none"
                 />
                 <button
                   type="button"
-                  aria-label="Send message"
+                  aria-label={t("send")}
                   onClick={handleSend}
                   disabled={!input.trim() || isStreaming}
-                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gold-500 text-gold-ink transition-opacity disabled:opacity-40"
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-gold-500 text-gold-ink transition-opacity disabled:opacity-40 rtl:-scale-x-100"
                 >
                   <Send className="h-4 w-4" strokeWidth={2} />
                 </button>
@@ -246,7 +243,7 @@ export function ChatWidget() {
                   onClick={reset}
                   className="mt-2 text-xs font-medium text-ink-mute underline underline-offset-2 hover:text-gold-600"
                 >
-                  Start a new conversation
+                  {t("newChat")}
                 </button>
               )}
             </div>

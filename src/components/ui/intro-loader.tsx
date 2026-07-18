@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { useTranslations } from "next-intl";
 
 const MAX_DURATION_MS = 1500;
 
 export function IntroLoader() {
+  const t = useTranslations("intro");
   const [visible, setVisible] = useState(true);
   const prefersReducedMotion = useReducedMotion();
 
@@ -46,7 +48,7 @@ export function IntroLoader() {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="font-serif text-3xl text-gold-600 sm:text-4xl"
           >
-            Revstay
+            {t("wordmark")}
           </motion.p>
         </motion.div>
       )}

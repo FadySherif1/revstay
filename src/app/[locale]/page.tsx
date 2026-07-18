@@ -1,4 +1,5 @@
 import dynamic from "next/dynamic";
+import { setRequestLocale } from "next-intl/server";
 import { Hero } from "@/components/sections/hero";
 
 const PlatformsCarousel = dynamic(() =>
@@ -15,6 +16,9 @@ const ScrollScene = dynamic(() =>
 const Services = dynamic(() =>
   import("@/components/sections/services").then((m) => m.Services)
 );
+const HowItWorks = dynamic(() =>
+  import("@/components/sections/how-it-works").then((m) => m.HowItWorks)
+);
 const Results = dynamic(() =>
   import("@/components/sections/results").then((m) => m.Results)
 );
@@ -28,7 +32,14 @@ const Footer = dynamic(() =>
   import("@/components/sections/footer").then((m) => m.Footer)
 );
 
-export default function Home() {
+export default async function Home({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+
   return (
     <>
       <main className="flex flex-1 flex-col">
@@ -37,6 +48,7 @@ export default function Home() {
         <ProblemSolution />
         <ScrollScene />
         <Services />
+        <HowItWorks />
         <Results />
         <About />
         <FinalCta />

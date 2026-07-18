@@ -1,21 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useTranslations } from "next-intl";
 import { Menu, X } from "lucide-react";
+import { Link } from "@/i18n/navigation";
 import { MobileMenu } from "@/components/sections/mobile-menu";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import { LanguageSwitcher } from "@/components/ui/language-switcher";
 
 export const NAV_LINKS = [
-  { label: "Services", href: "#services" },
-  { label: "Results", href: "#results" },
-  { label: "About", href: "#about" },
-  { label: "Contact", href: "#contact" },
-];
+  { key: "services", href: "#services" },
+  { key: "results", href: "#results" },
+  { key: "about", href: "#about" },
+  { key: "contact", href: "#contact" },
+] as const;
 
 const SECTION_IDS = NAV_LINKS.map((link) => link.href.slice(1));
 
 export function Navbar() {
+  const t = useTranslations("nav");
   const [scrolled, setScrolled] = useState(false);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -73,7 +76,7 @@ export function Navbar() {
               const isActive = activeId === link.href.slice(1);
               return (
                 <li key={link.href}>
-                  <Link
+                  <a
                     href={link.href}
                     className={`relative pb-1 text-sm font-semibold transition-colors ${
                       isActive
@@ -81,32 +84,33 @@ export function Navbar() {
                         : "text-ink/80 hover:text-gold-600"
                     }`}
                   >
-                    {link.label}
+                    {t(link.key)}
                     <span
                       aria-hidden
                       className={`absolute inset-x-0 -bottom-0.5 h-px bg-gold-600 transition-transform duration-300 ${
                         isActive ? "scale-x-100" : "scale-x-0"
                       }`}
                     />
-                  </Link>
+                  </a>
                 </li>
               );
             })}
           </ul>
 
           <div className="hidden items-center gap-4 md:flex">
+            <LanguageSwitcher />
             <ThemeToggle />
-            <Link
+            <a
               href="#book"
               className="rounded-full bg-gold-500 px-5 py-2.5 text-sm font-semibold text-gold-ink transition-colors hover:bg-gold-400"
             >
-              Book a Free Consultation
-            </Link>
+              {t("book")}
+            </a>
           </div>
 
           <button
             type="button"
-            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-label={menuOpen ? t("closeMenu") : t("openMenu")}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((v) => !v)}
             className="text-ink md:hidden"

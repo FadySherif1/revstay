@@ -5,36 +5,34 @@ import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Building2, Camera, TrendingUp, BarChart3, ArrowRight } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { TiltCard } from "@/components/ui/tilt-card";
 
 const SERVICES = [
   {
     icon: Building2,
-    title: "OTA Listing Creation",
-    body: "We build your hotel's pages across all major booking platforms — Booking.com, Agoda, Expedia, Airbnb, Hotelbeds, Hotels.com, and Trip.com — structured to rank and designed to sell.",
+    key: "listing",
     image: "/images/services/listing.avif",
   },
   {
     icon: Camera,
-    title: "Content & Presentation",
-    body: "Compelling room showcases, persuasive descriptions, and visual storytelling that makes travelers stop scrolling.",
+    key: "content",
     image: "/images/services/content.avif",
   },
   {
     icon: TrendingUp,
-    title: "Visibility Optimization",
-    body: "Continuous tuning of rankings, reviews strategy, and platform algorithms to keep you ahead.",
+    key: "visibility",
     image: "/images/services/visibility.jpg",
   },
   {
     icon: BarChart3,
-    title: "Performance & Growth",
-    body: "Transparent reporting on occupancy, bookings, and revenue — so you see exactly what we deliver.",
+    key: "growth",
     image: "/images/services/growth.jpg",
   },
 ];
 
 export function Services() {
+  const t = useTranslations("services");
   const sectionRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const patternRef = useRef<HTMLDivElement>(null);
@@ -111,14 +109,13 @@ export function Services() {
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
         <div className="mx-auto mb-16 max-w-2xl text-center">
           <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-600">
-            What We Do
+            {t("eyebrow")}
           </p>
           <h2 className="mb-4 font-serif text-3xl leading-tight text-ink sm:text-5xl">
-            Your Hotel, Everywhere Travelers Book
+            {t("headline")}
           </h2>
           <p className="text-lg text-ink-soft">
-            End-to-end management of your presence on the world&apos;s leading
-            travel platforms.
+            {t("sub")}
           </p>
         </div>
 
@@ -127,7 +124,7 @@ export function Services() {
           className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
         >
           {SERVICES.map((service) => (
-            <TiltCard key={service.title} maxTilt={4} className="h-full">
+            <TiltCard key={service.key} maxTilt={4} className="h-full">
               <article
                 data-card
                 className="group flex h-full flex-col overflow-hidden rounded-2xl border border-ink/10 bg-white-soft shadow-[var(--shadow-warm-sm)] transition-shadow duration-300 hover:shadow-[var(--shadow-warm)]"
@@ -162,20 +159,20 @@ export function Services() {
                   </div>
 
                   <h3 className="mb-2 font-serif text-lg text-ink">
-                    {service.title}
+                    {t(`items.${service.key}.title`)}
                   </h3>
                   <p className="flex-1 text-sm leading-relaxed text-ink-soft">
-                    {service.body}
+                    {t(`items.${service.key}.body`)}
                   </p>
 
                   {/* Learn more — slides in on hover */}
                   <button
                     type="button"
                     // TODO: link to /services/<slug> once service detail pages exist
-                    aria-label={`Learn more about ${service.title}`}
+                    aria-label={`${t("learnMore")} — ${t(`items.${service.key}.title`)}`}
                     className="mt-5 flex items-center gap-1.5 text-sm font-semibold text-gold-600 opacity-0 transition-all duration-300 -translate-x-1 group-hover:translate-x-0 group-hover:opacity-100 focus-visible:translate-x-0 focus-visible:opacity-100 focus-visible:outline-none"
                   >
-                    Learn more
+                    {t("learnMore")}
                     <ArrowRight className="h-4 w-4" strokeWidth={2} />
                   </button>
                 </div>

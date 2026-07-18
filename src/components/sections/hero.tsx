@@ -5,11 +5,11 @@ import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useTranslations } from "next-intl";
 import { PLATFORMS } from "@/lib/platforms";
 
-const HEADLINE = "Turn Empty Rooms Into Booked Nights";
-
 export function Hero() {
+  const t = useTranslations("hero");
   const sectionRef = useRef<HTMLElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
@@ -123,18 +123,18 @@ export function Hero() {
           variants={fadeUp(0)}
           className="mb-6 rounded-full bg-white-soft/70 px-4 py-1.5 text-sm font-semibold uppercase tracking-[0.2em] text-gold-600 backdrop-blur-sm"
         >
-          OTA Revenue Management for Hotels
+          {t("eyebrow")}
         </motion.p>
 
         <h1 className="mb-6 font-serif text-4xl leading-tight text-ink sm:text-6xl md:text-7xl">
-          {HEADLINE.split(" ").map((word, i) => (
+          {t("headline").split(" ").map((word, i) => (
             <motion.span
               key={`${word}-${i}`}
               custom={i}
               initial={prefersReducedMotion ? undefined : "hidden"}
               animate="visible"
               variants={wordVariants}
-              className="inline-block pr-[0.25em]"
+              className="inline-block pe-[0.25em]"
             >
               {word}
             </motion.span>
@@ -147,10 +147,7 @@ export function Hero() {
           variants={fadeUp(0.5)}
           className="mb-10 max-w-2xl text-lg font-medium text-ink-soft sm:text-xl"
         >
-          Revstay builds and optimizes your hotel&apos;s presence on
-          Booking.com, Expedia, Agoda, Airbnb, and every platform that
-          matters — so travelers find you first, book faster, and your
-          revenue grows.
+          {t("sub")}
         </motion.p>
 
         <motion.div
@@ -163,13 +160,13 @@ export function Hero() {
             href="#book"
             className="hero-cta-glow rounded-full bg-gold-500 px-8 py-3.5 text-base font-semibold text-gold-ink transition-transform hover:scale-[1.03] hover:bg-gold-400"
           >
-            Book a Free Consultation
+            {t("ctaPrimary")}
           </a>
           <a
-            href="#services"
+            href="#how-it-works"
             className="rounded-full border border-ink/25 bg-white-soft/60 px-8 py-3.5 text-base font-semibold text-ink backdrop-blur-sm transition-colors hover:border-gold-500 hover:text-gold-600"
           >
-            See How It Works
+            {t("ctaSecondary")}
           </a>
         </motion.div>
 
@@ -180,7 +177,7 @@ export function Hero() {
           className="flex flex-col items-center gap-3"
         >
           <p className="text-xs font-medium uppercase tracking-[0.15em] text-ink-mute">
-            Trusted expertise across the world&apos;s leading booking platforms
+            {t("trust")}
           </p>
           <div className="flex max-w-xl flex-wrap items-center justify-center gap-2.5">
             {PLATFORMS.map((platform) => (

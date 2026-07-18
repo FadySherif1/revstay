@@ -1,0 +1,186 @@
+{
+  "nav": {
+    "services": "Services",
+    "results": "Results",
+    "about": "About",
+    "contact": "Contact",
+    "book": "Book a Free Consultation",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "themeToggle": {
+    "toLight": "Switch to light mode",
+    "toDark": "Switch to dark mode"
+  },
+  "langSwitch": {
+    "label": "Language",
+    "en": "EN",
+    "ar": "عربي"
+  },
+  "hero": {
+    "eyebrow": "We Help Hotels Get More Bookings",
+    "headline": "Turn Empty Rooms Into Booked Nights",
+    "sub": "Revstay builds and optimizes your hotel's pages on Booking.com, Expedia, Agoda, Airbnb, and every booking platform that matters — so travelers find you first, book faster, and your revenue grows.",
+    "ctaPrimary": "Book a Free Consultation",
+    "ctaSecondary": "See How It Works",
+    "trust": "Trusted expertise across the world's leading booking platforms"
+  },
+  "problemSolution": {
+    "eyebrow": "The Challenge",
+    "headline": "Great Hotels Stay Empty for One Reason: Nobody Finds Them",
+    "before": "Before",
+    "after": "After",
+    "closing": "This transformation is what we do. Every day.",
+    "problems": {
+      "invisible": {
+        "title": "Invisible on booking platforms",
+        "body": "Your hotel is buried on page 10 of Booking.com while competitors take your guests."
+      },
+      "notSelling": {
+        "title": "Pages that don't sell",
+        "body": "Weak photos and unconvincing descriptions push travelers away in seconds."
+      },
+      "revenueLost": {
+        "title": "Money lost every night",
+        "body": "Every empty room tonight is profit you never get back."
+      }
+    },
+    "solutions": {
+      "rankHigher": {
+        "title": "Show up first",
+        "body": "We improve your pages so they land in the top search results on every platform."
+      },
+      "convert": {
+        "title": "Pages that convince and sell",
+        "body": "Professional presentation that turns browsers into booked guests."
+      },
+      "occupancy": {
+        "title": "Occupancy that keeps growing",
+        "body": "More visibility + stronger conversion = higher revenue you can measure."
+      }
+    }
+  },
+  "howItWorks": {
+    "eyebrow": "How It Works",
+    "headline": "Three Steps to a Fuller Hotel",
+    "steps": {
+      "analyze": {
+        "title": "Analyze & study",
+        "body": "We review where you stand today and pinpoint exactly where bookings are slipping away."
+      },
+      "build": {
+        "title": "Build & improve",
+        "body": "We rebuild your pages across all seven platforms — content, pricing, and visibility."
+      },
+      "grow": {
+        "title": "Track & grow",
+        "body": "We monitor, adjust, and send you clear reports. You watch occupancy climb."
+      }
+    }
+  },
+  "services": {
+    "eyebrow": "What We Do",
+    "headline": "Your Hotel, Everywhere Travelers Book",
+    "sub": "End-to-end management of your presence on the world's leading travel platforms.",
+    "learnMore": "Learn more",
+    "items": {
+      "listing": {
+        "title": "Booking page creation",
+        "body": "We build your hotel's pages across every major platform — Booking.com, Agoda, Expedia, Airbnb, Hotelbeds, Hotels.com, and Trip.com — set up to rank and designed to sell."
+      },
+      "content": {
+        "title": "Content & presentation",
+        "body": "Convincing photos and descriptions that make travelers stop and look."
+      },
+      "visibility": {
+        "title": "Visibility optimization",
+        "body": "Ongoing work on rankings and reviews to keep you ahead of your competitors."
+      },
+      "growth": {
+        "title": "Performance & growth",
+        "body": "Clear reports on occupancy, bookings, and revenue — so you see exactly what we deliver."
+      }
+    }
+  },
+  "results": {
+    "eyebrow": "Our Commitment",
+    "headline": "Built to Deliver",
+    "stats": {
+      "platforms": "Booking platforms we run with one strategy",
+      "monitoring": "Continuous monitoring of your pages and rates",
+      "team": "One team responsible for everything",
+      "transparency": "Transparency in reporting, always"
+    }
+  },
+  "about": {
+    "eyebrow": "Who We Are",
+    "headline": "People Who Understand How Travelers Book",
+    "body": "Revstay was built on real experience running hotel pages across Booking.com, Agoda, Expedia, Airbnb, and every major booking platform. We've seen from the inside exactly what makes a page rise to the top — and what leaves great hotels invisible. That knowledge is now yours.",
+    "pills": {
+      "expertise": "Platform Expertise",
+      "revenue": "Revenue-First Mindset",
+      "transparency": "Full Transparency"
+    }
+  },
+  "platforms": {
+    "eyebrow": "Where We Put You",
+    "headline": "Seven Platforms. One Strategy. Total Coverage.",
+    "regionLabel": "Booking platforms we manage",
+    "tags": {
+      "OTA": "OTA",
+      "Stays": "Stays",
+      "B2B": "B2B"
+    },
+    "descriptions": {
+      "booking": "The world's largest hotel booking platform",
+      "agoda": "Asia's leading travel booking powerhouse",
+      "expedia": "Global reach across flights, stays & packages",
+      "airbnb": "Boutique stays & apartment-hotel travelers",
+      "hotelbeds": "B2B distribution to tour operators worldwide",
+      "hotelscom": "Loyalty-driven bookers who return",
+      "tripcom": "Gateway to the fast-growing Asian market"
+    }
+  },
+  "finalCta": {
+    "headline": "Your Rooms Won't Fill Themselves",
+    "sub": "Book a free 30-minute consultation. We'll review where you stand and show you exactly where the opportunities are.",
+    "cta": "Book a Free Consultation",
+    "reassurance": "No commitment. No pressure. Just clarity."
+  },
+  "footer": {
+    "tagline": "We help hotels earn more from the world's leading booking platforms.",
+    "quickLinks": "Quick Links",
+    "contact": "Contact",
+    "rights": "© 2026 Revstay. All rights reserved.",
+    "social": {
+      "linkedin": "LinkedIn",
+      "instagram": "Instagram",
+      "x": "X"
+    }
+  },
+  "intro": {
+    "wordmark": "Revstay"
+  },
+  "chat": {
+    "title": "Revstay Concierge",
+    "subtitle": "Hotels, OTAs & Egyptian hospitality",
+    "open": "Open Revstay Concierge chat",
+    "close": "Close chat",
+    "tooltip": "Ask me anything about hotels ✨",
+    "dismissTooltip": "Dismiss tooltip",
+    "welcome": "Hi! I'm the Revstay Concierge — ask me anything about growing your hotel's bookings, OTA platforms, or hospitality in Egypt. مرحباً! اسألني عن أي شيء يخص الفنادق والحجوزات.",
+    "placeholder": "Ask about hotels, OTAs, or travel in Egypt…",
+    "send": "Send message",
+    "newChat": "Start a new conversation",
+    "retry": "Try again",
+    "chips": {
+      "rank": "How do I rank higher on Booking.com?",
+      "whatWeDo": "What does Revstay do exactly?",
+      "moreBookings": "How can I get more bookings for my hotel?"
+    }
+  },
+  "metadata": {
+    "title": "Revstay — Grow Your Hotel's Bookings on Booking.com, Agoda, Expedia & More",
+    "description": "Revstay helps hotels get more bookings by creating and optimizing their pages across Booking.com, Agoda, Expedia, Airbnb, Hotelbeds, Hotels.com, and Trip.com."
+  }
+}

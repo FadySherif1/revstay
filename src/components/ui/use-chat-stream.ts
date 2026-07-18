@@ -14,7 +14,7 @@ function makeId() {
   return Math.random().toString(36).slice(2);
 }
 
-export function useChatStream() {
+export function useChatStream(locale?: string) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isStreaming, setIsStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -46,7 +46,7 @@ export function useChatStream() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: history }),
+        body: JSON.stringify({ messages: history, locale }),
         signal: controller.signal,
       });
 
@@ -78,7 +78,7 @@ export function useChatStream() {
       setIsStreaming(false);
       abortRef.current = null;
     }
-  }, [messages, isStreaming]);
+  }, [messages, isStreaming, locale]);
 
   const reset = useCallback(() => {
     abortRef.current?.abort();

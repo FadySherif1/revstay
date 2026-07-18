@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useTranslations } from "next-intl";
 import {
   EyeOff,
   ImageOff,
@@ -13,43 +14,20 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-const PROBLEMS = [
-  {
-    icon: EyeOff,
-    title: "Invisible on booking platforms",
-    body: "Your hotel is buried on page 10 of Booking.com while competitors take your guests.",
-  },
-  {
-    icon: ImageOff,
-    title: "Listings that don't sell",
-    body: "Poor photos, weak descriptions, and unoptimized pricing push travelers away in seconds.",
-  },
-  {
-    icon: CircleDollarSign,
-    title: "Revenue left on the table",
-    body: "Empty rooms every night are profit you never get back.",
-  },
-];
+const PROBLEM_KEYS = [
+  { icon: EyeOff, key: "invisible" },
+  { icon: ImageOff, key: "notSelling" },
+  { icon: CircleDollarSign, key: "revenueLost" },
+] as const;
 
-const SOLUTIONS = [
-  {
-    icon: ArrowUpRight,
-    title: "Rank higher, get seen",
-    body: "We optimize your listings to climb search results on every major platform.",
-  },
-  {
-    icon: Sparkles,
-    title: "Listings that convert",
-    body: "Professional presentation that turns browsers into booked guests.",
-  },
-  {
-    icon: LineChart,
-    title: "Occupancy that grows",
-    body: "More visibility + better conversion = measurable revenue growth.",
-  },
-];
+const SOLUTION_KEYS = [
+  { icon: ArrowUpRight, key: "rankHigher" },
+  { icon: Sparkles, key: "convert" },
+  { icon: LineChart, key: "occupancy" },
+] as const;
 
 export function ProblemSolution() {
+  const t = useTranslations("problemSolution");
   const sectionRef = useRef<HTMLElement>(null);
   const problemRef = useRef<HTMLDivElement>(null);
   const solutionRef = useRef<HTMLDivElement>(null);
@@ -165,22 +143,22 @@ export function ProblemSolution() {
       <div className="mx-auto max-w-6xl px-6 lg:px-8">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-600">
-            The Challenge
+            {t("eyebrow")}
           </p>
           <h2 className="font-serif text-3xl leading-tight text-ink sm:text-5xl">
-            Great Hotels Stay Empty for One Reason: Nobody Finds Them
+            {t("headline")}
           </h2>
         </div>
 
         <div className="relative grid grid-cols-1 gap-10 md:grid-cols-[1fr_auto_1fr] md:gap-8">
           {/* BEFORE — problem column */}
           <div ref={problemRef} className="space-y-6">
-            <p className="text-center text-sm font-semibold uppercase tracking-[0.3em] text-ink-mute md:text-left">
-              Before
+            <p className="text-center text-sm font-semibold uppercase tracking-[0.3em] text-ink-mute md:text-start">
+              {t("before")}
             </p>
-            {PROBLEMS.map((item, i) => (
+            {PROBLEM_KEYS.map((item, i) => (
               <div
-                key={item.title}
+                key={item.key}
                 data-item
                 onMouseEnter={() => setActiveIndex(i)}
                 onMouseLeave={() => setActiveIndex(null)}
@@ -195,21 +173,23 @@ export function ProblemSolution() {
                 </div>
                 <div>
                   <h3 className="relative mb-1 inline-block font-semibold text-ink/70">
-                    {item.title}
+                    {t(`problems.${item.key}.title`)}
                     <span
                       aria-hidden
-                      className="absolute left-0 top-1/2 h-px w-full -translate-y-1/2 bg-ink-mute/40"
+                      className="absolute inset-x-0 top-1/2 h-px w-full -translate-y-1/2 bg-ink-mute/40"
                     />
                   </h3>
                   <p className="text-sm leading-relaxed text-ink-soft">
-                    {item.body}
+                    {t(`problems.${item.key}.body`)}
                   </p>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Transformation flow — vertical chevrons (desktop) / horizontal (mobile) */}
+          {/* Transformation flow — vertical chevrons (desktop) / horizontal
+              (mobile). rtl:-scale-x-100 flips the arrows to point from the
+              problem column toward the solution column in Arabic. */}
           <div
             aria-hidden
             className="flex items-center justify-center gap-2 py-2 md:flex-col md:px-3 md:py-0"
@@ -218,7 +198,7 @@ export function ProblemSolution() {
               <ChevronRight
                 key={n}
                 data-chevron
-                className="h-6 w-6 text-gold-500 drop-shadow-[0_0_6px_color-mix(in_srgb,var(--color-gold-500)_50%,transparent)] md:rotate-90"
+                className="h-6 w-6 text-gold-500 drop-shadow-[0_0_6px_color-mix(in_srgb,var(--color-gold-500)_50%,transparent)] rtl:-scale-x-100 md:rotate-90 md:rtl:scale-x-100"
                 strokeWidth={2.5}
               />
             ))}
@@ -226,32 +206,32 @@ export function ProblemSolution() {
 
           {/* AFTER — solution column */}
           <div ref={solutionRef} className="space-y-6">
-            <p className="text-center text-sm font-semibold uppercase tracking-[0.3em] text-gold-600 drop-shadow-[0_0_10px_color-mix(in_srgb,var(--color-gold-500)_35%,transparent)] md:text-left">
-              After
+            <p className="text-center text-sm font-semibold uppercase tracking-[0.3em] text-gold-600 drop-shadow-[0_0_10px_color-mix(in_srgb,var(--color-gold-500)_35%,transparent)] md:text-start">
+              {t("after")}
             </p>
-            {SOLUTIONS.map((item, i) => (
+            {SOLUTION_KEYS.map((item, i) => (
               <div
-                key={item.title}
+                key={item.key}
                 data-item
                 onMouseEnter={() => setActiveIndex(i)}
                 onMouseLeave={() => setActiveIndex(null)}
-                className={`relative flex gap-4 overflow-hidden rounded-2xl border border-gold-500/20 bg-ivory p-5 pl-6 shadow-[var(--shadow-warm-sm)] transition-all duration-300 ${
+                className={`relative flex gap-4 overflow-hidden rounded-2xl border border-gold-500/20 bg-ivory p-5 ps-6 shadow-[var(--shadow-warm-sm)] transition-all duration-300 ${
                   activeIndex === i ? "ring-2 ring-gold-500/60" : ""
                 }`}
               >
-                {/* Draw-in gold left border */}
+                {/* Draw-in gold border on the inline-start edge */}
                 <span
                   data-border
                   aria-hidden
-                  className="absolute left-0 top-0 h-full w-1 origin-top bg-gold-500"
+                  className="absolute inset-y-0 start-0 h-full w-1 origin-top bg-gold-500"
                 />
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-gold-500 text-gold-ink">
                   <item.icon className="h-5 w-5" strokeWidth={1.75} />
                 </div>
                 <div>
-                  <h3 className="mb-1 font-semibold text-ink">{item.title}</h3>
+                  <h3 className="mb-1 font-semibold text-ink">{t(`solutions.${item.key}.title`)}</h3>
                   <p className="text-sm leading-relaxed text-ink-soft">
-                    {item.body}
+                    {t(`solutions.${item.key}.body`)}
                   </p>
                 </div>
               </div>
@@ -263,7 +243,7 @@ export function ProblemSolution() {
           ref={closingRef}
           className="mx-auto mt-16 max-w-2xl text-center font-serif text-xl italic text-ink/80 sm:text-2xl"
         >
-          This transformation is what we do. Every day.
+          {t("closing")}
         </p>
       </div>
     </section>
