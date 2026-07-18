@@ -125,6 +125,7 @@ export function AuthModal({ googleEnabled }: { googleEnabled: boolean }) {
         >
           <motion.div
             onClick={(e) => e.stopPropagation()}
+            data-lenis-prevent
             initial={prefersReducedMotion ? undefined : { opacity: 0, scale: 0.94, y: 16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={prefersReducedMotion ? undefined : { opacity: 0, scale: 0.96, y: 8 }}
