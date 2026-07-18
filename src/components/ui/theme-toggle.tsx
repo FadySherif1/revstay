@@ -2,12 +2,17 @@
 
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
+import { useLocale } from "next-intl";
 import { useTheme } from "@/components/ui/theme-provider";
 
 const RAY_COUNT = 8;
+const KNOB_TRAVEL = 20;
 
 export function ThemeToggle({ className }: { className?: string }) {
   const { theme, toggleTheme, isTransitioning } = useTheme();
+  const locale = useLocale();
+  // In RTL the pill is mirrored, so the knob must travel toward screen-left.
+  const knobDir = locale === "ar" ? -1 : 1;
   const buttonRef = useRef<HTMLButtonElement>(null);
   const knobRef = useRef<HTMLSpanElement>(null);
   const raysRef = useRef<SVGGElement>(null);
@@ -27,7 +32,7 @@ export function ThemeToggle({ className }: { className?: string }) {
     const isDark = theme === "dark";
 
     if (prefersReducedMotion) {
-      gsap.set(knobRef.current, { x: isDark ? 20 : 0 });
+      gsap.set(knobRef.current, { x: isDark ? KNOB_TRAVEL * knobDir : 0 });
       gsap.set(raysRef.current, { opacity: isDark ? 0 : 1, scale: isDark ? 0.4 : 1 });
       gsap.set(biteRef.current, { opacity: isDark ? 1 : 0, x: isDark ? 5 : 12 });
       return;
@@ -37,7 +42,7 @@ export function ThemeToggle({ className }: { className?: string }) {
     const tl = gsap.timeline({ defaults: { duration: 0.5, ease: "power2.inOut" } });
     tlRef.current = tl;
 
-    tl.to(knobRef.current, { x: isDark ? 20 : 0, duration: 0.5, ease: "elastic.out(1, 0.65)" }, 0);
+    tl.to(knobRef.current, { x: isDark ? KNOB_TRAVEL * knobDir : 0, duration: 0.5, ease: "elastic.out(1, 0.65)" }, 0);
     tl.to(raysRef.current, {
       opacity: isDark ? 0 : 1,
       scale: isDark ? 0.4 : 1,
@@ -54,7 +59,7 @@ export function ThemeToggle({ className }: { className?: string }) {
     return () => {
       tl.kill();
     };
-  }, [theme]);
+  }, [theme, knobDir]);
 
   function handleClick() {
     if (isTransitioning || !buttonRef.current) return;
