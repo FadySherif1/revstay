@@ -19,6 +19,22 @@ export function LinkedinIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+export function FacebookIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.75}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      {...props}
+    >
+      <path d="M14.5 21v-7.5h2.5l.5-3h-3V8.25c0-.9.3-1.5 1.65-1.5H17.5V3.6C17.2 3.55 16.2 3.5 15.05 3.5c-2.4 0-4.05 1.45-4.05 4.15V10.5H8.5v3H11V21" />
+    </svg>
+  );
+}
+
 export function InstagramIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg

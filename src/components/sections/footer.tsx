@@ -1,9 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { LinkedinIcon, InstagramIcon } from "@/components/ui/social-icons";
+import { FacebookIcon, InstagramIcon } from "@/components/ui/social-icons";
 
 const QUICK_LINKS = [
   { key: "services", href: "#services" },
@@ -13,9 +12,8 @@ const QUICK_LINKS = [
 ];
 
 const SOCIALS = [
-  { icon: LinkedinIcon, key: "linkedin", href: "#" },
   { icon: InstagramIcon, key: "instagram", href: "#" },
-  { icon: X, key: "x", href: "#" },
+  { icon: FacebookIcon, key: "facebook", href: "#" },
 ];
 
 export function Footer() {
@@ -26,7 +24,7 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-6 py-16 lg:px-8">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
           <div>
-            <p className="mb-3 font-serif text-2xl text-ink">Revstay</p>
+            <p className="mb-3 text-2xl font-semibold text-ink">Revstay</p>
             <p className="max-w-xs text-sm leading-relaxed text-ink-soft">
               {t("tagline")}
             </p>
