@@ -159,6 +159,24 @@
       "generic": "Something went wrong. Please try again."
     }
   },
+  "myBookings": {
+    "title": "My Bookings",
+    "subtitle": "Here are your consultation appointments.",
+    "empty": "You don't have any bookings yet.",
+    "upcomingBadge": "Upcoming",
+    "pastBadge": "Past",
+    "hotelLabel": "Hotel",
+    "close": "Close",
+    "bookAnother": "Book another consultation",
+    "bookNow": "Book a Free Consultation",
+    "existingTitle": "You already have a booking",
+    "existingSubtitle": "You've booked a consultation with us. Here are the details.",
+    "status": {
+      "PENDING": "Awaiting confirmation",
+      "CONFIRMED": "Confirmed",
+      "CANCELLED": "Cancelled"
+    }
+  },
   "hero": {
     "eyebrow": "We Help Hotels Get More Bookings",
     "headline": "Turn Empty Rooms Into Booked Nights",

@@ -159,6 +159,24 @@
       "generic": "حصل خطأ. حاول تاني."
     }
   },
+  "myBookings": {
+    "title": "حجوزاتي",
+    "subtitle": "دي مواعيد استشاراتك معانا.",
+    "empty": "لسه معندكش أي حجوزات.",
+    "upcomingBadge": "قادم",
+    "pastBadge": "سابق",
+    "hotelLabel": "الفندق",
+    "close": "إغلاق",
+    "bookAnother": "احجز استشارة تانية",
+    "bookNow": "احجز استشارة مجانية",
+    "existingTitle": "عندك حجز بالفعل",
+    "existingSubtitle": "انت حاجز استشارة معانا. دي تفاصيلها.",
+    "status": {
+      "PENDING": "في انتظار التأكيد",
+      "CONFIRMED": "مؤكّد",
+      "CANCELLED": "ملغي"
+    }
+  },
   "hero": {
     "eyebrow": "بنساعد الفنادق تزود حجوزاتها",
     "headline": "غرفك الفاضية تتحول لحجوزات",

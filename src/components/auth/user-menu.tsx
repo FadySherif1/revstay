@@ -23,7 +23,7 @@ function initials(nameOrEmail: string) {
 export function UserMenu() {
   const t = useTranslations("auth");
   const { data: session, status } = useSession();
-  const { openAuth } = useAuthModal();
+  const { openAuth, openMyBookings } = useAuthModal();
   const prefersReducedMotion = useReducedMotion();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -91,11 +91,13 @@ export function UserMenu() {
                 {t("menu.dashboard")}
               </Link>
             )}
-            {/* TODO: link to /account/bookings once that page exists. */}
             <button
               type="button"
               role="menuitem"
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                setOpen(false);
+                openMyBookings();
+              }}
               className="flex w-full items-center gap-3 px-4 py-3 text-sm text-ink-soft transition-colors hover:bg-ink/5 hover:text-ink"
             >
               <CalendarDays className="h-4 w-4" strokeWidth={1.75} />

@@ -4,9 +4,11 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useState,
 } from "react";
 import { useSession } from "next-auth/react";
+import { getMyBookings, type MyBooking } from "@/actions/booking";
 
 type AuthTab = "signin" | "signup";
 // Action to resume once the user is authenticated.
@@ -16,14 +18,25 @@ type AuthModalContextValue = {
   isOpen: boolean;
   tab: AuthTab;
   bookingOpen: boolean;
+  myBookingsOpen: boolean;
+  myBookings: MyBooking[];
   openAuth: (tab?: AuthTab) => void;
   closeAuth: () => void;
   setTab: (tab: AuthTab) => void;
-  // Called by any "Book a Free Consultation" button.
+  // Called by any "Book a Free Consultation" button. Opens the existing
+  // reservation popup if the user already has an upcoming booking, else the
+  // booking form (or the auth modal when signed out).
   requestBooking: () => void;
+  // Force a fresh booking form even if a reservation already exists.
+  startNewBooking: () => void;
+  // Open the "My Bookings" popup directly (from the user menu).
+  openMyBookings: () => void;
+  closeMyBookings: () => void;
   // Called by the modal after a successful sign-in/sign-up.
   onAuthSuccess: () => void;
   closeBooking: () => void;
+  // Re-fetch the user's bookings (e.g. after creating one).
+  refreshBookings: () => void;
 };
 
 const AuthModalContext = createContext<AuthModalContextValue | null>(null);
@@ -40,6 +53,23 @@ export function AuthModalProvider({ children }: { children: React.ReactNode }) {
   const [tab, setTab] = useState<AuthTab>("signin");
   const [pending, setPending] = useState<PendingIntent>(null);
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [myBookingsOpen, setMyBookingsOpen] = useState(false);
+  const [myBookings, setMyBookings] = useState<MyBooking[]>([]);
+
+  const refreshBookings = useCallback(() => {
+    if (status !== "authenticated") {
+      setMyBookings([]);
+      return;
+    }
+    getMyBookings()
+      .then(setMyBookings)
+      .catch(() => setMyBookings([]));
+  }, [status]);
+
+  // Load the user's bookings whenever they become authenticated.
+  useEffect(() => {
+    refreshBookings();
+  }, [refreshBookings]);
 
   const openAuth = useCallback((next: AuthTab = "signin") => {
     setTab(next);
@@ -53,16 +83,30 @@ export function AuthModalProvider({ children }: { children: React.ReactNode }) {
 
   const closeBooking = useCallback(() => setBookingOpen(false), []);
 
+  const openMyBookings = useCallback(() => setMyBookingsOpen(true), []);
+  const closeMyBookings = useCallback(() => setMyBookingsOpen(false), []);
+
+  const startNewBooking = useCallback(() => {
+    setMyBookingsOpen(false);
+    setBookingOpen(true);
+  }, []);
+
   const requestBooking = useCallback(() => {
     if (status === "authenticated") {
-      setBookingOpen(true);
+      // Already has an upcoming reservation? Show it instead of a new form.
+      const hasUpcoming = myBookings.some((b) => b.isUpcoming);
+      if (hasUpcoming) {
+        setMyBookingsOpen(true);
+      } else {
+        setBookingOpen(true);
+      }
       return;
     }
     // Signed out: remember the intent and open the auth modal.
     setPending("booking");
     setTab("signin");
     setIsOpen(true);
-  }, [status]);
+  }, [status, myBookings]);
 
   const onAuthSuccess = useCallback(() => {
     setIsOpen(false);
@@ -78,12 +122,18 @@ export function AuthModalProvider({ children }: { children: React.ReactNode }) {
         isOpen,
         tab,
         bookingOpen,
+        myBookingsOpen,
+        myBookings,
         openAuth,
         closeAuth,
         setTab,
         requestBooking,
+        startNewBooking,
+        openMyBookings,
+        closeMyBookings,
         onAuthSuccess,
         closeBooking,
+        refreshBookings,
       }}
     >
       {children}

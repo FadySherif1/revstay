@@ -14,6 +14,37 @@ export type CreateBookingResult =
   | { ok: true; id: string }
   | { ok: false; error: string };
 
+export type MyBooking = {
+  id: string;
+  hotelName: string;
+  scheduledAt: string; // ISO — formatted client-side for the active locale
+  status: "PENDING" | "CONFIRMED" | "CANCELLED";
+  isUpcoming: boolean;
+};
+
+// Returns the signed-in user's bookings, soonest first. Cancelled ones are
+// excluded. Used by "My Bookings" and to detect an existing reservation
+// before opening a fresh booking form.
+export async function getMyBookings(): Promise<MyBooking[]> {
+  const session = await auth();
+  if (!session?.user?.id) return [];
+
+  const now = new Date();
+  const rows = await prisma.booking.findMany({
+    where: { userId: session.user.id, status: { not: "CANCELLED" } },
+    orderBy: { scheduledAt: "asc" },
+    select: { id: true, hotelName: true, scheduledAt: true, status: true },
+  });
+
+  return rows.map((b) => ({
+    id: b.id,
+    hotelName: b.hotelName,
+    scheduledAt: b.scheduledAt.toISOString(),
+    status: b.status as MyBooking["status"],
+    isUpcoming: b.scheduledAt.getTime() >= now.getTime(),
+  }));
+}
+
 export async function createBooking(input: unknown): Promise<CreateBookingResult> {
   // Booking requires an authenticated user.
   const session = await auth();

@@ -52,7 +52,7 @@ export function BookingModal() {
   const t = useTranslations("booking");
   const locale = useLocale();
   const prefersReducedMotion = useReducedMotion();
-  const { bookingOpen, closeBooking } = useAuthModal();
+  const { bookingOpen, closeBooking, refreshBookings } = useAuthModal();
   const { data: session } = useSession();
 
   const [step, setStep] = useState<Step>("form");
@@ -170,6 +170,8 @@ export function BookingModal() {
     const res = await createBooking({ ...form, notes: form.notes, date, slot });
     if (res.ok) {
       setStep("success");
+      // Keep "My Bookings" / the existing-reservation popup in sync.
+      refreshBookings();
     } else {
       setBusy(false);
       const key = `errors.${res.error}`;
