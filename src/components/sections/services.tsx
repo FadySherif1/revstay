@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Building2, Camera, TrendingUp, BarChart3, ArrowRight } from "lucide-react";
+import { Building2, Camera, TrendingUp, BarChart3 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { TiltCard } from "@/components/ui/tilt-card";
 
@@ -164,17 +164,6 @@ export function Services() {
                   <p className="flex-1 text-sm leading-relaxed text-ink-soft">
                     {t(`items.${service.key}.body`)}
                   </p>
-
-                  {/* Learn more — slides in on hover */}
-                  <button
-                    type="button"
-                    // TODO: link to /services/<slug> once service detail pages exist
-                    aria-label={`${t("learnMore")} — ${t(`items.${service.key}.title`)}`}
-                    className="mt-5 flex items-center gap-1.5 text-sm font-semibold text-gold-600 opacity-0 transition-all duration-300 -translate-x-1 group-hover:translate-x-0 group-hover:opacity-100 focus-visible:translate-x-0 focus-visible:opacity-100 focus-visible:outline-none"
-                  >
-                    {t("learnMore")}
-                    <ArrowRight className="h-4 w-4" strokeWidth={2} />
-                  </button>
                 </div>
               </article>
             </TiltCard>

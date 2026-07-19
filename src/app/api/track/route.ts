@@ -2,6 +2,10 @@ import { NextRequest } from "next/server";
 import { createHash } from "crypto";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+import { checkRateLimit } from "@/lib/rate-limit";
+import { getClientIpFromRequest } from "@/lib/client-ip";
+
+const TRACK_MAX_PER_MIN = 60;
 
 export const runtime = "nodejs";
 
@@ -18,6 +22,13 @@ function visitorHash(ip: string, ua: string): string {
 }
 
 export async function POST(req: NextRequest) {
+  const ip = getClientIpFromRequest(req);
+
+  // Never surface rate-limit failures to the visitor — tracking is
+  // best-effort — just stop writing once the per-IP budget is spent.
+  const { allowed } = await checkRateLimit(`track:${ip}`, TRACK_MAX_PER_MIN);
+  if (!allowed) return new Response(null, { status: 204 });
+
   let body: unknown;
   try {
     body = await req.json();
@@ -28,7 +39,6 @@ export async function POST(req: NextRequest) {
   const parsed = bodySchema.safeParse(body);
   if (!parsed.success) return new Response(null, { status: 204 });
 
-  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ?? "unknown";
   const ua = req.headers.get("user-agent") ?? "unknown";
 
   try {

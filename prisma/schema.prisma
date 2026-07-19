@@ -77,6 +77,11 @@ model VerificationToken {
 }
 
 // ─── Bookings (free consultation meetings) ────────────────────────────
+// A partial unique index on scheduledAt (WHERE status != 'CANCELLED') is
+// added via raw SQL in a migration — Prisma's schema DSL can't express a
+// conditional/partial unique index, only plain @@unique. This prevents two
+// active bookings from ever sharing the same slot at the DB level, on top
+// of the application-level availability check in createBooking().
 
 model Booking {
   id            String        @id @default(cuid())
@@ -111,6 +116,10 @@ enum BookingStatus {
   PENDING
   CONFIRMED
   CANCELLED
+  // Derived, not set on creation — a booking is COMPLETED once its
+  // scheduledAt has passed and it wasn't cancelled. Set by admin actions /
+  // shown as computed by getMyBookings(); see src/lib/booking-time.ts.
+  COMPLETED
 }
 
 // ─── Analytics ────────────────────────────────────────────────────────

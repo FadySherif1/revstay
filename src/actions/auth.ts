@@ -1,12 +1,12 @@
 "use server";
 
-import { headers } from "next/headers";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { signIn } from "@/auth";
 import { signInSchema, signUpSchema } from "@/lib/auth-schemas";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { getClientIp } from "@/lib/client-ip";
 
 const AUTH_MAX_ATTEMPTS = 5;
 const BCRYPT_ROUNDS = 12;
@@ -16,9 +16,7 @@ export type SignUpResult =
   | { ok: false; error: string; field?: "name" | "email" | "password" };
 
 async function clientKey(scope: string): Promise<string> {
-  const h = await headers();
-  const fwd = h.get("x-forwarded-for");
-  return `${scope}:${fwd?.split(",")[0]?.trim() ?? "unknown"}`;
+  return `${scope}:${await getClientIp()}`;
 }
 
 export type SignInResult = { ok: true } | { ok: false; error: string };
@@ -32,7 +30,7 @@ export async function signInWithCredentials(input: {
   email: string;
   password: string;
 }): Promise<SignInResult> {
-  const { allowed } = checkRateLimit(await clientKey("signin"), AUTH_MAX_ATTEMPTS);
+  const { allowed } = await checkRateLimit(await clientKey("signin"), AUTH_MAX_ATTEMPTS);
   if (!allowed) {
     return {
       ok: false,
@@ -70,7 +68,7 @@ export async function signUp(input: {
   email: string;
   password: string;
 }): Promise<SignUpResult> {
-  const { allowed } = checkRateLimit(await clientKey("signup"), AUTH_MAX_ATTEMPTS);
+  const { allowed } = await checkRateLimit(await clientKey("signup"), AUTH_MAX_ATTEMPTS);
   if (!allowed) {
     return {
       ok: false,

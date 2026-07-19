@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import type { AdminDashboardData } from "@/lib/admin-data";
 import { updateBookingStatus } from "@/actions/admin";
+import { CAIRO_TZ } from "@/lib/booking-time";
 
 type Booking = AdminDashboardData["recentBookings"][number];
 
@@ -12,11 +13,14 @@ const STATUSES = ["PENDING", "CONFIRMED", "CANCELLED"] as const;
 export function BookingsTable({ bookings }: { bookings: Booking[] }) {
   const t = useTranslations("admin");
   const locale = useLocale();
+  // Always shown in Cairo time (the market this booking calendar serves),
+  // regardless of the admin's own browser timezone.
   const dateFmt = new Intl.DateTimeFormat(locale === "ar" ? "ar-EG" : "en-US", {
     day: "numeric",
     month: "short",
     hour: "numeric",
     minute: "2-digit",
+    timeZone: CAIRO_TZ,
   });
 
   return (

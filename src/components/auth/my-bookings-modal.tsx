@@ -6,11 +6,13 @@ import { useLocale, useTranslations } from "next-intl";
 import { CalendarCheck, X, Building2 } from "lucide-react";
 import { useAuthModal } from "@/components/auth/auth-provider";
 import type { MyBooking } from "@/actions/booking";
+import { CAIRO_TZ } from "@/lib/booking-time";
 
 const STATUS_STYLES: Record<MyBooking["status"], string> = {
   PENDING: "bg-gold-500/15 text-gold-600",
   CONFIRMED: "bg-teal-500/15 text-teal-600",
   CANCELLED: "bg-ink/10 text-ink-soft",
+  COMPLETED: "bg-ink/10 text-ink-soft",
 };
 
 export function MyBookingsModal() {
@@ -28,6 +30,7 @@ export function MyBookingsModal() {
         month: "long",
         hour: "numeric",
         minute: "2-digit",
+        timeZone: CAIRO_TZ,
       }),
     [locale]
   );

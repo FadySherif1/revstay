@@ -8,7 +8,9 @@ const QUICK_LINKS = [
   { key: "services", href: "#services" },
   { key: "results", href: "#results" },
   { key: "about", href: "#about" },
-  { key: "contact", href: "#contact" },
+  // See navbar.tsx: retargeted to #book (final-cta), the only real
+  // contact/CTA section — #contact never existed.
+  { key: "contact", href: "#book" },
 ];
 
 const SOCIALS = [

@@ -1,13 +1,14 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import { useSession } from "next-auth/react";
 import { CalendarCheck, X, ArrowLeft, Loader2 } from "lucide-react";
 import { useAuthModal } from "@/components/auth/auth-provider";
-import { createBooking } from "@/actions/booking";
+import { createBooking, getAvailableSlots } from "@/actions/booking";
 import { BOOKING_SLOTS, type BookingSlot } from "@/lib/booking-schema";
+import { CAIRO_TZ } from "@/lib/booking-time";
 import { PLATFORMS } from "@/lib/platforms";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -28,23 +29,39 @@ type FormState = {
   notes: string;
 };
 
+// "Today" in Cairo, not the guest's browser timezone — Revstay serves the
+// Egyptian market and every slot is a Cairo wall-clock time (see
+// src/lib/booking-time.ts), so the day picker must anchor to the same
+// calendar day the server will interpret the pick against.
+function cairoToday(): Date {
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: CAIRO_TZ,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(new Date());
+  const y = Number(parts.find((p) => p.type === "year")?.value);
+  const m = Number(parts.find((p) => p.type === "month")?.value);
+  const d = Number(parts.find((p) => p.type === "day")?.value);
+  return new Date(Date.UTC(y, m - 1, d));
+}
+
 // Build the next N selectable days (skips nothing — simple + reliable).
 function upcomingDays(count: number): Date[] {
+  const start = cairoToday();
   const days: Date[] = [];
-  const start = new Date();
-  start.setHours(0, 0, 0, 0);
   for (let i = 1; i <= count; i++) {
     const d = new Date(start);
-    d.setDate(start.getDate() + i);
+    d.setUTCDate(start.getUTCDate() + i);
     days.push(d);
   }
   return days;
 }
 
 function toISODate(d: Date) {
-  const y = d.getFullYear();
-  const m = String(d.getMonth() + 1).padStart(2, "0");
-  const day = String(d.getDate()).padStart(2, "0");
+  const y = d.getUTCFullYear();
+  const m = String(d.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(d.getUTCDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
 }
 
@@ -81,9 +98,36 @@ export function BookingModal() {
         weekday: "short",
         day: "numeric",
         month: "short",
+        timeZone: CAIRO_TZ,
       }),
     [locale]
   );
+
+  const [availableSlots, setAvailableSlots] = useState<BookingSlot[] | null>(null);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+
+  // Re-fetch which slots are still open whenever the picked date changes.
+  useEffect(() => {
+    if (!date) {
+      setAvailableSlots(null);
+      return;
+    }
+    let cancelled = false;
+    setLoadingSlots(true);
+    getAvailableSlots(date)
+      .then((slots) => {
+        if (cancelled) return;
+        setAvailableSlots(slots);
+        // Deselect if the previously-picked slot is no longer open.
+        setSlot((s) => (s && !slots.includes(s) ? null : s));
+      })
+      .finally(() => {
+        if (!cancelled) setLoadingSlots(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [date]);
 
   // Prefill name/email from the session once when the modal opens.
   if (bookingOpen && !prefilled && session?.user) {
@@ -174,6 +218,14 @@ export function BookingModal() {
       refreshBookings();
     } else {
       setBusy(false);
+      if (res.error === "slotTaken") {
+        // Someone else grabbed it between load and submit — refresh the
+        // picker so the now-taken slot shows as unavailable immediately.
+        setSlot(null);
+        getAvailableSlots(date).then(setAvailableSlots);
+        setError(t("errors.slotTaken"));
+        return;
+      }
       const key = `errors.${res.error}`;
       // Fall back to generic if the error key isn't translated.
       setError(
@@ -185,7 +237,7 @@ export function BookingModal() {
   }
 
   const whenLabel =
-    date && slot ? `${dateFmt.format(new Date(`${date}T00:00`))} · ${t(`slots.${slot}`)}` : "";
+    date && slot ? `${dateFmt.format(new Date(`${date}T00:00:00Z`))} · ${t(`slots.${slot}`)}` : "";
 
   return (
     <AnimatePresence>
@@ -363,22 +415,31 @@ export function BookingModal() {
                 <div className="mb-2 grid grid-cols-2 gap-2">
                   {BOOKING_SLOTS.map((s) => {
                     const active = slot === s;
+                    const taken = !loadingSlots && availableSlots !== null && !availableSlots.includes(s);
                     return (
                       <button
                         key={s}
                         type="button"
+                        disabled={taken}
                         onClick={() => setSlot(s)}
                         className={`rounded-xl border py-2.5 text-sm font-semibold transition-colors ${
-                          active
-                            ? "border-gold-500 bg-gold-500 text-gold-ink"
-                            : "border-ink/15 bg-ivory text-ink-soft hover:border-gold-500/50"
+                          taken
+                            ? "cursor-not-allowed border-ink/10 bg-ink/5 text-ink-mute/60 line-through"
+                            : active
+                              ? "border-gold-500 bg-gold-500 text-gold-ink"
+                              : "border-ink/15 bg-ivory text-ink-soft hover:border-gold-500/50"
                         }`}
                       >
                         {t(`slots.${s}`)}
+                        {taken && <span className="ms-1.5 text-[10px] font-normal">({t("slotTakenLabel")})</span>}
                       </button>
                     );
                   })}
                 </div>
+
+                {!loadingSlots && availableSlots !== null && availableSlots.length === 0 && (
+                  <p className="mb-2 text-xs text-ink-mute">{t("fullyBooked")}</p>
+                )}
 
                 {error && <ErrorLine>{error}</ErrorLine>}
 

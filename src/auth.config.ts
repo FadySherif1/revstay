@@ -17,7 +17,13 @@ export const authConfig = {
         Google({
           clientId: process.env.AUTH_GOOGLE_ID,
           clientSecret: process.env.AUTH_GOOGLE_SECRET,
-          allowDangerousEmailAccountLinking: true,
+          // Deliberately omitted: allowDangerousEmailAccountLinking. With it
+          // on, signing in with Google would silently attach to any
+          // existing credentials account sharing that email — no proof the
+          // Google user actually owns the password-based account. Without
+          // it, NextAuth blocks the sign-in and redirects with
+          // error=OAuthAccountNotLinked, which the auth modal turns into a
+          // friendly "sign in with your password instead" message.
         }),
       ]
     : [],

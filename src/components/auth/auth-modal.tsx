@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { signIn, useSession } from "next-auth/react";
 import { useTranslations } from "next-intl";
@@ -13,8 +14,10 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export function AuthModal({ googleEnabled }: { googleEnabled: boolean }) {
   const t = useTranslations("auth");
   const prefersReducedMotion = useReducedMotion();
-  const { isOpen, tab, setTab, closeAuth, onAuthSuccess } = useAuthModal();
+  const { isOpen, tab, setTab, openAuth, closeAuth, onAuthSuccess } = useAuthModal();
   const { update: updateSession } = useSession();
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -45,6 +48,28 @@ export function AuthModal({ googleEnabled }: { googleEnabled: boolean }) {
     if (isOpen) window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [isOpen, closeAuth]);
+
+  // NextAuth redirects back to "/" with ?error=... when a Google sign-in
+  // can't complete — most commonly OAuthAccountNotLinked, which fires when
+  // that email already has a password-based account (we don't auto-link
+  // them; see auth.config.ts). Surface it as a friendly message and drop
+  // straight into the sign-in tab, then strip the param from the URL.
+  useEffect(() => {
+    const error = searchParams.get("error");
+    if (!error) return;
+
+    openAuth("signin");
+    setFormError(
+      error === "OAuthAccountNotLinked"
+        ? t("errors.accountNotLinked")
+        : t("errors.generic")
+    );
+
+    const url = new URL(window.location.href);
+    url.searchParams.delete("error");
+    router.replace(`${url.pathname}${url.search}${url.hash}`, { scroll: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
 
   function validate(): boolean {
     if (isSignUp && name.trim().length < 2) {

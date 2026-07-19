@@ -41,7 +41,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           where: { email: email.toLowerCase() },
         });
 
-        // No user, or an OAuth-only user without a password set.
+        // No user, or a Google-only account with no password set. Both
+        // cases return the same generic "invalid credentials" error (see
+        // signInWithCredentials in actions/auth.ts) rather than a specific
+        // "sign in with Google instead" message — telling them which one it
+        // is would leak whether the email is registered at all.
         if (!user?.hashedPassword) return null;
 
         const valid = await bcrypt.compare(password, user.hashedPassword);

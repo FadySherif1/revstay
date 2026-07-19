@@ -106,6 +106,7 @@
       "invalidCredentials": "Invalid email or password.",
       "emailTaken": "An account with this email already exists.",
       "rateLimited": "Too many attempts. Please wait a minute and try again.",
+      "accountNotLinked": "That email already has a password-based account. Please sign in with your email and password instead.",
       "generic": "Something went wrong. Please try again."
     },
     "menu": {
@@ -137,6 +138,8 @@
     "back": "Back",
     "timeTitle": "Pick a date & time",
     "timeSubtitle": "Choose a slot that works for you — it's a 30-minute call.",
+    "slotTakenLabel": "Booked",
+    "fullyBooked": "No times left this day — try another date.",
     "confirm": "Confirm Booking",
     "booking": "Booking…",
     "successTitle": "You're booked!",
@@ -153,6 +156,7 @@
       "phone": "Please enter a valid phone number.",
       "email": "Please enter a valid email address.",
       "noSlot": "Please pick a date and time.",
+      "slotTaken": "That time was just booked by someone else. Please pick another slot.",
       "platformsRequired": "Please select at least one platform (or add another).",
       "rateLimited": "Too many attempts. Please wait a minute and try again.",
       "unauthenticated": "Please sign in to book.",
@@ -174,7 +178,8 @@
     "status": {
       "PENDING": "Awaiting confirmation",
       "CONFIRMED": "Confirmed",
-      "CANCELLED": "Cancelled"
+      "CANCELLED": "Cancelled",
+      "COMPLETED": "Completed"
     }
   },
   "hero": {

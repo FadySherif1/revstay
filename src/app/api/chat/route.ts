@@ -3,6 +3,7 @@ import { z } from "zod";
 import OpenAI from "openai";
 import { CHATBOT_SYSTEM_PROMPT } from "@/lib/chatbot-prompt";
 import { checkRateLimit } from "@/lib/rate-limit";
+import { getClientIpFromRequest } from "@/lib/client-ip";
 
 export const runtime = "nodejs";
 
@@ -22,14 +23,9 @@ const requestSchema = z.object({
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-function getClientKey(req: NextRequest): string {
-  const forwardedFor = req.headers.get("x-forwarded-for");
-  return forwardedFor?.split(",")[0]?.trim() ?? "unknown";
-}
-
 export async function POST(req: NextRequest) {
-  const clientKey = getClientKey(req);
-  const { allowed, retryAfterSeconds } = checkRateLimit(clientKey);
+  const clientKey = getClientIpFromRequest(req);
+  const { allowed, retryAfterSeconds } = await checkRateLimit(clientKey);
 
   if (!allowed) {
     return Response.json(

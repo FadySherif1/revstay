@@ -15,7 +15,10 @@ export const NAV_LINKS = [
   { key: "services", href: "#services" },
   { key: "results", href: "#results" },
   { key: "about", href: "#about" },
-  { key: "contact", href: "#contact" },
+  // Retargeted from #contact (no section ever had that id — dead anchor)
+  // to #book, the final-cta section, which is the page's actual contact
+  // point.
+  { key: "contact", href: "#book" },
 ] as const;
 
 const SECTION_IDS = NAV_LINKS.map((link) => link.href.slice(1));
