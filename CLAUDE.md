@@ -2,8 +2,7 @@
 
 ## About
 Revstay (revenue + stay) helps hotels increase guest bookings by creating
-and optimizing their listings on Booking.com, Agoda, Expedia, Airbnb,
-Hotelbeds, Hotels.com, and Trip.com.
+and optimizing their listings on Booking.com, Expedia, and TripAdvisor.
 Target audience: hotel owners/managers. Goal: visitor understands the
 service within seconds and books a free consultation meeting.
 

@@ -2,6 +2,7 @@ import type { NextConfig } from "next";
 import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
+const isDevelopment = process.env.NODE_ENV === "development";
 
 // Content-Security-Policy compromises, documented:
 // - script-src 'unsafe-inline': the FOUC-prevention theme script in
@@ -18,7 +19,7 @@ const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 //   OAuth/accounts endpoints for the (currently dormant) Google sign-in.
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline'",
+  `script-src 'self' 'unsafe-inline'${isDevelopment ? " 'unsafe-eval'" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https:",
   "font-src 'self' data:",
