@@ -13,7 +13,7 @@ const QUICK_LINKS = [
 
 const PHONE_NUMBERS = [
   {
-    label: "+20 110 578 9455",
+    label: "+20 110 578 9455",  60-=3`  0`
     href: "tel:+201105789455",
   },
   {
