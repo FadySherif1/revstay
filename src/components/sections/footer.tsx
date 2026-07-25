@@ -8,25 +8,46 @@ const QUICK_LINKS = [
   { key: "services", href: "#services" },
   { key: "results", href: "#results" },
   { key: "about", href: "#about" },
-  // See navbar.tsx: retargeted to #book (final-cta), the only real
-  // contact/CTA section — #contact never existed.
   { key: "contact", href: "#book" },
 ];
 
+const PHONE_NUMBERS = [
+  {
+    label: "+20 110 578 9455",
+    href: "tel:+201105789455",
+  },
+  {
+    label: "+20 127 544 6186",
+    href: "tel:+201275446186",
+  },
+];
+
 const SOCIALS = [
-  { icon: InstagramIcon, key: "instagram", href: "#" },
-  { icon: FacebookIcon, key: "facebook", href: "#" },
+  {
+    icon: InstagramIcon,
+    key: "instagram",
+    href: "https://www.instagram.com/revstay",
+  },
+  {
+    icon: FacebookIcon,
+    key: "facebook",
+    href: "https://www.facebook.com/revstay",
+  },
 ];
 
 export function Footer() {
   const t = useTranslations("footer");
   const tNav = useTranslations("nav");
+
   return (
     <footer className="relative border-t border-gold-500/25 bg-cream">
       <div className="mx-auto max-w-6xl px-6 py-16 lg:px-8">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
           <div>
-            <p className="mb-3 text-2xl font-semibold text-ink">Revstay</p>
+            <p className="mb-3 text-2xl font-semibold text-ink">
+              Revstay
+            </p>
+
             <p className="max-w-xs text-sm leading-relaxed text-ink-soft">
               {t("tagline")}
             </p>
@@ -36,6 +57,7 @@ export function Footer() {
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-ink-soft">
               {t("quickLinks")}
             </p>
+
             <ul className="space-y-3">
               {QUICK_LINKS.map((link) => (
                 <li key={link.href}>
@@ -54,18 +76,35 @@ export function Footer() {
             <p className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-ink-soft">
               {t("contact")}
             </p>
-            <a
-              href="mailto:revstay0@gmail.com"
-              dir="ltr"
-              className="mb-5 block text-sm text-ink-soft transition-colors hover:text-gold-600 rtl:text-end"
-            >
-              revstay0@gmail.com
-            </a>
-            <div className="flex items-center gap-4">
+
+            <div className="space-y-3">
+              <a
+                href="mailto:revstay0@gmail.com"
+                dir="ltr"
+                className="block text-sm text-ink-soft transition-colors hover:text-gold-600 rtl:text-end"
+              >
+                revstay0@gmail.com
+              </a>
+
+              {PHONE_NUMBERS.map((phone) => (
+                <a
+                  key={phone.href}
+                  href={phone.href}
+                  dir="ltr"
+                  className="block text-sm text-ink-soft transition-colors hover:text-gold-600 rtl:text-end"
+                >
+                  {phone.label}
+                </a>
+              ))}
+            </div>
+
+            <div className="mt-6 flex items-center gap-4">
               {SOCIALS.map((social) => (
                 <a
                   key={social.key}
                   href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   aria-label={t(`social.${social.key}`)}
                   className="text-ink-soft transition-colors hover:text-gold-600"
                 >
