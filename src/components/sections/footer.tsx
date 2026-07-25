@@ -41,24 +41,24 @@ export function Footer() {
 
   return (
     <footer className="relative border-t border-gold-500/25 bg-cream">
-      <div className="mx-auto max-w-6xl px-6 py-16 lg:px-8">
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
+      <div className="mx-auto max-w-6xl px-6 py-8 lg:px-8">
+        <div className="grid grid-cols-1 gap-7 md:grid-cols-3">
           <div>
-            <p className="mb-3 text-2xl font-semibold text-ink">
+            <p className="mb-2 text-xl font-semibold text-ink">
               Revstay
             </p>
 
-            <p className="max-w-xs text-sm leading-relaxed text-ink-soft">
+            <p className="max-w-xs text-sm leading-snug text-ink-soft">
               {t("tagline")}
             </p>
           </div>
 
           <div>
-            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-ink-soft">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-ink-soft">
               {t("quickLinks")}
             </p>
 
-            <ul className="space-y-3">
+            <ul className="space-y-2">
               {QUICK_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link
@@ -73,11 +73,11 @@ export function Footer() {
           </div>
 
           <div>
-            <p className="mb-4 text-xs font-semibold uppercase tracking-[0.15em] text-ink-soft">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-ink-soft">
               {t("contact")}
             </p>
 
-            <div className="space-y-3">
+            <div className="space-y-2">
               <a
                 href="mailto:revstay0@gmail.com"
                 dir="ltr"
@@ -98,7 +98,7 @@ export function Footer() {
               ))}
             </div>
 
-            <div className="mt-6 flex items-center gap-4">
+            <div className="mt-4 flex items-center gap-4">
               {SOCIALS.map((social) => (
                 <a
                   key={social.key}
@@ -115,7 +115,7 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-14 border-t border-ink/10 pt-6 text-center text-xs text-ink-soft">
+        <div className="mt-8 border-t border-ink/10 pt-4 text-center text-xs text-ink-soft">
           {t("rights")}
         </div>
       </div>
