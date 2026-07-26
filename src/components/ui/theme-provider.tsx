@@ -4,7 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
@@ -36,11 +36,35 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const ringRef = useRef<HTMLDivElement>(null);
   const isTransitioningRef = useRef(false);
 
-  useEffect(() => {
-    const current = document.documentElement.getAttribute("data-theme");
-    if (current === "dark" || current === "light") {
-      setTheme(current);
+  useLayoutEffect(() => {
+    // The locale layout remounts when switching languages. Inline scripts do
+    // not reliably run again during that client-side navigation, so the new
+    // layout can momentarily lose data-theme. Restore the persisted choice
+    // before paint instead of falling back to the provider's light default.
+    let resolvedTheme: Theme | null = null;
+
+    try {
+      const stored = window.localStorage.getItem(THEME_STORAGE_KEY);
+      if (stored === "dark" || stored === "light") {
+        resolvedTheme = stored;
+      }
+    } catch {
+      // localStorage unavailable — fall through to the DOM/system preference.
     }
+
+    if (!resolvedTheme) {
+      const current = document.documentElement.getAttribute("data-theme");
+      if (current === "dark" || current === "light") {
+        resolvedTheme = current;
+      }
+    }
+
+    resolvedTheme ??= window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+
+    document.documentElement.setAttribute("data-theme", resolvedTheme);
+    setTheme(resolvedTheme);
   }, []);
 
   const toggleTheme = useCallback(
