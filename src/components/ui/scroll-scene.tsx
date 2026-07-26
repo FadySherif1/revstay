@@ -41,7 +41,14 @@ export function ScrollScene() {
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion) {
+      const ornaments =
+        sectionRef.current.querySelectorAll<SVGGElement>("[data-ornament]");
+      ornaments.forEach((ornament) => {
+        ornament.style.opacity = "1";
+      });
+      return;
+    }
 
     gsap.registerPlugin(ScrollTrigger);
 

@@ -22,8 +22,6 @@ export function Hero() {
     if (!sectionRef.current || !contentRef.current) return;
 
     gsap.registerPlugin(ScrollTrigger);
-    const isMobile = window.matchMedia("(max-width: 640px)").matches;
-
     const ctx = gsap.context(() => {
       gsap.to(contentRef.current, {
         y: 80,
@@ -38,13 +36,17 @@ export function Hero() {
 
       if (imageRef.current) {
         gsap.to(imageRef.current, {
-          y: isMobile ? 60 : 140,
+          // The image layer starts 5% above the hero and is 125% tall. Moving
+          // it up by 16% travels the remaining 20% of the hero, progressively
+          // trading the ceiling for the bed at the bottom of the photo.
+          yPercent: -16,
           ease: "none",
           scrollTrigger: {
             trigger: sectionRef.current,
             start: "top top",
             end: "bottom top",
             scrub: true,
+            invalidateOnRefresh: true,
           },
         });
       }
@@ -83,23 +85,29 @@ export function Hero() {
     <section
       ref={sectionRef}
       id="hero"
-      className="relative flex min-h-screen items-end overflow-hidden bg-cream pb-20 sm:items-center sm:pb-0"
+      className="relative isolate flex min-h-screen items-end overflow-hidden bg-cream pb-20 sm:items-center sm:pb-0"
     >
-      {/* Full-bleed golden-hour photo with parallax + Ken Burns */}
+      {/* Full-bleed hotel-room photo with parallax + Ken Burns */}
       <div
         ref={imageRef}
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-20 h-[120%] will-change-transform"
+        className="pointer-events-none absolute inset-x-0 -top-[5%] -z-20 h-[125%] will-change-transform"
       >
-        <div className={prefersReducedMotion ? "h-full w-full" : "ken-burns h-full w-full"}>
+        <div
+          className={
+            prefersReducedMotion
+              ? "h-full w-full"
+              : "ken-burns h-full w-full origin-bottom"
+          }
+        >
           <Image
-            src="/images/pyramids2.jpg"
+            src="/images/hero-hotel-room2.png"
             alt=""
             fill
             priority
             quality={82}
             sizes="100vw"
-            className="object-cover object-[center_30%]"
+            className="object-cover object-[70%_center] sm:object-center"
           />
           <div aria-hidden className="dark-scrim" />
         </div>
@@ -111,7 +119,7 @@ export function Hero() {
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
-            "linear-gradient(to bottom, color-mix(in srgb, var(--color-ivory) 10%, transparent) 0%, color-mix(in srgb, var(--color-ivory) 30%, transparent) 38%, color-mix(in srgb, var(--color-ivory) 82%, transparent) 72%, color-mix(in srgb, var(--color-ivory) 97%, transparent) 100%)",
+            "linear-gradient(to bottom, color-mix(in srgb, var(--color-ivory) 10%, transparent) 0%, color-mix(in srgb, var(--color-ivory) 26%, transparent) 38%, color-mix(in srgb, var(--color-ivory) 60%, transparent) 70%, color-mix(in srgb, var(--color-ivory) 78%, transparent) 90%, var(--color-ivory) 100%)",
         }}
       />
 

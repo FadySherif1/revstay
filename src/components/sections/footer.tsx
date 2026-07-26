@@ -1,6 +1,9 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTranslations } from "next-intl";
 import { FacebookIcon, InstagramIcon } from "@/components/ui/social-icons";
 
@@ -38,12 +41,64 @@ const SOCIALS = [
 export function Footer() {
   const t = useTranslations("footer");
   const tNav = useTranslations("nav");
+  const footerRef = useRef<HTMLElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const dividerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (
+      !footerRef.current ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      const columns = gridRef.current?.querySelectorAll("[data-footer-column]");
+
+      if (columns?.length) {
+        gsap.from(columns, {
+          autoAlpha: 0,
+          y: 22,
+          duration: 0.65,
+          ease: "power2.out",
+          stagger: 0.1,
+          scrollTrigger: {
+            trigger: gridRef.current,
+            start: "top 92%",
+            once: true,
+          },
+        });
+      }
+
+      if (dividerRef.current) {
+        gsap.from(dividerRef.current, {
+          scaleX: 0,
+          autoAlpha: 0,
+          duration: 0.8,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: dividerRef.current,
+            start: "top 96%",
+            once: true,
+          },
+        });
+      }
+    }, footerRef);
+
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <footer className="relative border-t border-gold-500/25 bg-cream">
+    <footer
+      ref={footerRef}
+      className="relative border-t border-gold-500/25 bg-cream"
+    >
       <div className="mx-auto max-w-6xl px-6 py-8 lg:px-8">
-        <div className="grid grid-cols-1 gap-7 md:grid-cols-3">
-          <div>
+        <div ref={gridRef} className="grid grid-cols-1 gap-7 md:grid-cols-3">
+          <div data-footer-column>
             <p className="mb-2 text-xl font-semibold text-ink">
               Revstay
             </p>
@@ -53,7 +108,7 @@ export function Footer() {
             </p>
           </div>
 
-          <div>
+          <div data-footer-column>
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-ink-soft">
               {t("quickLinks")}
             </p>
@@ -72,7 +127,7 @@ export function Footer() {
             </ul>
           </div>
 
-          <div>
+          <div data-footer-column>
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-ink-soft">
               {t("contact")}
             </p>
@@ -115,7 +170,10 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 border-t border-ink/10 pt-4 text-center text-xs text-ink-soft">
+        <div
+          ref={dividerRef}
+          className="mt-8 origin-center border-t border-ink/10 pt-4 text-center text-xs text-ink-soft"
+        >
           {t("rights")}
         </div>
       </div>

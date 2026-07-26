@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useLocale, useTranslations } from "next-intl";
 import { PLATFORM_DETAILS } from "@/lib/platforms";
 import { TiltCard } from "@/components/ui/tilt-card";
@@ -24,6 +26,9 @@ export function PlatformsCarousel() {
   const t = useTranslations("platforms");
   const locale = useLocale();
   const { theme } = useTheme();
+  const sectionRef = useRef<HTMLElement>(null);
+  const headingRef = useRef<HTMLDivElement>(null);
+  const cardsRef = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useRef(false);
   if (typeof window !== "undefined") {
     prefersReducedMotion.current = window.matchMedia(
@@ -79,22 +84,85 @@ export function PlatformsCarousel() {
     };
   }, [emblaApi, restartAutoScroll]);
 
+  useEffect(() => {
+    if (
+      !sectionRef.current ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    const ctx = gsap.context(() => {
+      const headingItems =
+        headingRef.current?.querySelectorAll("[data-platform-reveal]");
+      const cards =
+        cardsRef.current?.querySelectorAll("[data-platform-card]");
+
+      if (headingItems?.length) {
+        gsap.from(headingItems, {
+          autoAlpha: 0,
+          y: 24,
+          duration: 0.75,
+          ease: "power3.out",
+          stagger: 0.12,
+          scrollTrigger: {
+            trigger: headingRef.current,
+            start: "top 82%",
+            once: true,
+          },
+        });
+      }
+
+      if (cards?.length) {
+        gsap.from(cards, {
+          autoAlpha: 0,
+          y: 42,
+          rotateX: 5,
+          transformPerspective: 900,
+          duration: 0.85,
+          ease: "power3.out",
+          stagger: 0.08,
+          clearProps: "opacity,visibility,transform",
+          scrollTrigger: {
+            trigger: cardsRef.current,
+            start: "top 86%",
+            once: true,
+          },
+        });
+      }
+    }, sectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       aria-roledescription="carousel"
       aria-label={t("regionLabel")}
       className="relative overflow-hidden bg-cream py-24 sm:py-32"
     >
-      <div className="mx-auto mb-14 max-w-3xl px-6 text-center lg:px-8">
-        <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-600">
+      <div
+        ref={headingRef}
+        className="mx-auto mb-14 max-w-3xl px-6 text-center lg:px-8"
+      >
+        <p
+          data-platform-reveal
+          className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-600"
+        >
           {t("eyebrow")}
         </p>
-        <h2 className="font-serif text-3xl leading-tight text-ink sm:text-5xl">
+        <h2
+          data-platform-reveal
+          className="font-serif text-3xl leading-tight text-ink sm:text-5xl"
+        >
           {t("headline")}
         </h2>
       </div>
 
-      <div className="relative">
+      <div ref={cardsRef} className="relative">
         {/* Viewport — edge-fade-x dissolves cards softly at both edges */}
         <div className="edge-fade-x overflow-hidden px-6 lg:px-8" ref={emblaRef}>
           <div className="-mx-2 flex touch-pan-y">
@@ -105,6 +173,7 @@ export function PlatformsCarousel() {
               return (
                 <div
                   key={platform.name}
+                  data-platform-card
                   className="min-w-0 shrink-0 grow-0 basis-[82%] px-2 sm:basis-[46%] lg:basis-[28.5%]"
                 >
                   <TiltCard className="h-full">

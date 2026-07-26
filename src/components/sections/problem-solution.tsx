@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTranslations } from "next-intl";
@@ -138,9 +139,32 @@ export function ProblemSolution() {
     <section
       ref={sectionRef}
       id="problem-solution"
-      className="relative overflow-hidden bg-white-soft py-24 sm:py-32"
+      className="relative isolate overflow-hidden bg-white-soft py-24 sm:py-32"
     >
-      <div className="mx-auto max-w-6xl px-6 lg:px-8">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-20"
+      >
+        <Image
+          src="/images/problem-solution-bg.png"
+          alt=""
+          fill
+          quality={82}
+          sizes="100vw"
+          className="object-cover object-[72%_center] sm:object-center"
+        />
+      </div>
+
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{
+          background:
+            "linear-gradient(to bottom, color-mix(in srgb, var(--color-ivory) 74%, transparent) 0%, color-mix(in srgb, var(--color-ivory) 62%, transparent) 48%, color-mix(in srgb, var(--color-ivory) 76%, transparent) 100%)",
+        }}
+      />
+
+      <div className="relative mx-auto max-w-6xl px-6 lg:px-8">
         <div className="mx-auto mb-16 max-w-3xl text-center">
           <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-600">
             {t("eyebrow")}

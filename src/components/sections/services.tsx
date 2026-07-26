@@ -40,6 +40,7 @@ export function Services() {
   useEffect(() => {
     if (!sectionRef.current || !gridRef.current) return;
 
+    const hoverCleanups: Array<() => void> = [];
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
@@ -50,18 +51,76 @@ export function Services() {
     const ctx = gsap.context(() => {
       const cards = gridRef.current?.querySelectorAll("[data-card]");
       if (cards?.length) {
+        const cardElements = gsap.utils.toArray<HTMLElement>(cards);
+
         gsap.fromTo(
-          cards,
-          { clipPath: "inset(0% 0% 100% 0%)", y: 24 },
+          cardElements,
+          { opacity: 0, y: 42, scale: 0.97 },
           {
-            clipPath: "inset(0% 0% 0% 0%)",
+            opacity: 1,
             y: 0,
-            duration: 0.9,
+            scale: 1,
+            duration: 0.85,
             ease: "power3.out",
-            stagger: 0.12,
-            scrollTrigger: { trigger: gridRef.current, start: "top 78%" },
+            stagger: 0.1,
+            scrollTrigger: {
+              trigger: gridRef.current,
+              start: "top 82%",
+              once: true,
+            },
           }
         );
+
+        const canHover = window.matchMedia(
+          "(hover: hover) and (pointer: fine)"
+        ).matches;
+
+        if (canHover) {
+          cardElements.forEach((card) => {
+            const otherCards = cardElements.filter((item) => item !== card);
+
+            const handlePointerEnter = () => {
+              gsap.set(card, { zIndex: 10 });
+              gsap.to(card, {
+                y: -12,
+                scale: 1.025,
+                opacity: 1,
+                duration: 0.45,
+                ease: "power3.out",
+                overwrite: "auto",
+              });
+              gsap.to(otherCards, {
+                y: 3,
+                scale: 0.985,
+                opacity: 0.68,
+                duration: 0.4,
+                ease: "power3.out",
+                overwrite: "auto",
+              });
+            };
+
+            const handlePointerLeave = () => {
+              gsap.to(cardElements, {
+                y: 0,
+                scale: 1,
+                opacity: 1,
+                duration: 0.4,
+                ease: "power3.out",
+                overwrite: "auto",
+                onComplete: () => {
+                  gsap.set(cardElements, { clearProps: "zIndex" });
+                },
+              });
+            };
+
+            card.addEventListener("pointerenter", handlePointerEnter);
+            card.addEventListener("pointerleave", handlePointerLeave);
+            hoverCleanups.push(() => {
+              card.removeEventListener("pointerenter", handlePointerEnter);
+              card.removeEventListener("pointerleave", handlePointerLeave);
+            });
+          });
+        }
       }
 
       if (patternRef.current) {
@@ -78,7 +137,10 @@ export function Services() {
       }
     }, sectionRef);
 
-    return () => ctx.revert();
+    return () => {
+      hoverCleanups.forEach((cleanup) => cleanup());
+      ctx.revert();
+    };
   }, []);
 
   return (
@@ -124,49 +186,53 @@ export function Services() {
           className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
         >
           {SERVICES.map((service) => (
-            <TiltCard key={service.key} maxTilt={4} className="h-full">
-              <article
-                data-card
-                className="group flex h-full flex-col overflow-hidden rounded-2xl border border-ink/10 bg-white-soft shadow-[var(--shadow-warm-sm)] transition-shadow duration-300 hover:shadow-[var(--shadow-warm)]"
-              >
-                {/* Image area (~55%) */}
-                <div className="relative aspect-[4/3] overflow-hidden">
-                  <Image
-                    src={service.image}
-                    alt=""
-                    fill
-                    quality={72}
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    className="object-cover transition-transform duration-[600ms] ease-out will-change-transform group-hover:scale-[1.06]"
-                  />
-                  {/* Warm scrim fading into the text area */}
-                  <div
+            <div key={service.key} data-card className="h-full">
+              <TiltCard maxTilt={3} className="h-full">
+                <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-ink/10 bg-white-soft shadow-[var(--shadow-warm-sm)] transition-[border-color,box-shadow] duration-500 hover:border-gold-500/55 hover:shadow-[var(--shadow-warm)]">
+                  <span
                     aria-hidden
-                    className="pointer-events-none absolute inset-0"
-                    style={{
-                      background:
-                        "linear-gradient(to bottom, color-mix(in srgb, var(--color-fixed-dark) 5%, transparent) 0%, transparent 35%, color-mix(in srgb, var(--color-white-soft) 15%, transparent) 78%, var(--color-white-soft) 100%)",
-                    }}
+                    className="absolute inset-x-8 top-0 z-20 h-px origin-center scale-x-0 bg-gradient-to-r from-transparent via-gold-400 to-transparent opacity-0 transition-all duration-500 group-hover:scale-x-100 group-hover:opacity-100"
                   />
-                  <div aria-hidden className="dark-scrim" />
-                </div>
 
-                {/* Text area */}
-                <div className="relative flex flex-1 flex-col p-6 pt-9">
-                  {/* Frosted-glass icon, overlapping the image/text boundary */}
-                  <div className="absolute -top-6 left-5 flex h-12 w-12 items-center justify-center rounded-full border border-white/60 bg-white-soft/70 text-gold-600 shadow-[var(--shadow-warm-sm)] backdrop-blur-md">
-                    <service.icon className="h-6 w-6" strokeWidth={1.75} />
+                  {/* Image area (~55%) */}
+                  <div className="relative aspect-[4/3] overflow-hidden">
+                    <Image
+                      src={service.image}
+                      alt=""
+                      fill
+                      quality={72}
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                      className="object-cover transition-transform duration-[600ms] ease-out will-change-transform group-hover:scale-[1.06]"
+                    />
+                    {/* Warm scrim fading into the text area */}
+                    <div
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0"
+                      style={{
+                        background:
+                          "linear-gradient(to bottom, color-mix(in srgb, var(--color-fixed-dark) 5%, transparent) 0%, transparent 35%, color-mix(in srgb, var(--color-white-soft) 15%, transparent) 78%, var(--color-white-soft) 100%)",
+                      }}
+                    />
+                    <div aria-hidden className="dark-scrim" />
                   </div>
 
-                  <h3 className="mb-2 font-serif text-lg text-ink">
-                    {t(`items.${service.key}.title`)}
-                  </h3>
-                  <p className="flex-1 text-sm leading-relaxed text-ink-soft">
-                    {t(`items.${service.key}.body`)}
-                  </p>
-                </div>
-              </article>
-            </TiltCard>
+                  {/* Text area */}
+                  <div className="relative flex flex-1 flex-col p-6 pt-9">
+                    {/* Frosted-glass icon, overlapping the image/text boundary */}
+                    <div className="absolute -top-6 left-5 flex h-12 w-12 items-center justify-center rounded-full border border-white/60 bg-white-soft/70 text-gold-600 shadow-[var(--shadow-warm-sm)] backdrop-blur-md">
+                      <service.icon className="h-6 w-6" strokeWidth={1.75} />
+                    </div>
+
+                    <h3 className="mb-2 font-serif text-lg text-ink">
+                      {t(`items.${service.key}.title`)}
+                    </h3>
+                    <p className="flex-1 text-sm leading-relaxed text-ink-soft">
+                      {t(`items.${service.key}.body`)}
+                    </p>
+                  </div>
+                </article>
+              </TiltCard>
+            </div>
           ))}
         </div>
       </div>
