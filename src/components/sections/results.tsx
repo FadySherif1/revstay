@@ -152,15 +152,16 @@ export function Results() {
           fill
           quality={75}
           sizes="100vw"
-          className="object-cover object-center"
+          className="section-photo object-cover object-center"
         />
         <div aria-hidden className="dark-scrim" />
       </div>
 
-      {/* Warm ivory overlay (~85%) so counters pop */}
+      {/* Theme-aware veil: richer photography in light mode, restrained in dark. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-ivory/[0.88]"
+        className="pointer-events-none absolute inset-0 -z-10"
+        style={{ background: "var(--results-photo-overlay)" }}
       />
 
       {/* Ghosted pyramid outlines, recolored gold for light bg */}

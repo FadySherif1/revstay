@@ -151,7 +151,7 @@ export function ProblemSolution() {
           fill
           quality={82}
           sizes="100vw"
-          className="object-cover object-[72%_center] sm:object-center"
+          className="section-photo object-cover object-[72%_center] sm:object-center"
         />
       </div>
 
@@ -159,8 +159,7 @@ export function ProblemSolution() {
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
-          background:
-            "linear-gradient(to bottom, color-mix(in srgb, var(--color-ivory) 74%, transparent) 0%, color-mix(in srgb, var(--color-ivory) 62%, transparent) 48%, color-mix(in srgb, var(--color-ivory) 76%, transparent) 100%)",
+          background: "var(--problem-photo-overlay)",
         }}
       />
 
@@ -186,7 +185,7 @@ export function ProblemSolution() {
                 data-item
                 onMouseEnter={() => setActiveIndex(i)}
                 onMouseLeave={() => setActiveIndex(null)}
-                className={`flex gap-4 rounded-2xl border border-ink/10 bg-sand/40 p-5 saturate-[0.7] transition-all duration-300 ${
+                className={`flex gap-4 rounded-2xl border border-ink/10 bg-sand/75 p-5 saturate-[0.7] shadow-[var(--shadow-warm-sm)] backdrop-blur-sm transition-all duration-300 ${
                   activeIndex === i
                     ? "ring-2 ring-gold-500/50 saturate-100"
                     : ""

@@ -79,7 +79,7 @@ export function HowItWorks() {
           fill
           quality={82}
           sizes="100vw"
-          className="object-cover object-[72%_center] sm:object-center"
+          className="section-photo object-cover object-[72%_center] sm:object-center"
         />
       </div>
 
@@ -87,8 +87,7 @@ export function HowItWorks() {
         aria-hidden
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
-          background:
-            "linear-gradient(to bottom, color-mix(in srgb, var(--color-cream) 86%, transparent) 0%, color-mix(in srgb, var(--color-cream) 74%, transparent) 48%, color-mix(in srgb, var(--color-cream) 88%, transparent) 100%)",
+          background: "var(--steps-photo-overlay)",
         }}
       />
 

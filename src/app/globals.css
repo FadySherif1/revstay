@@ -46,6 +46,28 @@
 
   /* Fixed dark navy used only for the dark-mode photo scrim */
   --color-scrim-dark: #0b0f1a;
+
+  /* Photo-section treatment for the light theme. Keep the photography rich
+     while concentrating the warm veil where copy needs contrast. */
+  --section-photo-filter: saturate(1.18) contrast(1.08);
+  --problem-photo-overlay: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-ivory) 62%, transparent) 0%,
+    color-mix(in srgb, var(--color-ivory) 46%, transparent) 48%,
+    color-mix(in srgb, var(--color-ivory) 66%, transparent) 100%
+  );
+  --steps-photo-overlay: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-cream) 70%, transparent) 0%,
+    color-mix(in srgb, var(--color-cream) 52%, transparent) 48%,
+    color-mix(in srgb, var(--color-cream) 74%, transparent) 100%
+  );
+  --results-photo-overlay: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-ivory) 76%, transparent) 0%,
+    color-mix(in srgb, var(--color-ivory) 66%, transparent) 52%,
+    color-mix(in srgb, var(--color-ivory) 78%, transparent) 100%
+  );
 }
 
 [data-theme="dark"] {
@@ -79,6 +101,26 @@
   --color-error-bg: #2a1917;
   --color-error-border: #5a2e29;
   --color-error-fg: #e8a09a;
+
+  /* Preserve the established deep, restrained photography in dark mode. */
+  --section-photo-filter: saturate(0.96) contrast(1.03);
+  --problem-photo-overlay: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-ivory) 74%, transparent) 0%,
+    color-mix(in srgb, var(--color-ivory) 62%, transparent) 48%,
+    color-mix(in srgb, var(--color-ivory) 76%, transparent) 100%
+  );
+  --steps-photo-overlay: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-cream) 86%, transparent) 0%,
+    color-mix(in srgb, var(--color-cream) 74%, transparent) 48%,
+    color-mix(in srgb, var(--color-cream) 88%, transparent) 100%
+  );
+  --results-photo-overlay: color-mix(
+    in srgb,
+    var(--color-ivory) 88%,
+    transparent
+  );
 }
 
 @theme inline {
@@ -251,6 +293,11 @@ html {
 
 [data-theme="dark"] .dark-scrim {
   opacity: 1;
+}
+
+.section-photo {
+  filter: var(--section-photo-filter);
+  transition: filter 0.35s ease;
 }
 
 @keyframes ken-burns {

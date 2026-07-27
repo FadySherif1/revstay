@@ -107,7 +107,7 @@ export function Hero() {
             priority
             quality={82}
             sizes="100vw"
-            className="object-cover object-[70%_center] sm:object-center"
+            className="section-photo object-cover object-[70%_center] sm:object-center"
           />
           <div aria-hidden className="dark-scrim" />
         </div>
