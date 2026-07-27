@@ -29,12 +29,12 @@ const SOCIALS = [
   {
     icon: InstagramIcon,
     key: "instagram",
-    href: "https://www.instagram.com/revstay",
+    href: "https://www.instagram.com/revstay0?igsh=MWFzejlrODV6bWF5&utm_source=qr",
   },
   {
     icon: FacebookIcon,
     key: "facebook",
-    href: "https://www.facebook.com/revstay",
+    href: "https://www.facebook.com/share/19BtmBG469/?mibextid=wwXIfr",
   },
 ];
 
