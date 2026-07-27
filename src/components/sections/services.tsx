@@ -34,13 +34,22 @@ const SERVICES = [
 export function Services() {
   const t = useTranslations("services");
   const sectionRef = useRef<HTMLElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
-  const patternRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
+  const currentStepRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
-    if (!sectionRef.current || !gridRef.current) return;
+    if (
+      !sectionRef.current ||
+      !viewportRef.current ||
+      !trackRef.current
+    ) {
+      return;
+    }
 
-    const hoverCleanups: Array<() => void> = [];
+    const currentStepElement = currentStepRef.current;
+    const progressElement = progressRef.current;
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
@@ -49,97 +58,104 @@ export function Services() {
     gsap.registerPlugin(ScrollTrigger);
 
     const ctx = gsap.context(() => {
-      const cards = gridRef.current?.querySelectorAll("[data-card]");
-      if (cards?.length) {
-        const cardElements = gsap.utils.toArray<HTMLElement>(cards);
+      const section = sectionRef.current!;
+      const viewport = viewportRef.current!;
+      const track = trackRef.current!;
+      const cards = gsap.utils.toArray<HTMLElement>(
+        track.querySelectorAll("[data-card]")
+      );
+      const isRtl = document.documentElement.dir === "rtl";
+      const lastCardIndex = cards.length - 1;
 
-        gsap.fromTo(
-          cardElements,
-          { opacity: 0, y: 42, scale: 0.97 },
-          {
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            duration: 0.85,
-            ease: "power3.out",
-            stagger: 0.1,
-            scrollTrigger: {
-              trigger: gridRef.current,
-              start: "top 82%",
-              once: true,
-            },
-          }
-        );
+      const updateVisualState = (progress: number) => {
+        const cardPosition = progress * lastCardIndex;
+        const activeCardIndex = Math.round(cardPosition);
 
-        const canHover = window.matchMedia(
-          "(hover: hover) and (pointer: fine)"
-        ).matches;
+        cards.forEach((card, index) => {
+          const distance = Math.min(
+            Math.abs(index - cardPosition),
+            1
+          );
 
-        if (canHover) {
-          cardElements.forEach((card) => {
-            const otherCards = cardElements.filter((item) => item !== card);
+          gsap.set(card, {
+            opacity: gsap.utils.interpolate(1, 0.48, distance),
+            scale: gsap.utils.interpolate(1, 0.94, distance),
+          });
+        });
 
-            const handlePointerEnter = () => {
-              gsap.set(card, { zIndex: 10 });
-              gsap.to(card, {
-                y: -12,
-                scale: 1.025,
-                opacity: 1,
-                duration: 0.45,
-                ease: "power3.out",
-                overwrite: "auto",
-              });
-              gsap.to(otherCards, {
-                y: 3,
-                scale: 0.985,
-                opacity: 0.68,
-                duration: 0.4,
-                ease: "power3.out",
-                overwrite: "auto",
-              });
-            };
+        if (currentStepElement) {
+          currentStepElement.textContent = String(
+            activeCardIndex + 1
+          ).padStart(2, "0");
+        }
 
-            const handlePointerLeave = () => {
-              gsap.to(cardElements, {
-                y: 0,
-                scale: 1,
-                opacity: 1,
-                duration: 0.4,
-                ease: "power3.out",
-                overwrite: "auto",
-                onComplete: () => {
-                  gsap.set(cardElements, { clearProps: "zIndex" });
-                },
-              });
-            };
-
-            card.addEventListener("pointerenter", handlePointerEnter);
-            card.addEventListener("pointerleave", handlePointerLeave);
-            hoverCleanups.push(() => {
-              card.removeEventListener("pointerenter", handlePointerEnter);
-              card.removeEventListener("pointerleave", handlePointerLeave);
-            });
+        if (progressElement) {
+          gsap.set(progressElement, {
+            scaleX: (activeCardIndex + 1) / cards.length,
           });
         }
-      }
+      };
 
-      if (patternRef.current) {
-        gsap.to(patternRef.current, {
-          y: 60,
-          ease: "none",
-          scrollTrigger: {
-            trigger: sectionRef.current,
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
+      updateVisualState(0);
+
+      gsap.to(track, {
+        x: () => {
+          const travel = track.scrollWidth - viewport.clientWidth;
+          return isRtl ? travel : -travel;
+        },
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top top",
+          end: () =>
+            `+=${Math.max(window.innerHeight, 720) * lastCardIndex}`,
+          pin: true,
+          // The page's <main> is a flex column. Margin-based spacing keeps
+          // the following section below the full pinned scroll distance.
+          pinSpacing: "margin",
+          scrub: 0.8,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          snap:
+            lastCardIndex > 0
+              ? {
+                  snapTo: 1 / lastCardIndex,
+                  duration: { min: 0.18, max: 0.45 },
+                  delay: 0.05,
+                  ease: "power2.inOut",
+                }
+              : undefined,
+          onUpdate: (self) => {
+            updateVisualState(self.progress);
           },
-        });
-      }
+        },
+      });
+
+      gsap.from("[data-services-heading]", {
+        opacity: 0,
+        y: 24,
+        duration: 0.7,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 82%",
+          once: true,
+        },
+      });
+
+      ScrollTrigger.refresh();
     }, sectionRef);
 
     return () => {
-      hoverCleanups.forEach((cleanup) => cleanup());
       ctx.revert();
+      if (currentStepElement) {
+        currentStepElement.textContent = "01";
+      }
+      if (progressElement) {
+        gsap.set(progressElement, {
+          clearProps: "transform",
+        });
+      }
     };
   }, []);
 
@@ -147,18 +163,17 @@ export function Services() {
     <section
       ref={sectionRef}
       id="services"
-      className="relative overflow-hidden bg-ivory py-24 sm:py-32"
+      className="relative z-10 isolate h-[100svh] shrink-0 overflow-hidden bg-ivory"
     >
-      {/* Parallax geometric motif background */}
+      {/* Quiet geometric texture behind the pinned carousel. */}
       <div
-        ref={patternRef}
         aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.05] will-change-transform"
+        className="pointer-events-none absolute inset-0 -z-10 opacity-[0.045]"
       >
         <svg
           viewBox="0 0 400 400"
           preserveAspectRatio="xMidYMid slice"
-          className="h-[130%] w-full"
+          className="h-full w-full"
         >
           <pattern id="egypt-grid" width="50" height="50" patternUnits="userSpaceOnUse">
             <path d="M25,0 L50,25 L25,50 L0,25 Z" fill="none" stroke="var(--color-gold-600)" strokeWidth="1" />
@@ -168,72 +183,106 @@ export function Services() {
         </svg>
       </div>
 
-      <div className="mx-auto max-w-6xl px-6 lg:px-8">
-        <div className="mx-auto mb-16 max-w-2xl text-center">
+      <div className="mx-auto flex h-full w-full max-w-7xl flex-col px-4 pb-5 pt-24 sm:px-6 sm:pb-7 lg:px-8">
+        <div
+          data-services-heading
+          className="mx-auto mb-5 max-w-2xl shrink-0 text-center sm:mb-7"
+        >
           <p className="mb-4 text-sm font-semibold uppercase tracking-[0.2em] text-gold-600">
             {t("eyebrow")}
           </p>
-          <h2 className="mb-4 font-serif text-3xl leading-tight text-ink sm:text-5xl">
+          <h2 className="mb-3 font-serif text-3xl leading-tight text-ink sm:text-5xl">
             {t("headline")}
           </h2>
-          <p className="text-lg text-ink-soft">
+          <p className="text-base text-ink-soft sm:text-lg">
             {t("sub")}
           </p>
         </div>
 
         <div
-          ref={gridRef}
-          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
+          ref={viewportRef}
+          className="min-h-0 flex-1 snap-x snap-mandatory overflow-hidden motion-reduce:overflow-x-auto"
         >
-          {SERVICES.map((service) => (
-            <div key={service.key} data-card className="h-full">
-              <TiltCard maxTilt={3} className="h-full">
-                <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-ink/10 bg-white-soft shadow-[var(--shadow-warm-sm)] transition-[border-color,box-shadow] duration-500 hover:border-gold-500/55 hover:shadow-[var(--shadow-warm)]">
-                  <span
-                    aria-hidden
-                    className="absolute inset-x-8 top-0 z-20 h-px origin-center scale-x-0 bg-gradient-to-r from-transparent via-gold-400 to-transparent opacity-0 transition-all duration-500 group-hover:scale-x-100 group-hover:opacity-100"
-                  />
-
-                  {/* Image area (~55%) */}
-                  <div className="relative aspect-[4/3] overflow-hidden">
-                    <Image
-                      src={service.image}
-                      alt=""
-                      fill
-                      quality={72}
-                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                      className="object-cover transition-transform duration-[600ms] ease-out will-change-transform group-hover:scale-[1.06]"
-                    />
-                    {/* Warm scrim fading into the text area */}
-                    <div
+          <div ref={trackRef} className="flex h-full w-full">
+            {SERVICES.map((service, index) => (
+              <div
+                key={service.key}
+                data-card
+                className="flex h-full w-full shrink-0 snap-center items-center justify-center px-1 sm:px-3"
+              >
+                <TiltCard
+                  maxTilt={2.5}
+                  className="h-full w-full max-w-5xl"
+                >
+                  <article className="group relative grid h-full grid-rows-[42%_1fr] overflow-hidden rounded-3xl border border-gold-500/25 bg-white-soft shadow-[var(--shadow-warm)] transition-[border-color,box-shadow] duration-500 hover:border-gold-500/60 md:grid-cols-[1.08fr_0.92fr] md:grid-rows-1">
+                    <span
                       aria-hidden
-                      className="pointer-events-none absolute inset-0"
-                      style={{
-                        background:
-                          "linear-gradient(to bottom, color-mix(in srgb, var(--color-fixed-dark) 5%, transparent) 0%, transparent 35%, color-mix(in srgb, var(--color-white-soft) 15%, transparent) 78%, var(--color-white-soft) 100%)",
-                      }}
+                      className="absolute inset-x-12 top-0 z-20 h-px origin-center scale-x-0 bg-gradient-to-r from-transparent via-gold-400 to-transparent opacity-0 transition-all duration-500 group-hover:scale-x-100 group-hover:opacity-100"
                     />
-                    <div aria-hidden className="dark-scrim" />
-                  </div>
 
-                  {/* Text area */}
-                  <div className="relative flex flex-1 flex-col p-6 pt-9">
-                    {/* Frosted-glass icon, overlapping the image/text boundary */}
-                    <div className="absolute -top-6 left-5 flex h-12 w-12 items-center justify-center rounded-full border border-white/60 bg-white-soft/70 text-gold-600 shadow-[var(--shadow-warm-sm)] backdrop-blur-md">
-                      <service.icon className="h-6 w-6" strokeWidth={1.75} />
+                    <div className="relative min-h-0 overflow-hidden">
+                      <Image
+                        src={service.image}
+                        alt=""
+                        fill
+                        quality={78}
+                        sizes="(max-width: 768px) 100vw, 55vw"
+                        className="object-cover transition-transform duration-[900ms] ease-out will-change-transform group-hover:scale-[1.045]"
+                      />
+                      <div
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-fixed-dark/25 via-transparent to-transparent md:bg-gradient-to-r md:from-transparent md:via-transparent md:to-white-soft/20 rtl:md:bg-gradient-to-l"
+                      />
+                      <div aria-hidden className="dark-scrim" />
                     </div>
 
-                    <h3 className="mb-2 font-serif text-lg text-ink">
-                      {t(`items.${service.key}.title`)}
-                    </h3>
-                    <p className="flex-1 text-sm leading-relaxed text-ink-soft">
-                      {t(`items.${service.key}.body`)}
-                    </p>
-                  </div>
-                </article>
-              </TiltCard>
-            </div>
-          ))}
+                    <div className="relative flex min-h-0 flex-col justify-center overflow-y-auto p-6 sm:p-9 md:p-12">
+                      <span
+                        aria-hidden
+                        className="pointer-events-none absolute end-7 top-3 font-serif text-7xl leading-none text-gold-500/[0.08] sm:end-10 sm:top-6 sm:text-8xl"
+                      >
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+
+                      <div className="relative mb-4 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-gold-500/30 bg-gold-500 text-gold-ink shadow-[var(--shadow-warm-sm)] sm:mb-6 sm:h-14 sm:w-14">
+                        <service.icon
+                          className="h-6 w-6 sm:h-7 sm:w-7"
+                          strokeWidth={1.75}
+                        />
+                      </div>
+
+                      <p className="relative mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-gold-600">
+                        {String(index + 1).padStart(2, "0")} /{" "}
+                        {String(SERVICES.length).padStart(2, "0")}
+                      </p>
+                      <h3 className="relative mb-3 font-serif text-2xl leading-tight text-ink sm:text-3xl">
+                        {t(`items.${service.key}.title`)}
+                      </h3>
+                      <p className="relative max-w-md text-sm leading-relaxed text-ink-soft sm:text-base">
+                        {t(`items.${service.key}.body`)}
+                      </p>
+                    </div>
+                  </article>
+                </TiltCard>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div
+          aria-hidden
+          className="mx-auto mt-4 flex w-full max-w-5xl shrink-0 items-center gap-4 text-xs font-semibold tracking-[0.18em] text-ink-mute sm:mt-5"
+        >
+          <span ref={currentStepRef} className="w-6 text-gold-600">
+            01
+          </span>
+          <div className="relative h-px flex-1 overflow-hidden bg-ink/15">
+            <div
+              ref={progressRef}
+              className="absolute inset-y-0 start-0 w-full origin-left scale-x-25 bg-gold-500 rtl:origin-right"
+            />
+          </div>
+          <span>{String(SERVICES.length).padStart(2, "0")}</span>
         </div>
       </div>
     </section>

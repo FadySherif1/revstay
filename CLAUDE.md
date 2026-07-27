@@ -40,5 +40,3 @@ service within seconds and books a free consultation meeting.
 - Components in src/components, server actions in src/actions
 - Run `npm run lint && npx tsc --noEmit` after changes
 - Small commits with clear messages
-
-## tes
